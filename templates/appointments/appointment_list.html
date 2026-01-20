@@ -1,0 +1,310 @@
+{% extends 'base.html' %}
+
+{% block title %}Учрашувлар рўйхати - Healthcare CRM{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800">Учрашувлар рўйхати</h1>
+            <p class="text-gray-600 mt-2">Барча учрашувларни бошқариш ва назорат қилиш</p>
+        </div>
+        <a href="{% url 'appointment_create' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md transition duration-200 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Янги учрашув белгилаш
+        </a>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center">
+                <div class="bg-blue-100 rounded-full p-3">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-gray-600 text-sm">Жами учрашувлар</p>
+                    <p class="text-2xl font-bold text-gray-800">{{ total_appointments|default:0 }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center">
+                <div class="bg-yellow-100 rounded-full p-3">
+                    <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-gray-600 text-sm">Кутилмоқда</p>
+                    <p class="text-2xl font-bold text-gray-800">{{ pending_count|default:0 }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center">
+                <div class="bg-green-100 rounded-full p-3">
+                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-gray-600 text-sm">Келди</p>
+                    <p class="text-2xl font-bold text-gray-800">{{ completed_count|default:0 }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center">
+                <div class="bg-red-100 rounded-full p-3">
+                    <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-gray-600 text-sm">Келмади</p>
+                    <p class="text-2xl font-bold text-gray-800">{{ noshow_count|default:0 }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <form method="get" action="" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Search Input -->
+                <div class="md:col-span-2">
+                    <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Қидириш</label>
+                    <div class="relative">
+                        <input type="text"
+                               id="search"
+                               name="search"
+                               value="{{ request.GET.search }}"
+                               placeholder="Бемор исми, шифокор ёки бўлим бўйича қидириш..."
+                               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Status Filter -->
+                <div>
+                    <label for="holat" class="block text-sm font-medium text-gray-700 mb-2">Ҳолат</label>
+                    <select id="holat" name="holat" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">Барчаси</option>
+                        <option value="Кутилмоқда" {% if request.GET.holat == 'Кутилмоқда' %}selected{% endif %}>Кутилмоқда</option>
+                        <option value="Келди" {% if request.GET.holat == 'Келди' %}selected{% endif %}>Келди</option>
+                        <option value="Келмади" {% if request.GET.holat == 'Келмади' %}selected{% endif %}>Келмади</option>
+                        <option value="Бекор қилинди" {% if request.GET.holat == 'Бекор қилинди' %}selected{% endif %}>Бекор қилинди</option>
+                    </select>
+                </div>
+
+                <!-- Date Filter -->
+                <div>
+                    <label for="date" class="block text-sm font-medium text-gray-700 mb-2">Сана</label>
+                    <input type="date"
+                           id="date"
+                           name="date"
+                           value="{{ request.GET.date }}"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap gap-3">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition duration-200">
+                    Қидириш
+                </button>
+                <a href="{% url 'appointment_list' %}" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition duration-200">
+                    Тозалаш
+                </a>
+                <label class="flex items-center ml-4">
+                    <input type="checkbox" name="high_risk" value="1" {% if request.GET.high_risk %}checked{% endif %} class="w-4 h-4 text-blue-600 rounded">
+                    <span class="ml-2 text-sm text-gray-700">Юқори хавфли</span>
+                </label>
+                <label class="flex items-center">
+                    <input type="checkbox" name="sms_sent" value="1" {% if request.GET.sms_sent %}checked{% endif %} class="w-4 h-4 text-blue-600 rounded">
+                    <span class="ml-2 text-sm text-gray-700">SMS юборилган</span>
+                </label>
+            </div>
+        </form>
+    </div>
+
+    <!-- Appointments Table -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">№</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Бемор</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Сана/Вақт</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Шифокор</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Бўлим</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AI Хавф</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SMS</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ҳолат</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ҳаракатлар</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for appointment in appointments %}
+                    <tr class="hover:bg-gray-50 transition duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ forloop.counter }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 flex-shrink-0">
+                                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                        <span class="text-blue-600 font-semibold">{{ appointment.bemor.ism|slice:":1"|upper }}</span>
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        <a href="{% url 'patient_detail' appointment.bemor.pk %}" class="text-blue-600 hover:text-blue-800">
+                                            {{ appointment.bemor.ism }}
+                                        </a>
+                                    </div>
+                                    <div class="text-sm text-gray-500">{{ appointment.bemor.telefon }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ appointment.uchrashuv_sanasi|date:"d.m.Y" }}</div>
+                            <div class="text-sm text-gray-500">{{ appointment.uchrashuv_sanasi|time:"H:i" }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ appointment.shifokor }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ appointment.bolim }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if appointment.kelmay_qolish_riski %}
+                            <div class="space-y-1">
+                                <div class="text-xs text-gray-600">
+                                    Келмаслик:
+                                    <span class="font-semibold {% if appointment.kelmay_qolish_riski >= 70 %}text-red-600{% elif appointment.kelmay_qolish_riski >= 40 %}text-orange-600{% else %}text-green-600{% endif %}">
+                                        {{ appointment.kelmay_qolish_riski|floatformat:0 }}%
+                                    </span>
+                                </div>
+                                {% if appointment.qand_riski %}
+                                <div class="text-xs text-gray-600">
+                                    Қанд: <span class="font-semibold text-red-600">{{ appointment.qand_riski|floatformat:0 }}%</span>
+                                </div>
+                                {% endif %}
+                                {% if appointment.yurak_riski %}
+                                <div class="text-xs text-gray-600">
+                                    Юрак: <span class="font-semibold text-pink-600">{{ appointment.yurak_riski|floatformat:0 }}%</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% else %}
+                            <span class="text-xs text-gray-400">Маълумот йўқ</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if appointment.sms_yuborildi %}
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Юборилди
+                            </span>
+                            {% else %}
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                Йўқ
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if appointment.holat == 'Келди' %}
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-600 text-white">
+                                {{ appointment.holat }}
+                            </span>
+                            {% elif appointment.holat == 'Келмади' %}
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-600 text-white">
+                                {{ appointment.holat }}
+                            </span>
+                            {% elif appointment.holat == 'Бекор қилинди' %}
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-600 text-white">
+                                {{ appointment.holat }}
+                            </span>
+                            {% else %}
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-500 text-white">
+                                {{ appointment.holat }}
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div class="flex space-x-2">
+                                <a href="{% url 'appointment_edit' appointment.pk %}" class="text-green-600 hover:text-green-900 transition duration-150" title="Таҳрирлаш">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                    </svg>
+                                </a>
+                                <a href="{% url 'appointment_delete' appointment.pk %}" class="text-red-600 hover:text-red-900 transition duration-150" title="Ўчириш" onclick="return confirm('Ҳақиқатан ҳам ўчирмоқчимисиз?')">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </a>
+                                {% if appointment.holat == 'Кутилмоқда' and not appointment.sms_yuborildi %}
+                                <a href="{% url 'send_sms' appointment.pk %}" class="text-blue-600 hover:text-blue-900 transition duration-150" title="SMS юбориш">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="px-6 py-12 text-center">
+                            <div class="flex flex-col items-center justify-center text-gray-500">
+                                <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <p class="text-lg font-semibold">Учрашувлар топилмади</p>
+                                <p class="text-sm mt-2">Янги учрашув белгилаш учун юқоридаги тугмани босинг</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="mt-6 flex justify-center">
+        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+            {% if page_obj.has_previous %}
+            <a href="?page=1" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                <span>Биринчи</span>
+            </a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                <span>Олдинги</span>
+            </a>
+            {% endif %}
+
+            <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                Саҳифа {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                <span>Кейинги</span>
+            </a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                <span>Охирги</span>
+            </a>
+            {% endif %}
+        </nav>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
