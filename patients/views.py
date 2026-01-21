@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Q, Count
 from datetime import timedelta
+from .models import Staff
 from .models import Patient, Appointment, HealthScreening
 import sys
 import os
@@ -23,6 +24,9 @@ def dashboard(request):
 
     # Statistics
     total_patients = Patient.objects.count()
+    total_staff = Staff.objects.count()
+    active_staff = Staff.objects.filter(faol=True).count()
+
     today_appointments = Appointment.objects.filter(
         uchrashuv_sanasi__date=today
     ).count()
@@ -55,6 +59,8 @@ def dashboard(request):
 
     context = {
         'total_patients': total_patients,
+        'total_staff': total_staff,
+        'active_staff': active_staff,
         'today_appointments': today_appointments,
         'high_risk_count': high_risk_count,
         'completed_today': completed_today,
@@ -65,6 +71,24 @@ def dashboard(request):
 
     return render(request, 'dashboard.html', context)
 
+def staff_list(request):
+    """List of staff members"""
+    query = request.GET.get('q', '')
+
+    if query:
+        staff = Staff.objects.filter(
+            Q(ism__icontains=query) |
+            Q(lavozim__icontains=query) |
+            Q(bolim__icontains=query)
+        )
+    else:
+        staff = Staff.objects.all()
+
+    context = {
+        'staff': staff,
+        'query': query,
+    }
+    return render(request, 'staff/staff_list.html', context)
 
 def patient_list(request):
     """List all patients with search"""
@@ -388,3 +412,68 @@ def health_screening_create(request, pk):
 
     context = {'patient': patient}
     return render(request, 'patients/screening_form.html', context)
+
+def staff_create(request):
+    """Create new staff member"""
+    if request.method == 'POST':
+        try:
+            staff = Staff.objects.create(
+                ism=request.POST.get('ism'),
+                lavozim=request.POST.get('lavozim'),
+                bolim=request.POST.get('bolim'),
+                telefon=request.POST.get('telefon'),
+                email=request.POST.get('email', ''),
+                faol=request.POST.get('faol') == 'on',
+                ishga_olingan_sana=request.POST.get('ishga_olingan_sana'),
+            )
+            messages.success(request, f"Xodim {staff.ism} muvaffaqiyatli qo'shildi!")
+            return redirect('staff_list')
+        except Exception as e:
+            messages.error(request, f"Xato: {str(e)}")
+
+    context = {
+        'lavozim_choices': Staff.LAVOZIM_CHOICES,
+        'bolim_choices': Appointment.BOLIM_CHOICES,
+    }
+    return render(request, 'staff/staff_form.html', context)
+
+
+def staff_edit(request, pk):
+    """Edit staff member"""
+    staff = get_object_or_404(Staff, pk=pk)
+
+    if request.method == 'POST':
+        try:
+            staff.ism = request.POST.get('ism')
+            staff.lavozim = request.POST.get('lavozim')
+            staff.bolim = request.POST.get('bolim')
+            staff.telefon = request.POST.get('telefon')
+            staff.email = request.POST.get('email', '')
+            staff.faol = request.POST.get('faol') == 'on'
+            staff.ishga_olingan_sana = request.POST.get('ishga_olingan_sana')
+            staff.save()
+
+            messages.success(request, "Xodim ma'lumotlari yangilandi!")
+            return redirect('staff_list')
+        except Exception as e:
+            messages.error(request, f"Xato: {str(e)}")
+
+    context = {
+        'staff': staff,
+        'is_edit': True,
+        'lavozim_choices': Staff.LAVOZIM_CHOICES,
+        'bolim_choices': Appointment.BOLIM_CHOICES,
+    }
+    return render(request, 'staff/staff_form.html', context)
+
+
+def staff_delete(request, pk):
+    """Delete staff member"""
+    staff = get_object_or_404(Staff, pk=pk)
+
+    if request.method == 'POST':
+        staff.delete()
+        messages.success(request, f"Xodim {staff.ism} o'chirildi!")
+        return redirect('staff_list')
+
+    return redirect('staff_list')

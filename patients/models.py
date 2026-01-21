@@ -150,3 +150,36 @@ class HealthScreening(models.Model):
 
     def __str__(self):
         return f"{self.bemor.ism} - {self.tekshirilgan_sana.strftime('%d.%m.%Y')}"
+
+class Staff(models.Model):
+    """Xodim modeli - Staff model"""
+
+    LAVOZIM_CHOICES = [
+        ('doctor', 'Shifokor'),
+        ('nurse', 'Hamshira'),
+        ('admin', 'Administrator'),
+    ]
+
+    ism = models.CharField(max_length=200, verbose_name='Ism')
+    lavozim = models.CharField(
+        max_length=20,
+        choices=LAVOZIM_CHOICES,
+        verbose_name='Lavozim'
+    )
+    bolim = models.CharField(
+        max_length=50,
+        choices=Appointment.BOLIM_CHOICES,
+        verbose_name='Bo‘lim'
+    )
+    telefon = models.CharField(max_length=20, verbose_name='Telefon')
+    email = models.EmailField(blank=True, null=True, verbose_name='Email')
+    faol = models.BooleanField(default=True, verbose_name='Faol')
+    ishga_olingan_sana = models.DateField(default=timezone.now, verbose_name='Ishga olingan sana')
+
+    class Meta:
+        verbose_name = 'Xodim'
+        verbose_name_plural = 'Xodimlar'
+        ordering = ['ism']
+
+    def __str__(self):
+        return f"{self.ism} ({self.get_lavozim_display()})"

@@ -1,191 +1,138 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Healthcare CRM{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block title %}Bosh sahifa - Healthcare CRM{% endblock %}
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        .sidebar-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            color: #d1d5db;
+            transition: all 0.2s;
+        }
+        .sidebar-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .sidebar-link.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .btn-primary {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #3b82f6;
+            color: white;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+        .btn-secondary {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #6b7280;
+            color: white;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .btn-secondary:hover {
+            background-color: #4b5563;
+        }
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .alert.success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+        .alert.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+        .alert.warning {
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fcd34d;
+        }
+        .alert.info {
+            background-color: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+    </style>
 
-{% block content %}
-<div class="mb-6 flex justify-between items-center">
-    <div>
-        <h1 class="text-4xl font-bold text-gray-800">Bosh sahifa</h1>
-        <p class="text-gray-600 mt-2">Tizim statistikasi va bugungi uchrashuvlar</p>
-    </div>
-    <a href="{% url 'appointment_create' %}" class="btn-primary">+ Yangi Uchrashuv</a>
-</div>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
 
-<!-- Statistics Cards -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="stat-card">
-        <div class="text-3xl font-bold">{{ total_patients }}</div>
-        <div class="text-sm opacity-90 mt-1">Jami bemorlar</div>
-    </div>
+<body class="bg-gray-100 text-gray-800">
 
-    <div class="stat-card-warning">
-        <div class="text-3xl font-bold">{{ today_appointments }}</div>
-        <div class="text-sm opacity-90 mt-1">Bugungi uchrashuvlar</div>
-    </div>
+<div class="flex min-h-screen">
 
-    <div class="stat-card-danger">
-        <div class="text-3xl font-bold">{{ high_risk_count }}</div>
-        <div class="text-sm opacity-90 mt-1">Yuqori xavfli</div>
-    </div>
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-gradient-to-b from-gray-900 to-gray-800 text-white flex flex-col">
+        <div class="p-6 border-b border-gray-700">
+            <h1 class="text-2xl font-bold">Healthcare CRM</h1>
+            <p class="text-sm text-gray-300 mt-1">AI bilan ishlaydigan tizim</p>
+        </div>
 
-    <div class="stat-card-success">
-        <div class="text-3xl font-bold">{{ completed_today }}</div>
-        <div class="text-sm opacity-90 mt-1">Bugun yakunlangan</div>
-    </div>
-</div>
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="{% url 'dashboard' %}"
+               class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                🏠 Bosh sahifa
+            </a>
 
-<!-- Today's Appointments -->
-<div class="card p-6 mb-8">
-    <h2 class="text-2xl font-bold mb-4">Bugungi Uchrashuvlar</h2>
+            <a href="{% url 'patient_list' %}"
+               class="sidebar-link {% if request.resolver_match.url_name == 'patient_list' %}active{% endif %}">
+                👤 Bemorlar
+            </a>
 
-    {% if todays_appointments %}
-    <div class="overflow-x-auto">
-        <table>
-            <thead>
-                <tr>
-                    <th>Bemor</th>
-                    <th>Vaqt</th>
-                    <th>Shifokor</th>
-                    <th>Bo'lim</th>
-                    <th>Xavf</th>
-                    <th>Holat</th>
-                    <th>Harakatlar</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for appointment in todays_appointments %}
-                <tr>
-                    <td>
-                        <a href="{% url 'patient_detail' appointment.bemor.pk %}" class="text-blue-600 hover:underline font-medium">
-                            {{ appointment.bemor.ism }}
-                        </a>
-                    </td>
-                    <td>{{ appointment.uchrashuv_sanasi|date:"H:i" }}</td>
-                    <td>{{ appointment.shifokor }}</td>
-                    <td>{{ appointment.get_bolim_display }}</td>
-                    <td>
-                        {% if appointment.kelmay_qolish_riski %}
-                            {% if appointment.kelmay_qolish_riski < 0.3 %}
-                                <span class="badge-success">Past xavf</span>
-                            {% elif appointment.kelmay_qolish_riski < 0.7 %}
-                                <span class="badge-warning">O'rta xavf</span>
-                            {% else %}
-                                <span class="badge-danger">Yuqori xavf</span>
-                            {% endif %}
-                        {% else %}
-                            <span class="badge-secondary">-</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if appointment.holat == 'rejalashtirilgan' %}
-                            <span class="badge-info">Rejalashtirilgan</span>
-                        {% elif appointment.holat == 'yakunlangan' %}
-                            <span class="badge-success">Yakunlangan</span>
-                        {% elif appointment.holat == 'bekor_qilingan' %}
-                            <span class="badge-secondary">Bekor qilingan</span>
-                        {% else %}
-                            <span class="badge-danger">Kelmagan</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if appointment.holat == 'rejalashtirilgan' %}
-                            <a href="{% url 'appointment_complete' appointment.pk %}" class="btn btn-success text-xs py-1 px-2">✓ Yakunlash</a>
-                            <a href="{% url 'appointment_cancel' appointment.pk %}" class="btn btn-danger text-xs py-1 px-2 ml-1">✕ Bekor qilish</a>
-                        {% endif %}
-                    </td>
-                </tr>
+            <a href="{% url 'appointment_list' %}"
+               class="sidebar-link {% if request.resolver_match.url_name == 'appointment_list' %}active{% endif %}">
+                📅 Uchrashuvlar
+            </a>
+
+            <a href="{% url 'staff_list' %}"
+               class="sidebar-link {% if request.resolver_match.url_name == 'staff_list' %}active{% endif %}">
+                👨‍⚕️ Xodimlar
+            </a>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 p-8 overflow-y-auto">
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }}">
+                        {{ message }}
+                    </div>
                 {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% else %}
-    <div class="empty-state">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-        </svg>
-        <p class="text-lg">Bugun hech qanday uchrashuv yo'q</p>
-    </div>
-    {% endif %}
-</div>
-
-<!-- High Risk Patients & Department Stats -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <!-- High Risk Patients -->
-    <div class="card p-6">
-        <h2 class="text-2xl font-bold mb-4">Yuqori Xavfli Bemorlar</h2>
-
-        {% if high_risk_appointments %}
-        <div class="space-y-3">
-            {% for appointment in high_risk_appointments %}
-            <div class="risk-card-high card p-4">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <a href="{% url 'patient_detail' appointment.bemor.pk %}" class="font-bold text-lg text-blue-600 hover:underline">
-                            {{ appointment.bemor.ism }}
-                        </a>
-                        <p class="text-sm text-gray-600 mt-1">
-                            {{ appointment.uchrashuv_sanasi|date:"d.m.Y H:i" }} - {{ appointment.get_bolim_display }}
-                        </p>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-2xl font-bold text-red-600">{{ appointment.kelmay_qolish_riski|floatformat:0|add:"0" }}%</div>
-                        <div class="text-xs text-gray-600">Kelmay qolish riski</div>
-                    </div>
-                </div>
-                <button class="btn btn-warning text-sm mt-3 w-full">SMS yuborish</button>
             </div>
-            {% endfor %}
-        </div>
-        {% else %}
-        <div class="empty-state py-8">
-            <p>Yuqori xavfli bemorlar yo'q</p>
-        </div>
         {% endif %}
-    </div>
 
-    <!-- Department Statistics -->
-    <div class="card p-6">
-        <h2 class="text-2xl font-bold mb-4">Bo'limlar bo'yicha statistika</h2>
+        {% block content %}{% endblock %}
+    </main>
 
-        {% if dept_stats %}
-        <canvas id="departmentChart" height="300"></canvas>
-
-        <script>
-            const ctx = document.getElementById('departmentChart').getContext('2d');
-            const departmentChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: [
-                        {% for stat in dept_stats %}
-                        '{{ stat.bolim|capfirst }}'{% if not forloop.last %},{% endif %}
-                        {% endfor %}
-                    ],
-                    datasets: [{
-                        data: [
-                            {% for stat in dept_stats %}
-                            {{ stat.count }}{% if not forloop.last %},{% endif %}
-                            {% endfor %}
-                        ],
-                        backgroundColor: [
-                            '#0066CC', '#00C853', '#FF9800', '#FF6B6B', '#9C27B0', '#00BCD4', '#FFC107'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                        }
-                    }
-                }
-            });
-        </script>
-        {% else %}
-        <div class="empty-state py-8">
-            <p>Bugun uchrashuvlar yo'q</p>
-        </div>
-        {% endif %}
-    </div>
 </div>
-{% endblock %}
+
+</body>
+</html>

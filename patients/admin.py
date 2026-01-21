@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Patient, Appointment, HealthScreening
+from .models import Patient, Appointment, HealthScreening, Staff
 
 
 @admin.register(Patient)
@@ -26,3 +26,10 @@ class HealthScreeningAdmin(admin.ModelAdmin):
     search_fields = ['bemor__ism']
     date_hierarchy = 'tekshirilgan_sana'
     raw_id_fields = ['bemor', 'uchrashuv']
+
+@admin.register(Staff)
+class StaffAdmin(admin.ModelAdmin):
+    list_display = ['ism', 'lavozim', 'bolim', 'telefon', 'faol', 'ishga_olingan_sana']
+    list_filter = ['lavozim', 'bolim', 'faol']
+    search_fields = ['ism', 'telefon', 'email']
+    list_editable = ['faol']
