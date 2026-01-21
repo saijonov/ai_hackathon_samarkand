@@ -33,11 +33,20 @@
 }
 
 .stat-card-success {
-    background: linear-gradient(135deg, var(--success-green) 0%, #00A344 100%);
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #0052A3 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,102,204,0.2);
 }
 
 .stat-card-danger {
-    background: linear-gradient(135deg, var(--danger-red) 0%, #E85555 100%);
+    /* background: linear-gradient(135deg, var(--danger-red) 0%, #E85555 100%); */
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #0052A3 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(194, 26, 26, 0.2);
 }
 
 .stat-card-warning {

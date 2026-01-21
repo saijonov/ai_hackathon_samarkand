@@ -3,22 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Healthcare CRM{% endblock %}</title>
+    <title>{% block title %}MedAI CRM{% endblock %}</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/static/css/style.css">
-
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#EEF6FF',
+                            100: '#D9EBFF',
+                            200: '#BCDDFF',
+                            300: '#8EC8FF',
+                            400: '#59A8FF',
+                            500: '#3B82F6',
+                            600: '#2563EB',
+                            700: '#1D4ED8',
+                            800: '#1E40AF',
+                            900: '#1E3A8A',
+                        },
+                        accent: {
+                            teal: '#14B8A6',
+                            coral: '#F97066',
+                            amber: '#F59E0B',
+                            violet: '#8B5CF6',
+                        },
+                        surface: {
+                            50: '#FAFBFC',
+                            100: '#F4F6F8',
+                            200: '#E9EDF2',
+                            300: '#DDE3EB',
+                        },
+                        dark: {
+                            800: '#1F2937',
+                            900: '#111827',
+                        }
+                    },
+                    fontFamily: {
+                        'display': ['Plus Jakarta Sans', 'sans-serif'],
+                        'body': ['DM Sans', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
+                        'glow': '0 0 40px -10px rgba(59, 130, 246, 0.3)',
+                        'card': '0 1px 3px rgba(0, 0, 0, 0.05), 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02)',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out forwards',
+                        'slide-up': 'slideUp 0.5s ease-out forwards',
+                        'scale-in': 'scaleIn 0.4s ease-out forwards',
+                        'pulse-soft': 'pulseSoft 2s infinite',
+                        'gradient': 'gradient 8s ease infinite',
+                    }
+                }
+            }
+        }
+    </script>
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+    <style>
+        * {
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         @keyframes fadeIn {
@@ -26,204 +85,530 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .fade-in {
-            animation: fadeIn 0.5s ease-out;
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        .card:hover {
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-            transform: translateY(-2px);
+        @keyframes pulseSoft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        /* Glass morphism effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        /* Gradient mesh background */
+        .mesh-gradient {
+            background-color: #F4F6F8;
+            background-image: 
+                radial-gradient(at 40% 20%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
+                radial-gradient(at 80% 0%, rgba(20, 184, 166, 0.06) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, rgba(139, 92, 246, 0.05) 0px, transparent 50%),
+                radial-gradient(at 80% 50%, rgba(249, 112, 102, 0.04) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.06) 0px, transparent 50%);
+        }
+
+        /* Sidebar gradient */
+        .sidebar-gradient {
+            background: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+        }
+
+        /* Stat card gradients */
+        .stat-gradient-blue {
+            background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+        }
+        .stat-gradient-teal {
+            background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%);
+        }
+        .stat-gradient-coral {
+            background: linear-gradient(135deg, #F97066 0%, #DC2626 100%);
+        }
+        .stat-gradient-amber {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        }
+
+        /* Card hover effect */
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button styles */
         .btn-primary {
-            background: #0066CC;
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
             color: white;
             padding: 0.75rem 1.5rem;
-            border-radius: 8px;
+            border-radius: 12px;
+            font-weight: 600;
             transition: all 0.3s ease;
-            font-weight: 600;
+            box-shadow: 0 4px 15px -3px rgba(59, 130, 246, 0.4);
         }
-
         .btn-primary:hover {
-            background: #0052A3;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,102,204,0.3);
+            box-shadow: 0 8px 25px -5px rgba(59, 130, 246, 0.5);
         }
 
-        .badge-success {
-            background: #00C853;
+        .btn-success {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
             color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
             font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+        .btn-success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px -3px rgba(16, 185, 129, 0.4);
         }
 
-        .badge-warning {
-            background: #FF9800;
+        .btn-danger {
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
             color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
             font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+        .btn-danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px -3px rgba(239, 68, 68, 0.4);
         }
 
-        .badge-danger {
-            background: #FF6B6B;
+        .btn-warning {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
             color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
             font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+        .btn-warning:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px -3px rgba(245, 158, 11, 0.4);
         }
 
-        .badge-info {
-            background: #0066CC;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
+        .btn-secondary {
+            background: #F1F5F9;
+            color: #475569;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
             font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+        .btn-secondary:hover {
+            background: #E2E8F0;
         }
 
-        .badge-secondary {
-            background: #6c757d;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
-            font-weight: 600;
+        /* Sidebar link active state */
+        .sidebar-link {
+            position: relative;
+            overflow: hidden;
         }
-
-        .sidebar {
-            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
-            position: fixed;
+        .sidebar-link::before {
+            content: '';
+            position: absolute;
             left: 0;
             top: 0;
             bottom: 0;
-            width: 250px;
-            padding: 1.5rem;
-            overflow-y: auto;
-        }
-
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            color: rgba(255,255,255,0.7);
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
+            width: 3px;
+            background: transparent;
             transition: all 0.3s ease;
-            text-decoration: none;
         }
-
-        .sidebar-link:hover {
-            background: rgba(255,255,255,0.1);
-            color: white;
+        .sidebar-link.active::before {
+            background: linear-gradient(180deg, #3B82F6 0%, #14B8A6 100%);
         }
-
         .sidebar-link.active {
-            background: rgba(0,102,204,0.2);
-            color: white;
-            border-left: 3px solid #0066CC;
+            background: rgba(59, 130, 246, 0.1);
         }
 
-        .main-content {
-            margin-left: 250px;
-            padding: 2rem;
-            min-height: 100vh;
-            background: #F8F9FA;
+        /* Badge styles */
+        .badge {
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
         }
+        .badge-success { background: #D1FAE5; color: #047857; }
+        .badge-warning { background: #FEF3C7; color: #B45309; }
+        .badge-danger { background: #FEE2E2; color: #DC2626; }
+        .badge-info { background: #DBEAFE; color: #1D4ED8; }
+        .badge-secondary { background: #F1F5F9; color: #475569; }
 
-        table {
+        /* Risk indicator */
+        .risk-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: pulseSoft 2s infinite;
+        }
+        .risk-low { background: #10B981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+        .risk-medium { background: #F59E0B; box-shadow: 0 0 10px rgba(245, 158, 11, 0.5); }
+        .risk-high { background: #EF4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+
+        /* Table styles */
+        .data-table {
             width: 100%;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-collapse: separate;
+            border-spacing: 0;
         }
-
-        thead {
-            background: #F8F9FA;
+        .data-table thead {
+            background: #F8FAFC;
         }
-
-        th {
-            padding: 1rem;
+        .data-table th {
+            padding: 1rem 1.25rem;
             text-align: left;
             font-weight: 600;
-            color: #2C3E50;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748B;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        .data-table td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #F1F5F9;
+            vertical-align: middle;
+        }
+        .data-table tbody tr {
+            transition: all 0.2s ease;
+        }
+        .data-table tbody tr:hover {
+            background: #F8FAFC;
         }
 
-        td {
-            padding: 1rem;
-            border-top: 1px solid #E9ECEF;
+        /* Form inputs */
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 12px;
+            background: white;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+        .form-input::placeholder {
+            color: #94A3B8;
         }
 
-        tr:hover {
-            background: #F8F9FA;
+        /* Stagger animation for lists */
+        .stagger-item {
+            opacity: 0;
+            animation: slideUp 0.5s ease-out forwards;
+        }
+        .stagger-item:nth-child(1) { animation-delay: 0.05s; }
+        .stagger-item:nth-child(2) { animation-delay: 0.1s; }
+        .stagger-item:nth-child(3) { animation-delay: 0.15s; }
+        .stagger-item:nth-child(4) { animation-delay: 0.2s; }
+        .stagger-item:nth-child(5) { animation-delay: 0.25s; }
+        .stagger-item:nth-child(6) { animation-delay: 0.3s; }
+        .stagger-item:nth-child(7) { animation-delay: 0.35s; }
+        .stagger-item:nth-child(8) { animation-delay: 0.4s; }
+
+        /* Progress bar */
+        .progress-bar {
+            height: 6px;
+            background: #E2E8F0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.8s ease;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            color: #CBD5E1;
+        }
+
+        /* Notification dot */
+        .notification-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background: #EF4444;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        /* Icon button */
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            color: #64748B;
+        }
+        .icon-btn:hover {
+            background: #F1F5F9;
+            color: #1E293B;
+        }
+
+        /* Health metric card */
+        .metric-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .metric-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* Card base */
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        /* Mobile responsive sidebar */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0 !important;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="mesh-gradient min-h-screen">
     <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="mb-8">
-            <h1 class="text-2xl font-bold text-white">Healthcare CRM</h1>
-            <p class="text-sm text-gray-400 mt-1">AI bilan ishlaydigan tizim</p>
+    <aside class="sidebar sidebar-gradient fixed left-0 top-0 bottom-0 w-72 z-50 flex flex-col" id="sidebar">
+        <!-- Logo Section -->
+        <div class="p-6 border-b border-white/10">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-teal-400 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-white font-display">MedAI</h1>
+                    <p class="text-xs text-slate-400">Healthcare CRM</p>
+                </div>
+            </div>
         </div>
 
-        <nav>
-            <a href="{% url 'dashboard' %}" class="sidebar-link {% if request.path == '/' %}active{% endif %}">
-                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Navigation -->
+        <nav class="flex-1 py-6 px-4 space-y-1 overflow-y-auto">
+            <p class="px-4 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Asosiy</p>
+            
+            <a href="{% url 'dashboard' %}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition-all {% if 'home' in request.path %}active{% endif %}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                 </svg>
-                Bosh sahifa
+                <span class="font-medium">Bosh sahifa</span>
             </a>
 
-            <a href="{% url 'patient_list' %}" class="sidebar-link {% if 'patients' in request.path and 'create' not in request.path %}active{% endif %}">
-                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <p class="px-4 py-2 mt-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">Boshqaruv</p>
+
+            <a href="{% url 'patient_list' %}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition-all {% if 'patients' in request.path %}active{% endif %}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                 </svg>
-                Bemorlar
+                <span class="font-medium">Bemorlar</span>
             </a>
 
-            <a href="{% url 'appointment_list' %}" class="sidebar-link {% if 'appointments' in request.path %}active{% endif %}">
-                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href="{% url 'appointment_list' %}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition-all {% if 'appointments' in request.path %}active{% endif %}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                 </svg>
-                Uchrashuvlar
+                <span class="font-medium">Uchrashuvlar</span>
             </a>
-            <a href="{% url 'staff_list' %}"
-               class="sidebar-link {% if request.resolver_match.url_name == 'staff_list' %}active{% endif %}">
-                👨‍⚕️ Xodimlar
+
+            <a href="{% url 'staff_list' %}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition-all {% if 'staff' in request.path %}active{% endif %}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="font-medium">Xodimlar</span>
             </a>
         </nav>
-    </div>
+
+        <!-- Bottom section -->
+        <div class="p-4 border-t border-white/10">
+            <div class="glass rounded-xl p-4 bg-gradient-to-r from-blue-500/10 to-teal-500/10">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-teal-400 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-white">AI Tahlil</p>
+                        <p class="text-xs text-slate-400">3 ta model faol</p>
+                    </div>
+                </div>
+                <div class="flex gap-1">
+                    <div class="flex-1 h-1.5 rounded-full bg-gradient-to-r from-blue-500 to-teal-400"></div>
+                    <div class="flex-1 h-1.5 rounded-full bg-gradient-to-r from-teal-400 to-green-400"></div>
+                    <div class="flex-1 h-1.5 rounded-full bg-gradient-to-r from-green-400 to-emerald-400"></div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile menu button -->
+    <button class="lg:hidden fixed top-4 left-4 z-50 w-10 h-10 rounded-xl bg-white shadow-lg flex items-center justify-center" onclick="document.getElementById('sidebar').classList.toggle('open')">
+        <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
 
     <!-- Main Content -->
-    <div class="main-content">
+    <main class="lg:ml-72 min-h-screen">
+        <!-- Top bar -->
+        <header class="sticky top-0 z-40 glass border-b border-slate-200/50">
+            <div class="flex items-center justify-between px-6 lg:px-8 py-4">
+                <div class="flex items-center gap-4">
+                    <div class="hidden lg:block">
+                        <h2 class="text-lg font-semibold text-slate-800">{% block page_title %}Dashboard{% endblock %}</h2>
+                        <p class="text-sm text-slate-500">{% block page_subtitle %}Tizim statistikasi{% endblock %}</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <!-- Search -->
+                    <div class="hidden md:flex items-center gap-2 px-4 py-2.5 bg-white rounded-xl border border-slate-200 shadow-sm">
+                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <input type="text" placeholder="Qidirish..." class="w-48 text-sm bg-transparent border-none focus:outline-none text-slate-700 placeholder-slate-400">
+                    </div>
+
+                    <!-- Notifications -->
+                    <button class="icon-btn relative">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                        </svg>
+                        <span class="notification-dot"></span>
+                    </button>
+
+                    <!-- User -->
+                    <div class="flex items-center gap-3 pl-3 border-l border-slate-200">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white font-semibold shadow-lg shadow-violet-500/30">
+                            A
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
         <!-- Messages -->
         {% if messages %}
-        <div class="mb-4">
+        <div class="px-6 lg:px-8 pt-4">
             {% for message in messages %}
-            <div class="card p-4 mb-3 {% if message.tags == 'success' %}bg-green-50 border-l-4 border-green-500{% elif message.tags == 'error' %}bg-red-50 border-l-4 border-red-500{% elif message.tags == 'warning' %}bg-orange-50 border-l-4 border-orange-500{% else %}bg-blue-50 border-l-4 border-blue-500{% endif %}">
-                <p class="font-medium">{{ message }}</p>
+            <div class="mb-3 p-4 rounded-xl flex items-center gap-3 animate-fade-in
+                {% if message.tags == 'success' %}bg-emerald-50 border border-emerald-200 text-emerald-800
+                {% elif message.tags == 'error' %}bg-red-50 border border-red-200 text-red-800
+                {% elif message.tags == 'warning' %}bg-amber-50 border border-amber-200 text-amber-800
+                {% else %}bg-blue-50 border border-blue-200 text-blue-800{% endif %}">
+                {% if message.tags == 'success' %}
+                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                {% elif message.tags == 'error' %}
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                {% elif message.tags == 'warning' %}
+                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+                {% else %}
+                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                {% endif %}
+                <p class="font-medium text-sm">{{ message }}</p>
             </div>
             {% endfor %}
         </div>
         {% endif %}
 
         <!-- Page Content -->
-        <div class="fade-in">
+        <div class="px-6 lg:px-8 py-6">
             {% block content %}{% endblock %}
         </div>
-    </div>
+    </main>
+
+    <script>
+        // Close mobile sidebar when clicking outside
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = e.target.closest('button');
+            if (!sidebar.contains(e.target) && !menuBtn) {
+                sidebar.classList.remove('open');
+            }
+        });
+    </script>
 </body>
 </html>

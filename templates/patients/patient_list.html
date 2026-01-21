@@ -1,255 +1,237 @@
 {% extends 'base.html' %}
 
-{% block title %}Беморлар рўйхати - Healthcare CRM{% endblock %}
+{% block title %}Bemorlar - MedAI CRM{% endblock %}
+
+{% block page_title %}Bemorlar{% endblock %}
+{% block page_subtitle %}Barcha bemorlarni boshqarish{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <!-- Header -->
-    <div class="flex justify-between items-center mb-8">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800">Беморлар рўйхати</h1>
-            <p class="text-gray-600 mt-2">Барча беморларни бошқариш ва кўриш</p>
-        </div>
-        <a href="{% url 'patient_create' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md transition duration-200 flex items-center">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-            Янги бемор қўшиш
-        </a>
+<!-- Header -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+    <div>
+        <h1 class="text-3xl font-bold text-slate-800 font-display">Bemorlar ro'yxati</h1>
+        <p class="text-slate-500 mt-1">Barcha bemorlarni ko'rish va boshqarish</p>
     </div>
+    <a href="{% url 'patient_create' %}" class="btn-primary inline-flex items-center gap-2 self-start">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Yangi bemor
+    </a>
+</div>
 
-    <!-- Search and Filter Section -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-        <form method="get" action="" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Search Input -->
-                <div class="md:col-span-2">
-                    <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Қидириш</label>
-                    <div class="relative">
-                        <input type="text"
-                               id="search"
-                               name="search"
-                               value="{{ request.GET.search }}"
-                               placeholder="Исм, телефон ёки манзил бўйича қидириш..."
-                               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-
-                <!-- Gender Filter -->
-                <div>
-                    <label for="jins" class="block text-sm font-medium text-gray-700 mb-2">Жинс</label>
-                    <select id="jins" name="jins" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <option value="">Барчаси</option>
-                        <option value="Эркак" {% if request.GET.jins == 'Эркак' %}selected{% endif %}>Эркак</option>
-                        <option value="Аёл" {% if request.GET.jins == 'Аёл' %}selected{% endif %}>Аёл</option>
-                    </select>
+<!-- Search & Filter Card -->
+<div class="card rounded-2xl p-6 mb-6">
+    <form method="get" action="" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <!-- Search Input -->
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-slate-700 mb-2">Qidirish</label>
+                <div class="relative">
+                    <svg class="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" name="q" value="{{ query }}" placeholder="Ism yoki telefon raqami..."
+                           class="form-input pl-10">
                 </div>
             </div>
 
-            <!-- Filter Buttons -->
-            <div class="flex flex-wrap gap-3">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition duration-200">
-                    Қидириш
+            <!-- Gender Filter -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Jins</label>
+                <select name="jins" class="form-input">
+                    <option value="">Barchasi</option>
+                    <option value="E" {% if request.GET.jins == 'E' %}selected{% endif %}>Erkak</option>
+                    <option value="A" {% if request.GET.jins == 'A' %}selected{% endif %}>Ayol</option>
+                </select>
+            </div>
+
+            <!-- Filter Button -->
+            <div class="flex items-end">
+                <button type="submit" class="btn-primary w-full">
+                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    Qidirish
                 </button>
-                <a href="{% url 'patient_list' %}" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition duration-200">
-                    Тозалаш
-                </a>
-                <label class="flex items-center ml-4">
-                    <input type="checkbox" name="yurak_kasalligi" value="1" {% if request.GET.yurak_kasalligi %}checked{% endif %} class="w-4 h-4 text-blue-600 rounded">
-                    <span class="ml-2 text-sm text-gray-700">Юрак касаллиги</span>
-                </label>
-                <label class="flex items-center">
-                    <input type="checkbox" name="qand_kasalligi" value="1" {% if request.GET.qand_kasalligi %}checked{% endif %} class="w-4 h-4 text-blue-600 rounded">
-                    <span class="ml-2 text-sm text-gray-700">Қанд касаллиги</span>
-                </label>
-                <label class="flex items-center">
-                    <input type="checkbox" name="gipertoniya" value="1" {% if request.GET.gipertoniya %}checked{% endif %} class="w-4 h-4 text-blue-600 rounded">
-                    <span class="ml-2 text-sm text-gray-700">Гипертония</span>
-                </label>
-            </div>
-        </form>
-    </div>
-
-    <!-- Statistics Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center">
-                <div class="bg-blue-100 rounded-full p-3">
-                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <p class="text-gray-600 text-sm">Жами беморлар</p>
-                    <p class="text-2xl font-bold text-gray-800">{{ total_patients|default:0 }}</p>
-                </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center">
-                <div class="bg-red-100 rounded-full p-3">
-                    <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <p class="text-gray-600 text-sm">Қанд касаллиги</p>
-                    <p class="text-2xl font-bold text-gray-800">{{ diabetes_count|default:0 }}</p>
-                </div>
-            </div>
+        <!-- Quick Filters -->
+        <div class="flex flex-wrap gap-3 pt-4 border-t border-slate-100">
+            <label class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition-colors">
+                <input type="checkbox" name="qand_kasalligi" value="1" {% if request.GET.qand_kasalligi %}checked{% endif %} 
+                       class="w-4 h-4 text-primary-600 rounded border-slate-300 focus:ring-primary-500">
+                <span class="text-sm text-slate-700">Qand kasalligi</span>
+            </label>
+            <label class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition-colors">
+                <input type="checkbox" name="gipertoniya" value="1" {% if request.GET.gipertoniya %}checked{% endif %}
+                       class="w-4 h-4 text-primary-600 rounded border-slate-300 focus:ring-primary-500">
+                <span class="text-sm text-slate-700">Gipertoniya</span>
+            </label>
+            <label class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition-colors">
+                <input type="checkbox" name="yurak_kasalligi" value="1" {% if request.GET.yurak_kasalligi %}checked{% endif %}
+                       class="w-4 h-4 text-primary-600 rounded border-slate-300 focus:ring-primary-500">
+                <span class="text-sm text-slate-700">Yurak kasalligi</span>
+            </label>
+            {% if query or request.GET.jins or request.GET.qand_kasalligi or request.GET.gipertoniya or request.GET.yurak_kasalligi %}
+            <a href="{% url 'patient_list' %}" class="inline-flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:text-slate-800 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+                Filtrlarni tozalash
+            </a>
+            {% endif %}
         </div>
+    </form>
+</div>
 
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center">
-                <div class="bg-orange-100 rounded-full p-3">
-                    <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <p class="text-gray-600 text-sm">Гипертония</p>
-                    <p class="text-2xl font-bold text-gray-800">{{ hypertension_count|default:0 }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center">
-                <div class="bg-green-100 rounded-full p-3">
-                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <p class="text-gray-600 text-sm">Юрак касаллиги</p>
-                    <p class="text-2xl font-bold text-gray-800">{{ heart_disease_count|default:0 }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Patients Table -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">№</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Исм</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ёш/Жинс</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Телефон</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Қон гурухи</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Касалликлар</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ҳаракатлар</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    {% for patient in patients %}
-                    <tr class="hover:bg-gray-50 transition duration-150">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ forloop.counter }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div class="h-10 w-10 flex-shrink-0">
-                                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                                        <span class="text-blue-600 font-semibold">{{ patient.ism|slice:":1"|upper }}</span>
-                                    </div>
-                                </div>
-                                <div class="ml-4">
-                                    <div class="text-sm font-medium text-gray-900">{{ patient.ism }}</div>
-                                </div>
+<!-- Patients Table -->
+<div class="card rounded-2xl overflow-hidden">
+    {% if patients %}
+    <div class="overflow-x-auto">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Bemor</th>
+                    <th>Yosh / Jins</th>
+                    <th>Telefon</th>
+                    <th>Qon guruhi</th>
+                    <th>Kasalliklar</th>
+                    <th>Statistika</th>
+                    <th>Harakatlar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                <tr class="stagger-item">
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br {% if patient.jins == 'E' %}from-blue-100 to-blue-50{% else %}from-pink-100 to-pink-50{% endif %} flex items-center justify-center shadow-sm">
+                                <span class="{% if patient.jins == 'E' %}text-blue-600{% else %}text-pink-600{% endif %} font-bold text-lg">{{ patient.ism|slice:":1"|upper }}</span>
                             </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ patient.yosh }} йош / {{ patient.jins }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ patient.telefon }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
-                                {{ patient.qon_guruhi|default:"Белгисиз" }}
+                            <div>
+                                <a href="{% url 'patient_detail' patient.pk %}" class="font-semibold text-slate-800 hover:text-primary-600 transition-colors">
+                                    {{ patient.ism }}
+                                </a>
+                                <p class="text-xs text-slate-500 mt-0.5">ID: #{{ patient.pk }}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex items-center gap-2">
+                            <span class="font-medium text-slate-700">{{ patient.yosh }} yosh</span>
+                            <span class="text-slate-400">•</span>
+                            <span class="{% if patient.jins == 'E' %}text-blue-600{% else %}text-pink-600{% endif %}">
+                                {% if patient.jins == 'E' %}♂ Erkak{% else %}♀ Ayol{% endif %}
                             </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex flex-wrap gap-1">
-                                {% if patient.qand_kasalligi %}
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Қанд</span>
-                                {% endif %}
-                                {% if patient.gipertoniya %}
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">Гипертония</span>
-                                {% endif %}
-                                {% if patient.yurak_kasalligi %}
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Юрак</span>
-                                {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <a href="tel:{{ patient.telefon }}" class="text-slate-600 hover:text-primary-600 transition-colors">
+                            {{ patient.telefon }}
+                        </a>
+                    </td>
+                    <td>
+                        {% if patient.qon_guruhi %}
+                        <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-50 text-red-700 font-semibold text-sm">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                            </svg>
+                            {{ patient.qon_guruhi }}
+                        </span>
+                        {% else %}
+                        <span class="text-slate-400">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="flex flex-wrap gap-1.5">
+                            {% if patient.qand_kasalligi %}
+                            <span class="badge badge-danger">Qand</span>
+                            {% endif %}
+                            {% if patient.gipertoniya %}
+                            <span class="badge badge-warning">Gipertoniya</span>
+                            {% endif %}
+                            {% if patient.yurak_kasalligi %}
+                            <span class="badge badge-info">Yurak</span>
+                            {% endif %}
+                            {% if not patient.qand_kasalligi and not patient.gipertoniya and not patient.yurak_kasalligi %}
+                            <span class="badge badge-success">Sog'lom</span>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="text-sm">
+                            <div class="flex items-center gap-2 text-slate-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                {{ patient.umumiy_uchrashuvlar }} uchrashuv
                             </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <div class="flex space-x-2">
-                                <a href="{% url 'patient_detail' patient.pk %}" class="text-blue-600 hover:text-blue-900 transition duration-150" title="Кўриш">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                    </svg>
-                                </a>
-                                <a href="{% url 'patient_edit' patient.pk %}" class="text-green-600 hover:text-green-900 transition duration-150" title="Таҳрирлаш">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                    </svg>
-                                </a>
-                                <a href="{% url 'patient_delete' patient.pk %}" class="text-red-600 hover:text-red-900 transition duration-150" title="Ўчириш" onclick="return confirm('Ҳақиқатан ҳам ўчирмоқчимисиз?')">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            {% if patient.kelmaganlar_soni > 0 %}
+                            <div class="flex items-center gap-2 text-red-500 mt-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                {{ patient.kelmaganlar_soni }} kelmagan
+                            </div>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex items-center gap-2">
+                            <a href="{% url 'patient_detail' patient.pk %}" 
+                               class="icon-btn" title="Ko'rish">
+                                <svg class="w-5 h-5 text-slate-500 hover:text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                            </a>
+                            <a href="{% url 'patient_edit' patient.pk %}" 
+                               class="icon-btn" title="Tahrirlash">
+                                <svg class="w-5 h-5 text-slate-500 hover:text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                            </a>
+                            <a href="{% url 'health_screening_create' patient.pk %}" 
+                               class="icon-btn" title="Tekshiruv qo'shish">
+                                <svg class="w-5 h-5 text-slate-500 hover:text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </a>
+                            <form action="{% url 'patient_delete' patient.pk %}" method="post" class="inline"
+                                  onsubmit="return confirm('Haqiqatan ham {{ patient.ism }}ni o\'chirmoqchimisiz?')">
+                                {% csrf_token %}
+                                <button type="submit" class="icon-btn" title="O'chirish">
+                                    <svg class="w-5 h-5 text-slate-500 hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                     </svg>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="7" class="px-6 py-12 text-center">
-                            <div class="flex flex-col items-center justify-center text-gray-500">
-                                <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                                </svg>
-                                <p class="text-lg font-semibold">Беморлар топилмади</p>
-                                <p class="text-sm mt-2">Янги бемор қўшиш учун юқоридаги тугмани босинг</p>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-
-    <!-- Pagination -->
-    {% if is_paginated %}
-    <div class="mt-6 flex justify-center">
-        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-            {% if page_obj.has_previous %}
-            <a href="?page=1" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                <span>Биринчи</span>
-            </a>
-            <a href="?page={{ page_obj.previous_page_number }}" class="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                <span>Олдинги</span>
-            </a>
-            {% endif %}
-
-            <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
-                Саҳифа {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
-            </span>
-
-            {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" class="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                <span>Кейинги</span>
-            </a>
-            <a href="?page={{ page_obj.paginator.num_pages }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                <span>Охирги</span>
-            </a>
-            {% endif %}
-        </nav>
+    {% else %}
+    <div class="empty-state py-16">
+        <div class="w-24 h-24 mx-auto mb-6 rounded-3xl bg-slate-100 flex items-center justify-center">
+            <svg class="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+        </div>
+        <p class="text-xl font-semibold text-slate-600">Bemorlar topilmadi</p>
+        <p class="text-slate-400 mt-2">{% if query %}Qidiruv natijasi bo'sh. Boshqa so'z bilan urinib ko'ring.{% else %}Yangi bemor qo'shish uchun yuqoridagi tugmani bosing.{% endif %}</p>
+        {% if not query %}
+        <a href="{% url 'patient_create' %}" class="btn-primary inline-flex items-center gap-2 mt-6">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Birinchi bemorni qo'shing
+        </a>
+        {% endif %}
     </div>
     {% endif %}
 </div>

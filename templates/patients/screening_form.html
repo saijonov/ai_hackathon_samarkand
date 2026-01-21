@@ -1,338 +1,119 @@
 {% extends 'base.html' %}
 
-{% block title %}Соғлиқни текшириш - {{ patient.ism }}{% endblock %}
+{% block title %}Tekshiruv qo'shish - {{ patient.ism }} - MedAI CRM{% endblock %}
+
+{% block page_title %}Sog'liqni tekshirish{% endblock %}
+{% block page_subtitle %}{{ patient.ism }} uchun yangi tekshiruv{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <!-- Back Button -->
-    <div class="mb-6">
-        <a href="{% url 'patient_detail' patient.pk %}" class="text-blue-600 hover:text-blue-800 flex items-center transition duration-200">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-            </svg>
-            Бемор маълумотларига қайтиш
-        </a>
-    </div>
+<!-- Back Button -->
+<a href="{% url 'patient_detail' patient.pk %}" class="inline-flex items-center gap-2 text-slate-600 hover:text-slate-800 transition-colors mb-6">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+    </svg>
+    {{ patient.ism }} sahifasiga qaytish
+</a>
 
-    <!-- Page Header -->
-    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg shadow-lg p-8 mb-8 text-white">
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold mb-2 flex items-center">
-                    <svg class="w-10 h-10 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+<div class="max-w-3xl">
+    <div class="card rounded-2xl overflow-hidden">
+        <div class="p-6 border-b border-slate-100 bg-gradient-to-r from-teal-50 to-emerald-50">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
-                    Соғлиқни текшириш (Скрининг)
-                </h1>
-                <p class="text-blue-100 text-lg">Бемор: <span class="font-semibold">{{ patient.ism }}</span> ({{ patient.yosh }} йош, {{ patient.jins }})</p>
-            </div>
-            <div class="hidden md:block">
-                <div class="bg-white bg-opacity-20 rounded-full p-6">
-                    <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800 font-display">Tibbiy tekshiruv</h2>
+                    <p class="text-sm text-slate-500">Ko'rsatkichlarni kiriting - AI avtomatik tahlil qiladi</p>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Form Card -->
-    <div class="bg-white rounded-lg shadow-lg p-8 max-w-5xl mx-auto">
-        <form method="post" class="space-y-8" id="screeningForm">
+        <form method="post" class="p-6 space-y-6">
             {% csrf_token %}
-
-            <!-- Display form errors if any -->
-            {% if form.errors %}
-            <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg mb-6">
-                <div class="flex items-center mb-2">
-                    <svg class="w-6 h-6 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <h3 class="text-red-800 font-semibold">Хатолар мавжуд</h3>
-                </div>
-                <ul class="list-disc list-inside text-red-700 text-sm">
-                    {% for field, errors in form.errors.items %}
-                        {% for error in errors %}
-                            <li>{{ field }}: {{ error }}</li>
-                        {% endfor %}
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
-
-            <!-- Vital Signs Section -->
+            
+            <!-- Vital Signs -->
             <div>
-                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center border-b-2 border-blue-500 pb-2">
-                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                    </svg>
-                    Асосий кўрсаткичлар
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-                    <!-- Blood Pressure High -->
-                    <div>
-                        <label for="{{ form.qon_bosimi_yuqori.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Қон босими (юқори) <span class="text-red-500">*</span>
-                        </label>
-                        <div class="relative">
-                            <input type="number"
-                                   name="{{ form.qon_bosimi_yuqori.name }}"
-                                   id="{{ form.qon_bosimi_yuqori.id_for_label }}"
-                                   value="{{ form.qon_bosimi_yuqori.value|default:'' }}"
-                                   required
-                                   step="0.01"
-                                   min="0"
-                                   class="w-full px-4 py-3 pr-16 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                                   placeholder="120">
-                            <span class="absolute right-3 top-3 text-gray-500 text-sm">mmHg</span>
-                        </div>
-                        {% if form.qon_bosimi_yuqori.errors %}
-                        <p class="mt-1 text-sm text-red-600">{{ form.qon_bosimi_yuqori.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-
-                    <!-- Blood Pressure Low -->
-                    <div>
-                        <label for="{{ form.qon_bosimi_past.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Қон босими (паст) <span class="text-red-500">*</span>
-                        </label>
-                        <div class="relative">
-                            <input type="number"
-                                   name="{{ form.qon_bosimi_past.name }}"
-                                   id="{{ form.qon_bosimi_past.id_for_label }}"
-                                   value="{{ form.qon_bosimi_past.value|default:'' }}"
-                                   required
-                                   step="0.01"
-                                   min="0"
-                                   class="w-full px-4 py-3 pr-16 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                                   placeholder="80">
-                            <span class="absolute right-3 top-3 text-gray-500 text-sm">mmHg</span>
-                        </div>
-                        {% if form.qon_bosimi_past.errors %}
-                        <p class="mt-1 text-sm text-red-600">{{ form.qon_bosimi_past.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-
-                    <!-- Pulse -->
-                    <div>
-                        <label for="{{ form.puls.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Пулс <span class="text-red-500">*</span>
-                        </label>
-                        <div class="relative">
-                            <input type="number"
-                                   name="{{ form.puls.name }}"
-                                   id="{{ form.puls.id_for_label }}"
-                                   value="{{ form.puls.value|default:'' }}"
-                                   required
-                                   step="0.01"
-                                   min="0"
-                                   class="w-full px-4 py-3 pr-16 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                                   placeholder="72">
-                            <span class="absolute right-3 top-3 text-gray-500 text-sm">bpm</span>
-                        </div>
-                        {% if form.puls.errors %}
-                        <p class="mt-1 text-sm text-red-600">{{ form.puls.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-
-                    <!-- Temperature -->
-                    <div>
-                        <label for="{{ form.harorat.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Ҳарорат <span class="text-red-500">*</span>
-                        </label>
-                        <div class="relative">
-                            <input type="number"
-                                   name="{{ form.harorat.name }}"
-                                   id="{{ form.harorat.id_for_label }}"
-                                   value="{{ form.harorat.value|default:'' }}"
-                                   required
-                                   step="0.1"
-                                   min="0"
-                                   class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                                   placeholder="36.6">
-                            <span class="absolute right-3 top-3 text-gray-500 text-sm">°C</span>
-                        </div>
-                        {% if form.harorat.errors %}
-                        <p class="mt-1 text-sm text-red-600">{{ form.harorat.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-
-                    <!-- Glucose -->
-                    <div>
-                        <label for="{{ form.glyukoza.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Глюкоза
-                        </label>
-                        <div class="relative">
-                            <input type="number"
-                                   name="{{ form.glyukoza.name }}"
-                                   id="{{ form.glyukoza.id_for_label }}"
-                                   value="{{ form.glyukoza.value|default:'' }}"
-                                   step="0.01"
-                                   min="0"
-                                   class="w-full px-4 py-3 pr-16 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                                   placeholder="90">
-                            <span class="absolute right-3 top-3 text-gray-500 text-sm">mg/dL</span>
-                        </div>
-                        {% if form.glyukoza.errors %}
-                        <p class="mt-1 text-sm text-red-600">{{ form.glyukoza.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-
-                    <!-- Cholesterol -->
-                    <div>
-                        <label for="{{ form.holesterin.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Холестерин
-                        </label>
-                        <div class="relative">
-                            <input type="number"
-                                   name="{{ form.holesterin.name }}"
-                                   id="{{ form.holesterin.id_for_label }}"
-                                   value="{{ form.holesterin.value|default:'' }}"
-                                   step="0.01"
-                                   min="0"
-                                   class="w-full px-4 py-3 pr-16 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                                   placeholder="200">
-                            <span class="absolute right-3 top-3 text-gray-500 text-sm">mg/dL</span>
-                        </div>
-                        {% if form.holesterin.errors %}
-                        <p class="mt-1 text-sm text-red-600">{{ form.holesterin.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-
-                    <!-- BMI -->
-                    <div>
-                        <label for="{{ form.bmi.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            BMI (Тана масса индекси)
-                        </label>
-                        <div class="relative">
-                            <input type="number"
-                                   name="{{ form.bmi.name }}"
-                                   id="{{ form.bmi.id_for_label }}"
-                                   value="{{ form.bmi.value|default:'' }}"
-                                   step="0.1"
-                                   min="0"
-                                   class="w-full px-4 py-3 pr-16 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                                   placeholder="22.5">
-                            <span class="absolute right-3 top-3 text-gray-500 text-sm">kg/m²</span>
-                        </div>
-                        {% if form.bmi.errors %}
-                        <p class="mt-1 text-sm text-red-600">{{ form.bmi.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            <!-- AI Predictions Section (Read-only, will be calculated) -->
-            <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-lg p-6 border-2 border-purple-200">
-                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                    </svg>
-                    AI Башорат (автоматик ҳисобланади)
-                </h2>
-                <p class="text-gray-600 mb-4">
-                    Формани юборганингиздан кейин, AI модели беморнинг соғлиқ хавфини автоматик равишда баҳолайди.
-                </p>
+                <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Vital belgilar</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-white rounded-lg p-4 shadow-sm">
-                        <div class="flex items-center mb-2">
-                            <svg class="w-5 h-5 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                            </svg>
-                            <span class="font-semibold text-gray-700">Қанд касаллиги эҳтимоли</span>
-                        </div>
-                        <p class="text-sm text-gray-600">Глюкоза ва бошқа кўрсаткичлар асосида ҳисобланади</p>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Qon bosimi (yuqori) mmHg</label>
+                        <input type="number" name="qon_bosimi_yuqori" min="60" max="250"
+                               class="form-input" placeholder="120">
                     </div>
-                    <div class="bg-white rounded-lg p-4 shadow-sm">
-                        <div class="flex items-center mb-2">
-                            <svg class="w-5 h-5 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-                            <span class="font-semibold text-gray-700">Юрак касаллиги эҳтимоли</span>
-                        </div>
-                        <p class="text-sm text-gray-600">Қон босими ва холестерин асосида ҳисобланади</p>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Qon bosimi (past) mmHg</label>
+                        <input type="number" name="qon_bosimi_past" min="40" max="150"
+                               class="form-input" placeholder="80">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Puls (urish/min)</label>
+                        <input type="number" name="puls" min="40" max="200"
+                               class="form-input" placeholder="72">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Harorat °C</label>
+                        <input type="number" name="harorat" step="0.1" min="35" max="42"
+                               class="form-input" placeholder="36.6">
                     </div>
                 </div>
             </div>
 
-            <!-- Notes Section -->
-            <div>
-                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center border-b-2 border-blue-500 pb-2">
-                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                    </svg>
-                    Қўшимча маълумотлар
-                </h2>
-                <div class="mt-4">
-                    <label for="{{ form.izoh.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                        Изоҳ
-                    </label>
-                    <textarea name="{{ form.izoh.name }}"
-                              id="{{ form.izoh.id_for_label }}"
-                              rows="4"
-                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                              placeholder="Қўшимча изоҳлар ёки кузатишлар...">{{ form.izoh.value|default:'' }}</textarea>
-                    {% if form.izoh.errors %}
-                    <p class="mt-1 text-sm text-red-600">{{ form.izoh.errors.0 }}</p>
-                    {% endif %}
+            <!-- Lab Results -->
+            <div class="pt-6 border-t border-slate-100">
+                <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Laboratoriya natijalari</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Glyukoza (mg/dL)</label>
+                        <input type="number" name="glyukoza" step="0.1" min="50" max="500"
+                               class="form-input" placeholder="100">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Holesterin (mg/dL)</label>
+                        <input type="number" name="holesterin" step="0.1" min="100" max="400"
+                               class="form-input" placeholder="180">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">BMI (kg/m²)</label>
+                        <input type="number" name="bmi" step="0.1" min="15" max="50"
+                               class="form-input" placeholder="24.5">
+                    </div>
                 </div>
             </div>
 
-            <!-- Form Actions -->
-            <div class="flex justify-between items-center pt-6 border-t-2 border-gray-200">
-                <a href="{% url 'patient_detail' patient.pk %}" class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200 font-medium flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            <!-- Notes -->
+            <div class="pt-6 border-t border-slate-100">
+                <label class="block text-sm font-medium text-slate-700 mb-2">Shifokor izohi</label>
+                <textarea name="izoh" rows="3" class="form-input" placeholder="Qo'shimcha ma'lumotlar..."></textarea>
+            </div>
+
+            <!-- AI Info -->
+            <div class="p-4 rounded-xl bg-gradient-to-r from-violet-50 to-purple-50 border border-violet-100">
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="font-medium text-violet-800">AI Avtomatik tahlil</p>
+                        <p class="text-sm text-violet-600 mt-1">Kiritilgan ma'lumotlar asosida sun'iy intellekt qand va yurak kasalliklari xavfini avtomatik hisoblaydi.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex items-center justify-end gap-3 pt-6 border-t border-slate-100">
+                <a href="{% url 'patient_detail' patient.pk %}" class="btn-secondary">Bekor qilish</a>
+                <button type="submit" class="btn-primary inline-flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    Бекор қилиш
-                </a>
-                <button type="submit" class="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg shadow-lg transition duration-200 font-medium flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Скрининг натижасини сақлаш
+                    Saqlash va tahlil qilish
                 </button>
             </div>
         </form>
-    </div>
-
-    <!-- Information Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-5xl mx-auto">
-        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
-            <div class="flex items-start">
-                <svg class="w-6 h-6 text-green-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <div>
-                    <h3 class="text-green-800 font-semibold text-sm">Меъёрий қийматлар</h3>
-                    <p class="text-green-700 text-xs mt-1">Қон босими: 120/80 mmHg<br>Пулс: 60-100 bpm<br>Ҳарорат: 36.1-37.2°C</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
-            <div class="flex items-start">
-                <svg class="w-6 h-6 text-blue-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <div>
-                    <h3 class="text-blue-800 font-semibold text-sm">Глюкоза</h3>
-                    <p class="text-blue-700 text-xs mt-1">Меъёрий: 70-100 mg/dL (оч қорин)<br>Диабет: >126 mg/dL</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-lg">
-            <div class="flex items-start">
-                <svg class="w-6 h-6 text-purple-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                </svg>
-                <div>
-                    <h3 class="text-purple-800 font-semibold text-sm">AI Башорат</h3>
-                    <p class="text-purple-700 text-xs mt-1">Машина ўқитиш модели маълумотларингизни таҳлил қилиб, хавф даражасини аниқлайди</p>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 {% endblock %}

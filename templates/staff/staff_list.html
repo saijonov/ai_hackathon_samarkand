@@ -1,89 +1,119 @@
-{% extends 'dashboard.html' %}
+{% extends 'base.html' %}
+
+{% block title %}Xodimlar - MedAI CRM{% endblock %}
+
+{% block page_title %}Xodimlar{% endblock %}
+{% block page_subtitle %}Shifokorlar va xodimlarni boshqarish{% endblock %}
 
 {% block content %}
-<div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold text-gray-800">👨‍⚕️ Xodimlar</h1>
-    <a href="{% url 'staff_create' %}" class="btn-primary">
-        ➕ Yangi xodim qo'shish
+<!-- Header -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+    <div>
+        <h1 class="text-3xl font-bold text-slate-800 font-display">Xodimlar</h1>
+        <p class="text-slate-500 mt-1">Shifokorlar va xodimlarni boshqarish</p>
+    </div>
+    <a href="{% url 'staff_create' %}" class="btn-primary inline-flex items-center gap-2 self-start">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Yangi xodim
     </a>
 </div>
 
 <!-- Search -->
-<div class="mb-6">
-    <form method="GET" class="flex gap-2">
-        <input 
-            type="text" 
-            name="q" 
-            value="{{ query }}"
-            placeholder="Ism, lavozim yoki bo'lim bo'yicha qidirish..."
-            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-        >
-        <button type="submit" class="btn-primary">🔍 Qidirish</button>
+<div class="card rounded-2xl p-6 mb-6">
+    <form method="get" class="flex gap-4">
+        <div class="flex-1">
+            <div class="relative">
+                <svg class="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <input type="text" name="q" value="{{ query }}" placeholder="Ism, lavozim yoki bo'lim bo'yicha qidirish..."
+                       class="form-input pl-10">
+            </div>
+        </div>
+        <button type="submit" class="btn-primary">Qidirish</button>
     </form>
 </div>
 
-<!-- Staff Table -->
-<div class="bg-white rounded-lg shadow overflow-hidden">
-    <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-            <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ism</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Lavozim</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bo'lim</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Telefon</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Holat</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ishga olingan</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Amallar</th>
-            </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-            {% for member in staff %}
-            <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="font-medium text-gray-900">{{ member.ism }}</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
-                        {{ member.get_lavozim_display }}
-                    </span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ member.get_bolim_display }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ member.telefon }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ member.email|default:"-" }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    {% if member.faol %}
-                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Faol</span>
-                    {% else %}
-                        <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">Faol emas</span>
-                    {% endif %}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ member.ishga_olingan_sana|date:"d.m.Y" }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <a href="{% url 'staff_edit' member.pk %}" class="text-blue-600 hover:text-blue-900 mr-3">✏️</a>
-                    <form method="POST" action="{% url 'staff_delete' member.pk %}" class="inline" 
-                          onsubmit="return confirm('Rostdan ham o\'chirmoqchimisiz?');">
-                        {% csrf_token %}
-                        <button type="submit" class="text-red-600 hover:text-red-900">🗑️</button>
-                    </form>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="8" class="px-6 py-8 text-center text-gray-500">
-                    Xodimlar topilmadi
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<!-- Staff Grid -->
+{% if staff %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for member in staff %}
+    <div class="stagger-item card card-hover rounded-2xl p-6">
+        <div class="flex items-start justify-between mb-4">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-xl bg-gradient-to-br {% if member.lavozim == 'doctor' %}from-blue-500 to-indigo-600{% elif member.lavozim == 'nurse' %}from-pink-500 to-rose-600{% else %}from-emerald-500 to-teal-600{% endif %} flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                    {{ member.ism|slice:":1"|upper }}
+                </div>
+                <div>
+                    <h3 class="font-bold text-slate-800">{{ member.ism }}</h3>
+                    <p class="text-sm text-slate-500">{{ member.get_lavozim_display }}</p>
+                </div>
+            </div>
+            {% if member.faol %}
+            <span class="w-3 h-3 rounded-full bg-green-500 shadow-lg shadow-green-500/50"></span>
+            {% else %}
+            <span class="w-3 h-3 rounded-full bg-slate-300"></span>
+            {% endif %}
+        </div>
+
+        <div class="space-y-3 mb-4">
+            <div class="flex items-center gap-2 text-sm text-slate-600">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                </svg>
+                {{ member.get_bolim_display }}
+            </div>
+            <div class="flex items-center gap-2 text-sm text-slate-600">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                </svg>
+                {{ member.telefon }}
+            </div>
+            {% if member.email %}
+            <div class="flex items-center gap-2 text-sm text-slate-600">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+                {{ member.email }}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+            <span class="text-xs text-slate-400">Ishga olingan: {{ member.ishga_olingan_sana|date:"d.m.Y" }}</span>
+            <div class="flex items-center gap-1">
+                <a href="{% url 'staff_edit' member.pk %}" class="icon-btn" title="Tahrirlash">
+                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                </a>
+                <form action="{% url 'staff_delete' member.pk %}" method="post" class="inline"
+                      onsubmit="return confirm('Haqiqatan ham {{ member.ism }}ni o\'chirmoqchimisiz?')">
+                    {% csrf_token %}
+                    <button type="submit" class="icon-btn" title="O'chirish">
+                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 </div>
+{% else %}
+<div class="card rounded-2xl">
+    <div class="empty-state py-16">
+        <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-slate-100 flex items-center justify-center">
+            <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+        </div>
+        <p class="text-lg font-medium text-slate-600">Xodimlar topilmadi</p>
+        <p class="text-slate-400 mt-1">Yangi xodim qo'shish uchun yuqoridagi tugmani bosing</p>
+    </div>
+</div>
+{% endif %}
 {% endblock %}
