@@ -43,16 +43,6 @@ db.sqlite3-journal
 # Uncomment if you want to exclude trained models from git
 # ml_models/*.pkl
 
-# Datasets (can be large)
-datasets/*.csv
-datasets/*.zip
-datasets/*.json
-!datasets/DOWNLOAD_INSTRUCTIONS.md
-
-# Kaggle credentials
-.kaggle/
-kaggle.json
-
 # IDE
 .vscode/
 .idea/
