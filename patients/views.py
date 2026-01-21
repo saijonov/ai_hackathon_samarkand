@@ -2,10 +2,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Q, Count
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 from datetime import timedelta
 from .models import Patient, Appointment, HealthScreening
 import sys
 import os
+from io import BytesIO
+from elevenlabs.client import ElevenLabs
 
 # Add parent directory to path to import ml_models
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -120,11 +125,31 @@ def patient_create(request):
     """Create new patient"""
     if request.method == 'POST':
         try:
+            # Validate required fields
+            ism = request.POST.get('ism', '').strip()
+            yosh_str = request.POST.get('yosh', '').strip()
+            jins = request.POST.get('jins', '').strip()
+            telefon = request.POST.get('telefon', '').strip()
+
+            # Check required fields
+            if not ism:
+                messages.error(request, "Ism kiritilishi shart!")
+                return render(request, 'patients/patient_form.html')
+            if not yosh_str:
+                messages.error(request, "Yosh kiritilishi shart!")
+                return render(request, 'patients/patient_form.html')
+            if not jins:
+                messages.error(request, "Jins tanlanishi shart!")
+                return render(request, 'patients/patient_form.html')
+            if not telefon:
+                messages.error(request, "Telefon kiritilishi shart!")
+                return render(request, 'patients/patient_form.html')
+
             patient = Patient.objects.create(
-                ism=request.POST.get('ism'),
-                yosh=int(request.POST.get('yosh')),
-                jins=request.POST.get('jins'),
-                telefon=request.POST.get('telefon'),
+                ism=ism,
+                yosh=int(yosh_str),
+                jins=jins,
+                telefon=telefon,
                 manzil=request.POST.get('manzil', ''),
                 qon_guruhi=request.POST.get('qon_guruhi', ''),
                 allergiyalar=request.POST.get('allergiyalar', ''),
@@ -134,6 +159,8 @@ def patient_create(request):
             )
             messages.success(request, f"Bemor {patient.ism} muvaffaqiyatli qo'shildi!")
             return redirect('patient_detail', pk=patient.pk)
+        except ValueError as e:
+            messages.error(request, "Yosh to'g'ri formatda kiritilishi kerak!")
         except Exception as e:
             messages.error(request, f"Xato: {str(e)}")
 
@@ -388,3 +415,44 @@ def health_screening_create(request, pk):
 
     context = {'patient': patient}
     return render(request, 'patients/screening_form.html', context)
+
+
+@csrf_exempt
+def transcribe_audio(request):
+    """Transcribe audio using ElevenLabs Speech-to-Text API"""
+    if request.method == 'POST' and request.FILES.get('audio'):
+        try:
+            # Get the audio file from request
+            audio_file = request.FILES['audio']
+            audio_data = BytesIO(audio_file.read())
+            
+            # Initialize ElevenLabs client
+            elevenlabs = ElevenLabs(api_key=settings.ELEVENLABS_API_KEY)
+            
+            # Transcribe the audio
+            transcription = elevenlabs.speech_to_text.convert(
+                file=audio_data,
+                model_id="scribe_v2",
+                tag_audio_events=True,
+                language_code="uzb",  # Uzbek language
+                diarize=True,  # Annotate who is speaking
+            )
+            
+            # Return the transcription text
+            return JsonResponse({
+                'success': True,
+                'transcription': str(transcription.text if hasattr(transcription, 'text') else transcription),
+                'message': 'Audio muvaffaqiyatli transkripsiya qilindi!'
+            })
+            
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e),
+                'message': f'Xato: {str(e)}'
+            }, status=400)
+    
+    return JsonResponse({
+        'success': False,
+        'message': 'Audio fayl topilmadi'
+    }, status=400)

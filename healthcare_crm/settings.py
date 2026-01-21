@@ -124,3 +124,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ElevenLabs API Key
+ELEVENLABS_API_KEY = 'sk_1f5dbd795f51c0df9789f7fd859c64e6bbbc5e7decd37537'

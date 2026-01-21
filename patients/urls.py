@@ -21,4 +21,7 @@ urlpatterns = [
     path('appointments/<int:pk>/complete/', views.appointment_complete, name='appointment_complete'),
     path('appointments/<int:pk>/cancel/', views.appointment_cancel, name='appointment_cancel'),
     path('appointments/<int:pk>/noshow/', views.appointment_noshow, name='appointment_noshow'),
+
+    # Voice transcription
+    path('transcribe-audio/', views.transcribe_audio, name='transcribe_audio'),
 ]
