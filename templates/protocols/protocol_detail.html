@@ -1,0 +1,293 @@
+{% extends 'base.html' %}
+
+{% block title %}Protokol - {{ patient.ism }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Back Button -->
+    <div class="mb-6">
+        <a href="{% url 'patient_detail' pk=patient.pk %}" class="text-blue-600 hover:text-blue-800 flex items-center transition duration-200">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            {{ patient.ism }}ga qaytish
+        </a>
+    </div>
+
+    <!-- Page Header with AI Prediction -->
+    <div class="mb-8">
+        <div class="flex items-center justify-between flex-wrap gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2 flex items-center">
+                    {% if protocol.protocol_type == 'diabetes' %}
+                    <svg class="w-8 h-8 mr-3 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                    </svg>
+                    {% else %}
+                    <svg class="w-8 h-8 mr-3 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                    {% endif %}
+                    {{ protocol.get_protocol_type_display }}
+                </h1>
+                <p class="text-gray-600">
+                    Bemor: <strong>{{ patient.ism }}</strong> |
+                    Sana: <strong>{{ protocol.yaratilgan_sana|date:"d.m.Y H:i" }}</strong>
+                    {% if protocol.shifokor %} | Shifokor: <strong>{{ protocol.shifokor }}</strong>{% endif %}
+                </p>
+            </div>
+
+            <!-- AI Prediction Card -->
+            {% if protocol.ai_prediction is not None %}
+            <div class="{% if protocol.ai_prediction >= 70 %}bg-red-100 border-red-500{% elif protocol.ai_prediction >= 30 %}bg-yellow-100 border-yellow-500{% else %}bg-green-100 border-green-500{% endif %} border-2 rounded-xl p-6 text-center min-w-[200px]">
+                <div class="text-sm font-medium {% if protocol.ai_prediction >= 70 %}text-red-700{% elif protocol.ai_prediction >= 30 %}text-yellow-700{% else %}text-green-700{% endif %} mb-1">AI Bashorat</div>
+                <div class="text-4xl font-bold {% if protocol.ai_prediction >= 70 %}text-red-600{% elif protocol.ai_prediction >= 30 %}text-yellow-600{% else %}text-green-600{% endif %}">
+                    {{ protocol.ai_prediction }}%
+                </div>
+                <div class="text-sm font-medium {% if protocol.ai_prediction >= 70 %}text-red-600{% elif protocol.ai_prediction >= 30 %}text-yellow-600{% else %}text-green-600{% endif %} mt-1">
+                    {{ protocol.risk_level }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Risk Gauge -->
+    {% if protocol.ai_prediction is not None %}
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6 max-w-4xl mx-auto">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+            <svg class="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+            Xavf darajasi ko'rsatkichi
+        </h2>
+        <div class="relative pt-1">
+            <div class="flex mb-2 items-center justify-between">
+                <div class="text-xs font-semibold inline-block py-1 px-2 rounded-full text-green-600 bg-green-200">Past (0-30%)</div>
+                <div class="text-xs font-semibold inline-block py-1 px-2 rounded-full text-yellow-600 bg-yellow-200">O'rta (30-70%)</div>
+                <div class="text-xs font-semibold inline-block py-1 px-2 rounded-full text-red-600 bg-red-200">Yuqori (70-100%)</div>
+            </div>
+            <div class="overflow-hidden h-4 text-xs flex rounded-full bg-gray-200">
+                <div style="width: {{ protocol.ai_prediction }}%"
+                     class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center transition-all duration-500
+                     {% if protocol.ai_prediction >= 70 %}bg-red-500{% elif protocol.ai_prediction >= 30 %}bg-yellow-500{% else %}bg-green-500{% endif %}">
+                </div>
+            </div>
+            <div class="mt-2 text-center text-lg font-bold">
+                {% if protocol.protocol_type == 'diabetes' %}
+                Qand kasalligi xavfi: {{ protocol.ai_prediction }}%
+                {% else %}
+                Yurak kasalligi xavfi: {{ protocol.ai_prediction }}%
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Medical Conditions -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6 max-w-4xl mx-auto">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center border-b pb-2">
+            <svg class="w-6 h-6 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            Umumiy tibbiy ma'lumotlar
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {% if protocol.qon_guruhi %}
+            <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-sm text-gray-500">Qon guruhi</div>
+                <div class="text-xl font-bold text-gray-800">{{ protocol.qon_guruhi }}</div>
+            </div>
+            {% endif %}
+            {% if protocol.allergiyalar %}
+            <div class="p-4 bg-gray-50 rounded-lg md:col-span-2">
+                <div class="text-sm text-gray-500">Allergiyalar</div>
+                <div class="text-lg text-gray-800">{{ protocol.allergiyalar }}</div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="mt-4 flex flex-wrap gap-3">
+            <span class="px-4 py-2 rounded-full text-sm font-medium {% if protocol.qand_kasalligi %}bg-red-100 text-red-800{% else %}bg-gray-100 text-gray-500{% endif %}">
+                {% if protocol.qand_kasalligi %}✓{% else %}✗{% endif %} Qand kasalligi
+            </span>
+            <span class="px-4 py-2 rounded-full text-sm font-medium {% if protocol.gipertoniya %}bg-orange-100 text-orange-800{% else %}bg-gray-100 text-gray-500{% endif %}">
+                {% if protocol.gipertoniya %}✓{% else %}✗{% endif %} Gipertoniya
+            </span>
+            <span class="px-4 py-2 rounded-full text-sm font-medium {% if protocol.yurak_kasalligi %}bg-pink-100 text-pink-800{% else %}bg-gray-100 text-gray-500{% endif %}">
+                {% if protocol.yurak_kasalligi %}✓{% else %}✗{% endif %} Yurak kasalligi
+            </span>
+        </div>
+    </div>
+
+    <!-- Protocol Specific Data -->
+    {% if protocol.protocol_type == 'diabetes' %}
+    <!-- Diabetes Data -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6 max-w-4xl mx-auto">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center border-b pb-2">
+            <svg class="w-6 h-6 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+            </svg>
+            Qand kasalligi ko'rsatkichlari
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {% if protocol.pregnancies is not None %}
+            <div class="p-4 bg-red-50 rounded-lg text-center">
+                <div class="text-sm text-gray-500">Homiladorlik soni</div>
+                <div class="text-2xl font-bold text-red-700">{{ protocol.pregnancies }}</div>
+            </div>
+            {% endif %}
+            {% if protocol.glucose is not None %}
+            <div class="p-4 bg-red-50 rounded-lg text-center">
+                <div class="text-sm text-gray-500">Glyukoza (mg/dL)</div>
+                <div class="text-2xl font-bold {% if protocol.glucose > 140 %}text-red-600{% elif protocol.glucose < 70 %}text-yellow-600{% else %}text-green-600{% endif %}">{{ protocol.glucose }}</div>
+            </div>
+            {% endif %}
+            {% if protocol.blood_pressure is not None %}
+            <div class="p-4 bg-red-50 rounded-lg text-center">
+                <div class="text-sm text-gray-500">Qon bosimi (mm Hg)</div>
+                <div class="text-2xl font-bold text-red-700">{{ protocol.blood_pressure }}</div>
+            </div>
+            {% endif %}
+            {% if protocol.skin_thickness is not None %}
+            <div class="p-4 bg-red-50 rounded-lg text-center">
+                <div class="text-sm text-gray-500">Teri qalinligi (mm)</div>
+                <div class="text-2xl font-bold text-red-700">{{ protocol.skin_thickness }}</div>
+            </div>
+            {% endif %}
+            {% if protocol.insulin is not None %}
+            <div class="p-4 bg-red-50 rounded-lg text-center">
+                <div class="text-sm text-gray-500">Insulin (mu U/ml)</div>
+                <div class="text-2xl font-bold text-red-700">{{ protocol.insulin }}</div>
+            </div>
+            {% endif %}
+            {% if protocol.bmi is not None %}
+            <div class="p-4 bg-red-50 rounded-lg text-center">
+                <div class="text-sm text-gray-500">BMI</div>
+                <div class="text-2xl font-bold {% if protocol.bmi > 30 %}text-red-600{% elif protocol.bmi < 18.5 %}text-yellow-600{% else %}text-green-600{% endif %}">{{ protocol.bmi }}</div>
+            </div>
+            {% endif %}
+            {% if protocol.diabetes_pedigree is not None %}
+            <div class="p-4 bg-red-50 rounded-lg text-center">
+                <div class="text-sm text-gray-500">Irsiy omil</div>
+                <div class="text-2xl font-bold text-red-700">{{ protocol.diabetes_pedigree }}</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <!-- Heart Disease Data -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6 max-w-4xl mx-auto">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center border-b pb-2">
+            <svg class="w-6 h-6 mr-2 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+            </svg>
+            Yurak kasalligi ko'rsatkichlari
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {% if protocol.sex is not None %}
+            <div class="p-4 bg-pink-50 rounded-lg text-center">
+                <div class="text-sm text-gray-500">Jins</div>
+                <div class="text-2xl font-bold text-pink-700">{% if protocol.sex == 1 %}Erkak{% else %}Ayol{% endif %}</div>
+            </div>
+            {% endif %}
+            {% if protocol.chest_pain_type is not None %}
+            <div class="p-4 bg-pink-50 rounded-lg text-center">
+                <div class="text-sm text-gray-500">Ko'krak og'rig'i</div>
+                <div class="text-lg font-bold text-pink-700">{{ protocol.get_chest_pain_type_display }}</div>
+            </div>
+            {% endif %}
+            {% if protocol.resting_bp is not None %}
+            <div class="p-4 bg-pink-50 rounded-lg text-center">
+                <div class="text-sm text-gray-500">Qon bosimi (mm Hg)</div>
+                <div class="text-2xl font-bold {% if protocol.resting_bp > 140 %}text-red-600{% else %}text-pink-700{% endif %}">{{ protocol.resting_bp }}</div>
+            </div>
+            {% endif %}
+            {% if protocol.cholesterol is not None %}
+            <div class="p-4 bg-pink-50 rounded-lg text-center">
+                <div class="text-sm text-gray-500">Xolesterin (mg/dl)</div>
+                <div class="text-2xl font-bold {% if protocol.cholesterol > 200 %}text-red-600{% else %}text-pink-700{% endif %}">{{ protocol.cholesterol }}</div>
+            </div>
+            {% endif %}
+            {% if protocol.max_heart_rate is not None %}
+            <div class="p-4 bg-pink-50 rounded-lg text-center">
+                <div class="text-sm text-gray-500">Maks yurak urishi</div>
+                <div class="text-2xl font-bold text-pink-700">{{ protocol.max_heart_rate }} bpm</div>
+            </div>
+            {% endif %}
+            {% if protocol.rest_ecg is not None %}
+            <div class="p-4 bg-pink-50 rounded-lg text-center">
+                <div class="text-sm text-gray-500">EKG natijasi</div>
+                <div class="text-lg font-bold text-pink-700">
+                    {% if protocol.rest_ecg == 0 %}Normal{% elif protocol.rest_ecg == 1 %}ST-T anormal{% else %}LVH{% endif %}
+                </div>
+            </div>
+            {% endif %}
+            {% if protocol.oldpeak is not None %}
+            <div class="p-4 bg-pink-50 rounded-lg text-center">
+                <div class="text-sm text-gray-500">ST depressiyasi</div>
+                <div class="text-2xl font-bold text-pink-700">{{ protocol.oldpeak }}</div>
+            </div>
+            {% endif %}
+            {% if protocol.num_vessels is not None %}
+            <div class="p-4 bg-pink-50 rounded-lg text-center">
+                <div class="text-sm text-gray-500">Tomirlar soni</div>
+                <div class="text-2xl font-bold text-pink-700">{{ protocol.num_vessels }}</div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="mt-4 flex flex-wrap gap-3">
+            <span class="px-4 py-2 rounded-full text-sm font-medium {% if protocol.fasting_blood_sugar %}bg-red-100 text-red-800{% else %}bg-green-100 text-green-800{% endif %}">
+                Och qorindagi qand > 120: {% if protocol.fasting_blood_sugar %}Ha{% else %}Yo'q{% endif %}
+            </span>
+            <span class="px-4 py-2 rounded-full text-sm font-medium {% if protocol.exercise_angina %}bg-red-100 text-red-800{% else %}bg-green-100 text-green-800{% endif %}">
+                Mashqda angina: {% if protocol.exercise_angina %}Ha{% else %}Yo'q{% endif %}
+            </span>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Transcript (if available) -->
+    {% if protocol.transcript %}
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6 max-w-4xl mx-auto">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center border-b pb-2">
+            <svg class="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+            </svg>
+            Ovozli yozuv transkripti
+        </h2>
+        <div class="bg-gray-50 p-4 rounded-lg">
+            <p class="text-gray-700 whitespace-pre-wrap">{{ protocol.transcript }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Notes -->
+    {% if protocol.izoh %}
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6 max-w-4xl mx-auto">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center border-b pb-2">
+            <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
+            Shifokor izohi
+        </h2>
+        <p class="text-gray-700">{{ protocol.izoh }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Action Buttons -->
+    <div class="flex justify-center space-x-4 max-w-4xl mx-auto">
+        <a href="{% url 'patient_detail' pk=patient.pk %}" class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Bemorga qaytish
+        </a>
+        <a href="{% url 'protocol_create' pk=patient.pk %}" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow-md transition flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Yangi protokol
+        </a>
+    </div>
+</div>
+{% endblock %}

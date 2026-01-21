@@ -1,0 +1,496 @@
+{% extends 'base.html' %}
+
+{% block title %}Yangi protokol - {{ patient.ism }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Back Button -->
+    <div class="mb-6">
+        <a href="{% url 'patient_detail' pk=patient.pk %}" class="text-blue-600 hover:text-blue-800 flex items-center transition duration-200">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            {{ patient.ism }}ga qaytish
+        </a>
+    </div>
+
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2 flex items-center">
+            <svg class="w-8 h-8 mr-3 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            Yangi protokol qo'shish
+        </h1>
+        <p class="text-gray-600">Bemor: <strong>{{ patient.ism }}</strong> ({{ patient.yosh }} yosh)</p>
+    </div>
+
+    <!-- Protocol Type Selection -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6 max-w-4xl mx-auto">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+            <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            Protokol turini tanlang
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <button type="button" id="selectDiabetes" onclick="selectProtocolType('diabetes')"
+                    class="protocol-type-btn p-6 border-2 border-gray-200 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-300 text-left">
+                <div class="flex items-center mb-3">
+                    <svg class="w-10 h-10 text-red-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                    </svg>
+                    <span class="text-xl font-bold text-gray-800">Qand kasalligi</span>
+                </div>
+                <p class="text-gray-600 text-sm">Diabetes protokoli - glyukoza, insulin, BMI va boshqa ko'rsatkichlar</p>
+            </button>
+            <button type="button" id="selectHeart" onclick="selectProtocolType('heart')"
+                    class="protocol-type-btn p-6 border-2 border-gray-200 rounded-xl hover:border-pink-500 hover:bg-pink-50 transition-all duration-300 text-left">
+                <div class="flex items-center mb-3">
+                    <svg class="w-10 h-10 text-pink-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                    <span class="text-xl font-bold text-gray-800">Yurak kasalligi</span>
+                </div>
+                <p class="text-gray-600 text-sm">Yurak protokoli - qon bosimi, xolesterin, EKG va boshqa ko'rsatkichlar</p>
+            </button>
+        </div>
+    </div>
+
+    <!-- Voice Recording Section -->
+    <div id="voiceRecordingSection" class="hidden bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg shadow-md p-6 max-w-4xl mx-auto mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                    </svg>
+                    Ovozli yozuv
+                </h2>
+                <p class="text-gray-600 text-sm mt-1">Bemor bilan suhbatni yozib oling - GPT avtomatik maydonlarni to'ldiradi</p>
+            </div>
+            <button type="button" id="recordButton" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center transition-all">
+                <svg id="micIcon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                </svg>
+                <span id="recordButtonText">Yozishni boshlash</span>
+            </button>
+        </div>
+        <div id="recordingStatus" class="hidden">
+            <div class="flex items-center space-x-2 text-red-600 font-medium mb-2">
+                <span class="animate-pulse text-2xl">🔴</span>
+                <span>Yozish davom etmoqda...</span>
+                <span id="recordingTimer" class="text-gray-600 font-mono">0:00</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div id="recordingProgress" class="bg-red-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+        <div id="transcriptionResult" class="hidden mt-4">
+            <h3 class="font-semibold text-gray-700 mb-2 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Transkript:
+            </h3>
+            <textarea id="transcriptionText" class="w-full p-4 rounded-lg border border-gray-200 text-gray-800 h-32 resize-none" placeholder="Transkript bu yerda ko'rsatiladi..."></textarea>
+            <button type="button" id="extractDataBtn" onclick="extractDataFromTranscript()"
+                    class="mt-3 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center transition-all">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                GPT bilan ma'lumotlarni ajratish
+            </button>
+        </div>
+        <div id="loadingIndicator" class="hidden flex items-center justify-center p-4">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mr-3"></div>
+            <span class="text-gray-600">Qayta ishlanmoqda...</span>
+        </div>
+    </div>
+
+    <!-- Protocol Form -->
+    <form method="post" id="protocolForm" class="hidden max-w-4xl mx-auto">
+        {% csrf_token %}
+        <input type="hidden" name="protocol_type" id="protocolTypeInput" value="">
+        <input type="hidden" name="transcript" id="transcriptInput" value="">
+
+        <!-- Common Medical Info -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center border-b pb-2">
+                <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Umumiy ma'lumotlar
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Shifokor</label>
+                    <input type="text" name="shifokor" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Shifokor ismi">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Qon guruhi</label>
+                    <select name="qon_guruhi" id="field_qon_guruhi" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <option value="">Tanlanmagan</option>
+                        <option value="O(I)">O(I)</option>
+                        <option value="A(II)">A(II)</option>
+                        <option value="B(III)">B(III)</option>
+                        <option value="AB(IV)">AB(IV)</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Allergiyalar</label>
+                    <input type="text" name="allergiyalar" id="field_allergiyalar" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Allergiyalar mavjud bo'lsa kiriting">
+                </div>
+            </div>
+            <!-- Medical Conditions -->
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="flex items-center p-3 border border-gray-200 rounded-lg">
+                    <input type="checkbox" name="qand_kasalligi" id="field_qand_kasalligi" class="w-5 h-5 text-red-600 rounded">
+                    <label for="field_qand_kasalligi" class="ml-2 text-gray-700">Qand kasalligi mavjud</label>
+                </div>
+                <div class="flex items-center p-3 border border-gray-200 rounded-lg">
+                    <input type="checkbox" name="gipertoniya" id="field_gipertoniya" class="w-5 h-5 text-orange-600 rounded">
+                    <label for="field_gipertoniya" class="ml-2 text-gray-700">Gipertoniya mavjud</label>
+                </div>
+                <div class="flex items-center p-3 border border-gray-200 rounded-lg">
+                    <input type="checkbox" name="yurak_kasalligi" id="field_yurak_kasalligi" class="w-5 h-5 text-pink-600 rounded">
+                    <label for="field_yurak_kasalligi" class="ml-2 text-gray-700">Yurak kasalligi mavjud</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diabetes Fields -->
+        <div id="diabetesFields" class="hidden bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center border-b pb-2">
+                <svg class="w-6 h-6 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                </svg>
+                Qand kasalligi ko'rsatkichlari
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Homiladorlik soni</label>
+                    <input type="number" name="pregnancies" id="field_pregnancies" min="0" max="17" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500" placeholder="0-17">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Glyukoza (mg/dL) <span class="text-red-500">*</span></label>
+                    <input type="number" name="glucose" id="field_glucose" step="0.1" min="0" max="200" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500" placeholder="70-140 normal">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Qon bosimi (mm Hg)</label>
+                    <input type="number" name="blood_pressure" id="field_blood_pressure" min="0" max="130" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500" placeholder="60-80 normal">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Teri qalinligi (mm)</label>
+                    <input type="number" name="skin_thickness" id="field_skin_thickness" min="0" max="99" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500" placeholder="0-99">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Insulin (mu U/ml)</label>
+                    <input type="number" name="insulin" id="field_insulin" step="0.1" min="0" max="850" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500" placeholder="16-166 normal">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">BMI <span class="text-red-500">*</span></label>
+                    <input type="number" name="bmi" id="field_bmi" step="0.1" min="0" max="70" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500" placeholder="18.5-24.9 normal">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Irsiy omil koeffitsienti</label>
+                    <input type="number" name="diabetes_pedigree" id="field_diabetes_pedigree" step="0.001" min="0" max="2.5" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500" placeholder="0.0-2.5">
+                </div>
+            </div>
+        </div>
+
+        <!-- Heart Disease Fields -->
+        <div id="heartFields" class="hidden bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center border-b pb-2">
+                <svg class="w-6 h-6 mr-2 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+                Yurak kasalligi ko'rsatkichlari
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Jins</label>
+                    <select name="sex" id="field_sex" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
+                        <option value="">Tanlanmagan</option>
+                        <option value="1">Erkak</option>
+                        <option value="0">Ayol</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ko'krak og'rig'i turi</label>
+                    <select name="chest_pain_type" id="field_chest_pain_type" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
+                        <option value="">Tanlanmagan</option>
+                        <option value="0">Asimptomatik</option>
+                        <option value="1">Atipik angina</option>
+                        <option value="2">Angina bo'lmagan og'riq</option>
+                        <option value="3">Tipik angina</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Dam olishdagi qon bosimi <span class="text-red-500">*</span></label>
+                    <input type="number" name="resting_bp" id="field_resting_bp" min="90" max="200" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500" placeholder="90-200 mm Hg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Xolesterin (mg/dl) <span class="text-red-500">*</span></label>
+                    <input type="number" name="cholesterol" id="field_cholesterol" step="0.1" min="100" max="600" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500" placeholder="< 200 normal">
+                </div>
+                <div class="flex items-center p-3 border border-gray-200 rounded-lg">
+                    <input type="checkbox" name="fasting_blood_sugar" id="field_fasting_blood_sugar" class="w-5 h-5 text-pink-600 rounded">
+                    <label for="field_fasting_blood_sugar" class="ml-2 text-gray-700 text-sm">Och qorindagi qand > 120 mg/dl</label>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Dam olishdagi EKG</label>
+                    <select name="rest_ecg" id="field_rest_ecg" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
+                        <option value="">Tanlanmagan</option>
+                        <option value="0">Normal</option>
+                        <option value="1">ST-T anormalligi</option>
+                        <option value="2">Chap qorincha gipertrofiyasi</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Maksimal yurak urishi</label>
+                    <input type="number" name="max_heart_rate" id="field_max_heart_rate" min="70" max="210" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500" placeholder="70-210 bpm">
+                </div>
+                <div class="flex items-center p-3 border border-gray-200 rounded-lg">
+                    <input type="checkbox" name="exercise_angina" id="field_exercise_angina" class="w-5 h-5 text-pink-600 rounded">
+                    <label for="field_exercise_angina" class="ml-2 text-gray-700 text-sm">Jismoniy mashqda angina</label>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ST depressiyasi (oldpeak)</label>
+                    <input type="number" name="oldpeak" id="field_oldpeak" step="0.1" min="0" max="6.5" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500" placeholder="0.0-6.5">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ST segment qiyaligi</label>
+                    <select name="slope" id="field_slope" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
+                        <option value="">Tanlanmagan</option>
+                        <option value="0">Pastga</option>
+                        <option value="1">Tekis</option>
+                        <option value="2">Yuqoriga</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Asosiy tomirlar soni</label>
+                    <select name="num_vessels" id="field_num_vessels" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
+                        <option value="">Tanlanmagan</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Talassemiya</label>
+                    <select name="thal" id="field_thal" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
+                        <option value="">Tanlanmagan</option>
+                        <option value="1">Normal</option>
+                        <option value="2">Tuzatilgan nuqson</option>
+                        <option value="3">Qaytmas nuqson</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Qo'shimcha izoh</h2>
+            <textarea name="izoh" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Shifokor izohi..."></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-end space-x-4">
+            <a href="{% url 'patient_detail' pk=patient.pk %}" class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                Bekor qilish
+            </a>
+            <button type="submit" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow-md transition flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Protokolni saqlash
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+let selectedProtocolType = null;
+let mediaRecorder = null;
+let audioChunks = [];
+let recordingStartTime = null;
+let timerInterval = null;
+
+function selectProtocolType(type) {
+    selectedProtocolType = type;
+    document.getElementById('protocolTypeInput').value = type;
+
+    // Update button styles
+    document.querySelectorAll('.protocol-type-btn').forEach(btn => {
+        btn.classList.remove('border-red-500', 'bg-red-50', 'border-pink-500', 'bg-pink-50');
+        btn.classList.add('border-gray-200');
+    });
+
+    if (type === 'diabetes') {
+        document.getElementById('selectDiabetes').classList.add('border-red-500', 'bg-red-50');
+        document.getElementById('diabetesFields').classList.remove('hidden');
+        document.getElementById('heartFields').classList.add('hidden');
+    } else {
+        document.getElementById('selectHeart').classList.add('border-pink-500', 'bg-pink-50');
+        document.getElementById('heartFields').classList.remove('hidden');
+        document.getElementById('diabetesFields').classList.add('hidden');
+    }
+
+    // Show voice recording and form
+    document.getElementById('voiceRecordingSection').classList.remove('hidden');
+    document.getElementById('protocolForm').classList.remove('hidden');
+}
+
+// Voice recording functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const recordButton = document.getElementById('recordButton');
+    const recordButtonText = document.getElementById('recordButtonText');
+    const recordingStatus = document.getElementById('recordingStatus');
+    const recordingTimer = document.getElementById('recordingTimer');
+    const recordingProgress = document.getElementById('recordingProgress');
+    const transcriptionResult = document.getElementById('transcriptionResult');
+    const transcriptionText = document.getElementById('transcriptionText');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+
+    if (!recordButton) return;
+
+    recordButton.addEventListener('click', async function() {
+        if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+            // Start recording
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    await transcribeAudio(audioBlob);
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                mediaRecorder.start();
+                recordingStartTime = Date.now();
+
+                // Update UI
+                recordButtonText.textContent = "To'xtatish";
+                recordButton.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                recordButton.classList.add('bg-red-600', 'hover:bg-red-700');
+                recordingStatus.classList.remove('hidden');
+
+                // Start timer
+                timerInterval = setInterval(() => {
+                    const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+                    const minutes = Math.floor(elapsed / 60);
+                    const seconds = elapsed % 60;
+                    recordingTimer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    recordingProgress.style.width = `${Math.min((elapsed / 120) * 100, 100)}%`;
+                }, 1000);
+
+            } catch (error) {
+                alert('Mikrofonga kirish imkoni yo\'q: ' + error.message);
+            }
+        } else {
+            // Stop recording
+            mediaRecorder.stop();
+            clearInterval(timerInterval);
+
+            // Update UI
+            recordButtonText.textContent = "Yozishni boshlash";
+            recordButton.classList.remove('bg-red-600', 'hover:bg-red-700');
+            recordButton.classList.add('bg-purple-600', 'hover:bg-purple-700');
+            recordingStatus.classList.add('hidden');
+            loadingIndicator.classList.remove('hidden');
+        }
+    });
+
+    async function transcribeAudio(audioBlob) {
+        const formData = new FormData();
+        formData.append('audio', audioBlob, 'recording.webm');
+
+        try {
+            const response = await fetch('/transcribe-audio/', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            loadingIndicator.classList.add('hidden');
+
+            if (result.success) {
+                transcriptionText.value = result.transcription;
+                transcriptionResult.classList.remove('hidden');
+                document.getElementById('transcriptInput').value = result.transcription;
+            } else {
+                alert('Xato: ' + (result.error || result.message));
+            }
+        } catch (error) {
+            loadingIndicator.classList.add('hidden');
+            alert('Transkriptsiya xatosi: ' + error.message);
+        }
+    }
+});
+
+async function extractDataFromTranscript() {
+    const transcript = document.getElementById('transcriptionText').value;
+    if (!transcript || !selectedProtocolType) {
+        alert('Transkript va protokol turi kerak');
+        return;
+    }
+
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const extractBtn = document.getElementById('extractDataBtn');
+
+    loadingIndicator.classList.remove('hidden');
+    extractBtn.disabled = true;
+
+    try {
+        const response = await fetch('/api/extract-from-transcript/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                protocol_type: selectedProtocolType,
+                transcript: transcript
+            })
+        });
+
+        const result = await response.json();
+        loadingIndicator.classList.add('hidden');
+        extractBtn.disabled = false;
+
+        if (result.success) {
+            fillFormWithData(result.data);
+            alert("Ma'lumotlar muvaffaqiyatli to'ldirildi!");
+        } else {
+            alert('Xato: ' + result.error);
+        }
+    } catch (error) {
+        loadingIndicator.classList.add('hidden');
+        extractBtn.disabled = false;
+        alert('Xato: ' + error.message);
+    }
+}
+
+function fillFormWithData(data) {
+    for (const [key, value] of Object.entries(data)) {
+        const field = document.getElementById('field_' + key);
+        if (field) {
+            if (field.type === 'checkbox') {
+                field.checked = Boolean(value);
+            } else if (field.tagName === 'SELECT') {
+                field.value = value !== null ? value : '';
+            } else {
+                field.value = value !== null ? value : '';
+            }
+        }
+    }
+}
+</script>
+{% endblock %}

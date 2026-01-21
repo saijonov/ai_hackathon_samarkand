@@ -58,6 +58,12 @@
                     </svg>
                     Скрининг қўшиш
                 </a>
+                <a href="{% url 'protocol_create' patient.pk %}" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg shadow-md transition duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Протокол қўшиш
+                </a>
             </div>
         </div>
     </div>
@@ -309,10 +315,72 @@
                 {% endif %}
             </div>
 
+            <!-- Protocols Section -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Протоколлар
+                    </h2>
+                    <a href="{% url 'protocol_list' pk=patient.pk %}" class="text-purple-600 hover:text-purple-800 text-sm font-medium">
+                        Барчасини кўриш →
+                    </a>
+                </div>
+                {% if protocols %}
+                <div class="space-y-3">
+                    {% for protocol in protocols %}
+                    <a href="{% url 'protocol_detail' pk=protocol.pk %}" class="block p-4 border rounded-lg hover:bg-gray-50 transition">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                {% if protocol.protocol_type == 'diabetes' %}
+                                <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mr-3">
+                                    <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                                    </svg>
+                                </div>
+                                {% else %}
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center mr-3">
+                                    <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </div>
+                                {% endif %}
+                                <div>
+                                    <p class="font-semibold text-gray-800">{{ protocol.get_protocol_type_display }}</p>
+                                    <p class="text-sm text-gray-500">{{ protocol.yaratilgan_sana|date:"d.m.Y H:i" }}</p>
+                                </div>
+                            </div>
+                            {% if protocol.ai_prediction is not None %}
+                            <div class="text-right">
+                                <span class="text-lg font-bold {% if protocol.ai_prediction >= 70 %}text-red-600{% elif protocol.ai_prediction >= 30 %}text-yellow-600{% else %}text-green-600{% endif %}">
+                                    {{ protocol.ai_prediction }}%
+                                </span>
+                                <p class="text-xs text-gray-500">{{ protocol.risk_level }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-6">
+                    <p class="text-gray-500 mb-3">Протоколлар йўқ</p>
+                    <a href="{% url 'protocol_create' pk=patient.pk %}" class="inline-flex items-center text-purple-600 hover:text-purple-800">
+                        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Протокол қўшиш
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
             <!-- Screening History -->
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                     </svg>
                     Скрининг тарихи

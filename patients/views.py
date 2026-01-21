@@ -6,7 +6,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from datetime import timedelta
-from .models import Patient, Appointment, HealthScreening
+from .models import Patient, Appointment, HealthScreening, Protocol
+from .gpt_service import extract_medical_data_from_transcript, get_schema_for_protocol
+import json
 import sys
 import os
 from io import BytesIO
@@ -18,6 +20,8 @@ from ml_models.predictor import (
     predict_noshow,
     predict_diabetes,
     predict_heart_disease,
+    predict_diabetes_from_protocol,
+    predict_heart_disease_from_protocol,
     get_risk_level_uzbek
 )
 
@@ -108,6 +112,9 @@ def patient_detail(request, pk):
     # Get health screenings
     screenings = patient.tekshiruvlar.all()[:5]
 
+    # Get protocols
+    protocols = patient.protokollar.all()[:5]
+
     context = {
         'patient': patient,
         'diabetes_risk': diabetes_risk,
@@ -116,6 +123,7 @@ def patient_detail(request, pk):
         'heart_risk_level': heart_risk_level,
         'appointments': appointments,
         'screenings': screenings,
+        'protocols': protocols,
     }
 
     return render(request, 'patients/patient_detail.html', context)
@@ -456,3 +464,175 @@ def transcribe_audio(request):
         'success': False,
         'message': 'Audio fayl topilmadi'
     }, status=400)
+
+
+# ============ PROTOCOL VIEWS ============
+
+def protocol_list(request, pk):
+    """List all protocols for a patient"""
+    patient = get_object_or_404(Patient, pk=pk)
+    protocols = patient.protokollar.all()
+
+    context = {
+        'patient': patient,
+        'protocols': protocols,
+    }
+    return render(request, 'protocols/protocol_list.html', context)
+
+
+def protocol_create(request, pk):
+    """Create new protocol with voice recording and GPT extraction"""
+    patient = get_object_or_404(Patient, pk=pk)
+
+    if request.method == 'POST':
+        try:
+            protocol_type = request.POST.get('protocol_type')
+            if not protocol_type:
+                messages.error(request, "Protokol turi tanlanishi shart!")
+                return render(request, 'protocols/protocol_form.html', {'patient': patient})
+
+            # Create protocol instance
+            protocol = Protocol(
+                bemor=patient,
+                protocol_type=protocol_type,
+                shifokor=request.POST.get('shifokor', ''),
+                izoh=request.POST.get('izoh', ''),
+                transcript=request.POST.get('transcript', ''),
+            )
+
+            # Common medical fields
+            protocol.qon_guruhi = request.POST.get('qon_guruhi') or None
+            protocol.allergiyalar = request.POST.get('allergiyalar', '')
+            protocol.qand_kasalligi = request.POST.get('qand_kasalligi') == 'on'
+            protocol.gipertoniya = request.POST.get('gipertoniya') == 'on'
+            protocol.yurak_kasalligi = request.POST.get('yurak_kasalligi') == 'on'
+
+            # Diabetes-specific fields
+            if protocol_type == 'diabetes':
+                protocol.pregnancies = int(request.POST.get('pregnancies')) if request.POST.get('pregnancies') else None
+                protocol.glucose = float(request.POST.get('glucose')) if request.POST.get('glucose') else None
+                protocol.blood_pressure = int(request.POST.get('blood_pressure')) if request.POST.get('blood_pressure') else None
+                protocol.skin_thickness = int(request.POST.get('skin_thickness')) if request.POST.get('skin_thickness') else None
+                protocol.insulin = float(request.POST.get('insulin')) if request.POST.get('insulin') else None
+                protocol.bmi = float(request.POST.get('bmi')) if request.POST.get('bmi') else None
+                protocol.diabetes_pedigree = float(request.POST.get('diabetes_pedigree')) if request.POST.get('diabetes_pedigree') else None
+
+            # Heart disease-specific fields
+            elif protocol_type == 'heart':
+                protocol.sex = int(request.POST.get('sex')) if request.POST.get('sex') else None
+                protocol.chest_pain_type = int(request.POST.get('chest_pain_type')) if request.POST.get('chest_pain_type') else None
+                protocol.resting_bp = int(request.POST.get('resting_bp')) if request.POST.get('resting_bp') else None
+                protocol.cholesterol = float(request.POST.get('cholesterol')) if request.POST.get('cholesterol') else None
+                protocol.fasting_blood_sugar = request.POST.get('fasting_blood_sugar') == 'on'
+                protocol.rest_ecg = int(request.POST.get('rest_ecg')) if request.POST.get('rest_ecg') else None
+                protocol.max_heart_rate = int(request.POST.get('max_heart_rate')) if request.POST.get('max_heart_rate') else None
+                protocol.exercise_angina = request.POST.get('exercise_angina') == 'on'
+                protocol.oldpeak = float(request.POST.get('oldpeak')) if request.POST.get('oldpeak') else None
+                protocol.slope = int(request.POST.get('slope')) if request.POST.get('slope') else None
+                protocol.num_vessels = int(request.POST.get('num_vessels')) if request.POST.get('num_vessels') else None
+                protocol.thal = int(request.POST.get('thal')) if request.POST.get('thal') else None
+
+            # Save protocol first (needed for FK relation in prediction)
+            protocol.save()
+
+            # Calculate AI risk prediction using ALL protocol fields
+            if protocol_type == 'diabetes':
+                risk = predict_diabetes_from_protocol(protocol)
+            else:  # heart
+                risk = predict_heart_disease_from_protocol(protocol)
+
+            # Update protocol with prediction results
+            protocol.ai_prediction = round(risk * 100, 2)
+            risk_info = get_risk_level_uzbek(risk)
+            protocol.risk_level = risk_info['label']
+            protocol.save()
+
+            # Update patient medical conditions if found
+            if protocol.qand_kasalligi and not patient.qand_kasalligi:
+                patient.qand_kasalligi = True
+            if protocol.gipertoniya and not patient.gipertoniya:
+                patient.gipertoniya = True
+            if protocol.yurak_kasalligi and not patient.yurak_kasalligi:
+                patient.yurak_kasalligi = True
+            patient.save()
+
+            messages.success(request, f"Protokol muvaffaqiyatli yaratildi! AI bashorat: {protocol.ai_prediction}% ({protocol.risk_level})")
+            return redirect('protocol_detail', pk=protocol.pk)
+
+        except ValueError as e:
+            messages.error(request, f"Ma'lumot formati noto'g'ri: {str(e)}")
+        except Exception as e:
+            messages.error(request, f"Xato: {str(e)}")
+
+    context = {
+        'patient': patient,
+    }
+    return render(request, 'protocols/protocol_form.html', context)
+
+
+def protocol_detail(request, pk):
+    """View protocol details with AI prediction"""
+    protocol = get_object_or_404(Protocol, pk=pk)
+
+    context = {
+        'protocol': protocol,
+        'patient': protocol.bemor,
+    }
+    return render(request, 'protocols/protocol_detail.html', context)
+
+
+@csrf_exempt
+def extract_from_transcript(request):
+    """API endpoint to extract medical data from transcript using GPT"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            protocol_type = data.get('protocol_type')
+            transcript = data.get('transcript')
+
+            if not protocol_type or not transcript:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'protocol_type va transcript kerak'
+                }, status=400)
+
+            # Extract data using GPT
+            extracted_data = extract_medical_data_from_transcript(protocol_type, transcript)
+
+            if 'error' in extracted_data:
+                return JsonResponse({
+                    'success': False,
+                    'error': extracted_data['error']
+                }, status=400)
+
+            return JsonResponse({
+                'success': True,
+                'data': extracted_data,
+                'message': "Ma'lumotlar muvaffaqiyatli ajratib olindi!"
+            })
+
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'success': False,
+                'error': 'Noto\'g\'ri JSON format'
+            }, status=400)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=500)
+
+    return JsonResponse({
+        'success': False,
+        'error': 'POST so\'rov kerak'
+    }, status=405)
+
+
+def get_protocol_schema(request):
+    """API endpoint to get JSON schema for a protocol type"""
+    protocol_type = request.GET.get('type')
+    if not protocol_type:
+        return JsonResponse({'error': 'type parametri kerak'}, status=400)
+
+    schema = get_schema_for_protocol(protocol_type)
+    return JsonResponse({'schema': schema})

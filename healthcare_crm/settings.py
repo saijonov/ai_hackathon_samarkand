@@ -127,3 +127,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ElevenLabs API Key
 ELEVENLABS_API_KEY = 'sk_1f5dbd795f51c0df9789f7fd859c64e6bbbc5e7decd37537'
+
+# OpenAI API Key (for GPT)
+OPENAI_API_KEY = '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'

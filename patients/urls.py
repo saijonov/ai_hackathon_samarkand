@@ -24,4 +24,13 @@ urlpatterns = [
 
     # Voice transcription
     path('transcribe-audio/', views.transcribe_audio, name='transcribe_audio'),
+
+    # Protocols
+    path('patients/<int:pk>/protocols/', views.protocol_list, name='protocol_list'),
+    path('patients/<int:pk>/protocols/create/', views.protocol_create, name='protocol_create'),
+    path('protocols/<int:pk>/', views.protocol_detail, name='protocol_detail'),
+
+    # API endpoints for GPT extraction
+    path('api/extract-from-transcript/', views.extract_from_transcript, name='extract_from_transcript'),
+    path('api/protocol-schema/', views.get_protocol_schema, name='get_protocol_schema'),
 ]
