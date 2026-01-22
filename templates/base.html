@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -394,14 +395,10 @@
     <div class="sidebar">
         <!-- Logo -->
         <div class="mb-8 flex items-center gap-3">
-            <div class="w-12 h-12 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl flex items-center justify-center logo-icon shadow-lg">
-                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                </svg>
-            </div>
+            <img src="{% static 'logo.png' %}" alt="AID.uz Logo" class="w-20 h-20 rounded-xl logo-icon shadow-lg object-contain">
             <div>
-                <h1 class="text-xl font-bold text-white">MedCare</h1>
-                <p class="text-xs text-indigo-300">AI Healthcare CRM</p>
+                <h1 class="text-xl font-bold text-white">AID.uz</h1>
+                <p class="text-xs text-indigo-300">AI Doctor</p>
             </div>
         </div>
 

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load math_filters %}
 
 {% block title %}Bosh sahifa - Healthcare CRM{% endblock %}
 
@@ -163,17 +164,17 @@
                             {% if appointment.kelmay_qolish_riski < 0.3 %}
                                 <div class="flex items-center gap-2">
                                     <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                    <span class="badge badge-success">{{ appointment.kelmay_qolish_riski|floatformat:0 }}% Past</span>
+                                    <span class="badge badge-success">{{ appointment.kelmay_qolish_riski|percentage|floatformat:0 }}% Past</span>
                                 </div>
                             {% elif appointment.kelmay_qolish_riski < 0.7 %}
                                 <div class="flex items-center gap-2">
                                     <div class="w-2 h-2 bg-amber-500 rounded-full animate-pulse-soft"></div>
-                                    <span class="badge badge-warning">{{ appointment.kelmay_qolish_riski|floatformat:0 }}% O'rta</span>
+                                    <span class="badge badge-warning">{{ appointment.kelmay_qolish_riski|percentage|floatformat:0 }}% O'rta</span>
                                 </div>
                             {% else %}
                                 <div class="flex items-center gap-2">
                                     <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse-soft"></div>
-                                    <span class="badge badge-danger">{{ appointment.kelmay_qolish_riski|floatformat:0 }}% Yuqori</span>
+                                    <span class="badge badge-danger">{{ appointment.kelmay_qolish_riski|percentage|floatformat:0 }}% Yuqori</span>
                                 </div>
                             {% endif %}
                         {% else %}
@@ -272,7 +273,7 @@
                         </div>
                     </div>
                     <div class="text-right">
-                        <div class="text-2xl font-bold text-red-600">{{ appointment.kelmay_qolish_riski|floatformat:0 }}%</div>
+                        <div class="text-2xl font-bold text-red-600">{{ appointment.kelmay_qolish_riski|percentage|floatformat:0 }}%</div>
                         <div class="text-xs text-gray-500">Xavf darajasi</div>
                     </div>
                 </div>

@@ -1,39 +1,46 @@
 {% extends 'base.html' %}
 
-{% block title %}{% if form.instance.pk %}Учрашувни таҳрирлаш{% else %}Янги учрашув белгилаш{% endif %} - Healthcare CRM{% endblock %}
+{% block title %}{% if appointment %}Uchrashuvni tahrirlash{% else %}Yangi uchrashuv belgilash{% endif %} -
+Healthcare CRM{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <!-- Back Button -->
     <div class="mb-6">
-        <a href="{% url 'appointment_list' %}" class="text-blue-600 hover:text-blue-800 flex items-center transition duration-200">
+        <a href="{% url 'appointment_list' %}"
+            class="text-blue-600 hover:text-blue-800 flex items-center transition duration-200">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+                </path>
             </svg>
-            Учрашувлар рўйхатига қайтиш
+            Uchrashuvlar ro'yxatiga qaytish
         </a>
     </div>
 
     <!-- Page Header -->
     <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-800 mb-2">
-            {% if form.instance.pk %}
+            {% if appointment %}
             <span class="flex items-center">
                 <svg class="w-8 h-8 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                    </path>
                 </svg>
-                Учрашувни таҳрирлаш
+                Uchrashuvni tahrirlash
             </span>
             {% else %}
             <span class="flex items-center">
                 <svg class="w-8 h-8 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                    </path>
                 </svg>
-                Янги учрашув белгилаш
+                Yangi uchrashuv belgilash
             </span>
             {% endif %}
         </h1>
-        <p class="text-gray-600">Учрашув маълумотларини тўлдиринг</p>
+        <p class="text-gray-600">Uchrashuv ma'lumotlarini to'ldiring</p>
     </div>
 
     <!-- Form Card -->
@@ -41,129 +48,85 @@
         <form method="post" class="space-y-8">
             {% csrf_token %}
 
-            <!-- Display form errors if any -->
-            {% if form.errors %}
-            <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg mb-6">
-                <div class="flex items-center mb-2">
-                    <svg class="w-6 h-6 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <h3 class="text-red-800 font-semibold">Хатолар мавжуд</h3>
-                </div>
-                <ul class="list-disc list-inside text-red-700 text-sm">
-                    {% for field, errors in form.errors.items %}
-                        {% for error in errors %}
-                            <li>{{ field }}: {{ error }}</li>
-                        {% endfor %}
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
-
             <!-- Appointment Information Section -->
             <div>
                 <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center border-b pb-2">
                     <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                        </path>
                     </svg>
-                    Учрашув маълумотлари
+                    Uchrashuv ma'lumotlari
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                     <!-- Patient Selection -->
                     <div class="md:col-span-2">
-                        <label for="{{ form.bemor.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Бемор <span class="text-red-500">*</span>
+                        <label for="id_bemor" class="block text-sm font-medium text-gray-700 mb-2">
+                            Bemor <span class="text-red-500">*</span>
                         </label>
-                        <select name="{{ form.bemor.name }}"
-                                id="{{ form.bemor.id_for_label }}"
-                                required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
-                            <option value="">Беморни танланг</option>
+                        <select name="bemor" id="id_bemor" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
+                            <option value="">Bemorni tanlang</option>
                             {% for patient in patients %}
-                            <option value="{{ patient.pk }}" {% if form.bemor.value == patient.pk %}selected{% endif %}>
-                                {{ patient.ism }} - {{ patient.yosh }} йош, {{ patient.jins }} ({{ patient.telefon }})
+                            <option value="{{ patient.pk }}" {% if appointment and appointment.bemor.pk == patient.pk %}selected{% endif %}>
+                                {{ patient.ism }} - {{ patient.yosh }} yosh, {{ patient.jins }} ({{ patient.telefon }})
                             </option>
                             {% endfor %}
                         </select>
-                        {% if form.bemor.errors %}
-                        <p class="mt-1 text-sm text-red-600">{{ form.bemor.errors.0 }}</p>
-                        {% endif %}
                     </div>
 
                     <!-- Appointment Date -->
                     <div>
-                        <label for="{{ form.uchrashuv_sanasi.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Сана ва вақт <span class="text-red-500">*</span>
+                        <label for="id_uchrashuv_sanasi" class="block text-sm font-medium text-gray-700 mb-2">
+                            Sana va vaqt <span class="text-red-500">*</span>
                         </label>
-                        <input type="datetime-local"
-                               name="{{ form.uchrashuv_sanasi.name }}"
-                               id="{{ form.uchrashuv_sanasi.id_for_label }}"
-                               value="{{ form.uchrashuv_sanasi.value|date:'Y-m-d\TH:i' }}"
-                               required
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
-                        {% if form.uchrashuv_sanasi.errors %}
-                        <p class="mt-1 text-sm text-red-600">{{ form.uchrashuv_sanasi.errors.0 }}</p>
-                        {% endif %}
+                        <input type="datetime-local" name="uchrashuv_sanasi" id="id_uchrashuv_sanasi"
+                            value="{% if appointment %}{{ appointment.uchrashuv_sanasi|date:'Y-m-d\TH:i' }}{% endif %}" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
                     </div>
 
                     <!-- Status -->
                     <div>
-                        <label for="{{ form.holat.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Ҳолат <span class="text-red-500">*</span>
+                        <label for="id_holat" class="block text-sm font-medium text-gray-700 mb-2">
+                            Holat <span class="text-red-500">*</span>
                         </label>
-                        <select name="{{ form.holat.name }}"
-                                id="{{ form.holat.id_for_label }}"
-                                required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
-                            <option value="">Танланг</option>
-                            <option value="Кутилмоқда" {% if form.holat.value == "Кутилмоқда" %}selected{% endif %}>Кутилмоқда</option>
-                            <option value="Келди" {% if form.holat.value == "Келди" %}selected{% endif %}>Келди</option>
-                            <option value="Келмади" {% if form.holat.value == "Келмади" %}selected{% endif %}>Келмади</option>
-                            <option value="Бекор қилинди" {% if form.holat.value == "Бекор қилинди" %}selected{% endif %}>Бекор қилинди</option>
+                        <select name="holat" id="id_holat" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
+                            <option value="">Tanlang</option>
+                            <option value="Kutilmoqda" {% if appointment and appointment.holat == "Kutilmoqda" %}selected{% endif %}>Kutilmoqda</option>
+                            <option value="Keldi" {% if appointment and appointment.holat == "Keldi" %}selected{% endif %}>Keldi</option>
+                            <option value="Kelmadi" {% if appointment and appointment.holat == "Kelmadi" %}selected{% endif %}>Kelmadi</option>
+                            <option value="Bekor qilingan" {% if appointment and appointment.holat == "Bekor qilingan" %}selected{% endif %}>Bekor qilingan</option>
                         </select>
-                        {% if form.holat.errors %}
-                        <p class="mt-1 text-sm text-red-600">{{ form.holat.errors.0 }}</p>
-                        {% endif %}
                     </div>
 
                     <!-- Doctor -->
                     <div>
-                        <label for="{{ form.shifokor.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Шифокор <span class="text-red-500">*</span>
+                        <label for="id_shifokor" class="block text-sm font-medium text-gray-700 mb-2">
+                            Shifokor <span class="text-red-500">*</span>
                         </label>
-                        <input type="text"
-                               name="{{ form.shifokor.name }}"
-                               id="{{ form.shifokor.id_for_label }}"
-                               value="{{ form.shifokor.value|default:'' }}"
-                               required
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                               placeholder="Шифокор исми">
-                        {% if form.shifokor.errors %}
-                        <p class="mt-1 text-sm text-red-600">{{ form.shifokor.errors.0 }}</p>
-                        {% endif %}
+                        <input type="text" name="shifokor" id="id_shifokor"
+                            value="{% if appointment %}{{ appointment.shifokor }}{% endif %}" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                            placeholder="Shifokor ismi">
                     </div>
 
                     <!-- Department -->
                     <div>
-                        <label for="{{ form.bolim.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Бўлим <span class="text-red-500">*</span>
+                        <label for="id_bolim" class="block text-sm font-medium text-gray-700 mb-2">
+                            Bo'lim <span class="text-red-500">*</span>
                         </label>
-                        <select name="{{ form.bolim.name }}"
-                                id="{{ form.bolim.id_for_label }}"
-                                required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
-                            <option value="">Танланг</option>
-                            <option value="Кардиология" {% if form.bolim.value == "Кардиология" %}selected{% endif %}>Кардиология</option>
-                            <option value="Эндокринология" {% if form.bolim.value == "Эндокринология" %}selected{% endif %}>Эндокринология</option>
-                            <option value="Терапия" {% if form.bolim.value == "Терапия" %}selected{% endif %}>Терапия</option>
-                            <option value="Неврология" {% if form.bolim.value == "Неврология" %}selected{% endif %}>Неврология</option>
-                            <option value="Педиатрия" {% if form.bolim.value == "Педиатрия" %}selected{% endif %}>Педиатрия</option>
-                            <option value="Хирургия" {% if form.bolim.value == "Хирургия" %}selected{% endif %}>Хирургия</option>
-                            <option value="Умумий" {% if form.bolim.value == "Умумий" %}selected{% endif %}>Умумий</option>
+                        <select name="bolim" id="id_bolim" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
+                            <option value="">Tanlang</option>
+                            <option value="Kardiologiya" {% if appointment and appointment.bolim == "Kardiologiya" %}selected{% endif %}>Kardiologiya</option>
+                            <option value="Endokrinologiya" {% if appointment and appointment.bolim == "Endokrinologiya" %}selected{% endif %}>Endokrinologiya</option>
+                            <option value="Terapiya" {% if appointment and appointment.bolim == "Terapiya" %}selected{% endif %}>Terapiya</option>
+                            <option value="Nevrologiya" {% if appointment and appointment.bolim == "Nevrologiya" %}selected{% endif %}>Nevrologiya</option>
+                            <option value="Pediatriya" {% if appointment and appointment.bolim == "Pediatriya" %}selected{% endif %}>Pediatriya</option>
+                            <option value="Xirurgiya" {% if appointment and appointment.bolim == "Xirurgiya" %}selected{% endif %}>Xirurgiya</option>
+                            <option value="Umumiy" {% if appointment and appointment.bolim == "Umumiy" %}selected{% endif %}>Umumiy</option>
                         </select>
-                        {% if form.bolim.errors %}
-                        <p class="mt-1 text-sm text-red-600">{{ form.bolim.errors.0 }}</p>
-                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -172,57 +135,62 @@
             <div>
                 <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center border-b pb-2">
                     <svg class="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                        </path>
                     </svg>
-                    SMS Хабарнома
+                    SMS Xabarnoma
                 </h2>
                 <div class="mt-4">
                     <div class="flex items-center p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 transition duration-200">
-                        <input type="checkbox"
-                               name="{{ form.sms_yuborildi.name }}"
-                               id="{{ form.sms_yuborildi.id_for_label }}"
-                               {% if form.sms_yuborildi.value %}checked{% endif %}
-                               class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                        <label for="{{ form.sms_yuborildi.id_for_label }}" class="ml-3 flex items-center cursor-pointer">
-                            <svg class="w-6 h-6 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        <input type="checkbox" name="sms_yuborildi" id="id_sms_yuborildi"
+                            {% if appointment and appointment.sms_yuborildi %}checked{% endif %}
+                            class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="id_sms_yuborildi" class="ml-3 flex items-center cursor-pointer">
+                            <svg class="w-6 h-6 mr-2 text-green-500" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z">
+                                </path>
                             </svg>
-                            <span class="text-gray-700 font-medium">SMS эслатма юборилди</span>
+                            <span class="text-gray-700 font-medium">SMS eslatma yuborildi</span>
                         </label>
                     </div>
-                    <p class="text-sm text-gray-500 mt-2 ml-1">Агар беморга SMS эслатма юборилган бўлса, белгиланг</p>
+                    <p class="text-sm text-gray-500 mt-2 ml-1">Agar bemorga SMS eslatma yuborilgan bo'lsa, belgilang</p>
                 </div>
             </div>
 
             <!-- AI Risk Predictions Section (Read-only, calculated automatically) -->
-            {% if form.instance.pk and form.instance.kelmay_qolish_riski %}
+            {% if appointment and appointment.kelmay_qolish_riski %}
             <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-lg p-6 border-2 border-purple-200">
                 <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
                     <svg class="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
+                        </path>
                     </svg>
-                    AI Башорат натижалари
+                    AI Bashorat natijalari
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                     <div class="bg-white rounded-lg p-4 shadow-sm">
-                        <p class="text-sm text-gray-600 mb-2">Келмаслик хавфи</p>
-                        <p class="text-2xl font-bold {% if form.instance.kelmay_qolish_riski >= 70 %}text-red-600{% elif form.instance.kelmay_qolish_riski >= 40 %}text-orange-600{% else %}text-green-600{% endif %}">
-                            {{ form.instance.kelmay_qolish_riski|floatformat:1 }}%
+                        <p class="text-sm text-gray-600 mb-2">Kelmaslik xavfi</p>
+                        <p class="text-2xl font-bold {% if appointment.kelmay_qolish_riski >= 70 %}text-red-600{% elif appointment.kelmay_qolish_riski >= 40 %}text-orange-600{% else %}text-green-600{% endif %}">
+                            {{ appointment.kelmay_qolish_riski|floatformat:1 }}%
                         </p>
                     </div>
-                    {% if form.instance.qand_riski %}
+                    {% if appointment.qand_riski %}
                     <div class="bg-white rounded-lg p-4 shadow-sm">
-                        <p class="text-sm text-gray-600 mb-2">Қанд касаллиги хавфи</p>
-                        <p class="text-2xl font-bold {% if form.instance.qand_riski >= 70 %}text-red-600{% elif form.instance.qand_riski >= 40 %}text-orange-600{% else %}text-green-600{% endif %}">
-                            {{ form.instance.qand_riski|floatformat:1 }}%
+                        <p class="text-sm text-gray-600 mb-2">Qand kasalligi xavfi</p>
+                        <p class="text-2xl font-bold {% if appointment.qand_riski >= 70 %}text-red-600{% elif appointment.qand_riski >= 40 %}text-orange-600{% else %}text-green-600{% endif %}">
+                            {{ appointment.qand_riski|floatformat:1 }}%
                         </p>
                     </div>
                     {% endif %}
-                    {% if form.instance.yurak_riski %}
+                    {% if appointment.yurak_riski %}
                     <div class="bg-white rounded-lg p-4 shadow-sm">
-                        <p class="text-sm text-gray-600 mb-2">Юрак касаллиги хавфи</p>
-                        <p class="text-2xl font-bold {% if form.instance.yurak_riski >= 70 %}text-red-600{% elif form.instance.yurak_riski >= 40 %}text-orange-600{% else %}text-green-600{% endif %}">
-                            {{ form.instance.yurak_riski|floatformat:1 }}%
+                        <p class="text-sm text-gray-600 mb-2">Yurak kasalligi xavfi</p>
+                        <p class="text-2xl font-bold {% if appointment.yurak_riski >= 70 %}text-red-600{% elif appointment.yurak_riski >= 40 %}text-orange-600{% else %}text-green-600{% endif %}">
+                            {{ appointment.yurak_riski|floatformat:1 }}%
                         </p>
                     </div>
                     {% endif %}
@@ -231,13 +199,16 @@
             {% else %}
             <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
                 <div class="flex items-start">
-                    <svg class="w-6 h-6 text-blue-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <svg class="w-6 h-6 text-blue-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <div>
-                        <h3 class="text-blue-800 font-semibold mb-1">AI Башорат</h3>
+                        <h3 class="text-blue-800 font-semibold mb-1">AI Bashorat</h3>
                         <p class="text-blue-700 text-sm">
-                            Учрашувни сақлагандан кейин, AI модели автоматик равишда келмаслик хавфини ва бошқа соғлиқ хавфларини баҳолайди.
+                            Uchrashuvni saqlangandan keyin, AI modeli avtomatik ravishda kelmaslik xavfini va boshqa
+                            sog'liq xavflarini baholaydi.
                         </p>
                     </div>
                 </div>
@@ -248,35 +219,34 @@
             <div>
                 <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center border-b pb-2">
                     <svg class="w-6 h-6 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                        </path>
                     </svg>
-                    Қўшимча маълумотлар
+                    Qo'shimcha ma'lumotlar
                 </h2>
                 <div class="mt-4">
-                    <label for="{{ form.izoh.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                        Изоҳ
+                    <label for="id_izoh" class="block text-sm font-medium text-gray-700 mb-2">
+                        Izoh
                     </label>
-                    <textarea name="{{ form.izoh.name }}"
-                              id="{{ form.izoh.id_for_label }}"
-                              rows="4"
-                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                              placeholder="Учрашув ҳақида қўшимча маълумотлар...">{{ form.izoh.value|default:'' }}</textarea>
-                    {% if form.izoh.errors %}
-                    <p class="mt-1 text-sm text-red-600">{{ form.izoh.errors.0 }}</p>
-                    {% endif %}
+                    <textarea name="izoh" id="id_izoh" rows="4"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                        placeholder="Uchrashuv haqida qo'shimcha ma'lumotlar...">{% if appointment %}{{ appointment.izoh }}{% endif %}</textarea>
                 </div>
             </div>
 
             <!-- Form Actions -->
             <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
-                <a href="{% url 'appointment_list' %}" class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200 font-medium">
-                    Бекор қилиш
+                <a href="{% url 'appointment_list' %}"
+                    class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200 font-medium">
+                    Bekor qilish
                 </a>
-                <button type="submit" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md transition duration-200 font-medium flex items-center">
+                <button type="submit"
+                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md transition duration-200 font-medium flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
-                    {% if form.instance.pk %}Ўзгартиришларни сақлаш{% else %}Учрашувни белгилаш{% endif %}
+                    {% if appointment %}O'zgartirishlarni saqlash{% else %}Uchrashuvni belgilash{% endif %}
                 </button>
             </div>
         </form>
@@ -286,14 +256,16 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 max-w-4xl mx-auto">
         <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
             <div class="flex items-start">
-                <svg class="w-6 h-6 text-blue-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <svg class="w-6 h-6 text-blue-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 <div>
-                    <h3 class="text-blue-800 font-semibold mb-1">Маълумот</h3>
+                    <h3 class="text-blue-800 font-semibold mb-1">Ma'lumot</h3>
                     <p class="text-blue-700 text-sm">
-                        <span class="text-red-500">*</span> белгиланган майдонлар мажбурий тўлдирилади.
-                        Тизим автоматик равишда беморнинг учрашувга келмаслик хавфини баҳолайди.
+                        <span class="text-red-500">*</span> belgilangan maydonlar majburiy to'ldiriladi.
+                        Tizim avtomatik ravishda bemorning uchrashuvga kelmaslik xavfini baholaydi.
                     </p>
                 </div>
             </div>
@@ -301,14 +273,16 @@
 
         <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
             <div class="flex items-start">
-                <svg class="w-6 h-6 text-green-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                <svg class="w-6 h-6 text-green-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
                 </svg>
                 <div>
-                    <h3 class="text-green-800 font-semibold mb-1">SMS Эслатма</h3>
+                    <h3 class="text-green-800 font-semibold mb-1">SMS Eslatma</h3>
                     <p class="text-green-700 text-sm">
-                        Учрашув санасидан олдин беморга автоматик SMS эслатма юборилади.
-                        Юқори келмаслик хавфи бор беморларга қўшимча эслатма юборинг.
+                        Uchrashuv sanasidan oldin bemorga avtomatik SMS eslatma yuboriladi.
+                        Yuqori kelmaslik xavfi bor bemorlarga qo'shimcha eslatma yuboring.
                     </p>
                 </div>
             </div>
@@ -317,16 +291,16 @@
 </div>
 
 <script>
-// Auto-select patient if passed via URL parameter
-document.addEventListener('DOMContentLoaded', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const patientId = urlParams.get('patient_id');
-    if (patientId) {
-        const patientSelect = document.getElementById('{{ form.bemor.id_for_label }}');
-        if (patientSelect) {
-            patientSelect.value = patientId;
+    // Auto-select patient if passed via URL parameter
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const patientId = urlParams.get('patient_id');
+        if (patientId) {
+            const patientSelect = document.getElementById('id_bemor');
+            if (patientSelect) {
+                patientSelect.value = patientId;
+            }
         }
-    }
-});
+    });
 </script>
 {% endblock %}

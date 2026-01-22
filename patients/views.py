@@ -98,13 +98,13 @@ def patient_detail(request, pk):
     """Patient detail with AI health analysis"""
     patient = get_object_or_404(Patient, pk=pk)
 
-    # Calculate AI predictions
-    diabetes_risk = predict_diabetes(patient)
-    heart_risk = predict_heart_disease(patient)
+    # Calculate AI predictions (convert to percentages for display)
+    diabetes_risk = predict_diabetes(patient) * 100
+    heart_risk = predict_heart_disease(patient) * 100
 
-    # Get risk levels
-    diabetes_risk_level = get_risk_level_uzbek(diabetes_risk)
-    heart_risk_level = get_risk_level_uzbek(heart_risk)
+    # Get risk levels (convert back to decimal for risk level calculation)
+    diabetes_risk_level = get_risk_level_uzbek(diabetes_risk / 100)
+    heart_risk_level = get_risk_level_uzbek(heart_risk / 100)
 
     # Get appointments
     appointments = patient.uchrashuvlar.all()[:10]

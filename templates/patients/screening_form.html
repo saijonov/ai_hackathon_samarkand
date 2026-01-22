@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Соғлиқни текшириш - {{ patient.ism }}{% endblock %}
+{% block title %}Sog'liqni tekshirish - {{ patient.ism }}{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
@@ -10,7 +10,7 @@
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
-            Бемор маълумотларига қайтиш
+            Bemor ma'lumotlariga qaytish
         </a>
     </div>
 
@@ -22,9 +22,9 @@
                     <svg class="w-10 h-10 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                     </svg>
-                    Соғлиқни текшириш (Скрининг)
+                    Sog'liqni tekshirish (Skrining)
                 </h1>
-                <p class="text-blue-100 text-lg">Бемор: <span class="font-semibold">{{ patient.ism }}</span> ({{ patient.yosh }} йош, {{ patient.jins }})</p>
+                <p class="text-blue-100 text-lg">Bemor: <span class="font-semibold">{{ patient.ism }}</span> ({{ patient.yosh }} yosh, {{ patient.jins }})</p>
             </div>
             <div class="hidden md:block">
                 <div class="bg-white bg-opacity-20 rounded-full p-6">
@@ -48,7 +48,7 @@
                     <svg class="w-6 h-6 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <h3 class="text-red-800 font-semibold">Хатолар мавжуд</h3>
+                    <h3 class="text-red-800 font-semibold">Xatolar mavjud</h3>
                 </div>
                 <ul class="list-disc list-inside text-red-700 text-sm">
                     {% for field, errors in form.errors.items %}
@@ -66,13 +66,13 @@
                     <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                     </svg>
-                    Асосий кўрсаткичлар
+                    Asosiy ko'rsatkichlar
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
                     <!-- Blood Pressure High -->
                     <div>
                         <label for="{{ form.qon_bosimi_yuqori.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Қон босими (юқори) <span class="text-red-500">*</span>
+                            Qon bosimi (yuqori) <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <input type="number"
@@ -94,7 +94,7 @@
                     <!-- Blood Pressure Low -->
                     <div>
                         <label for="{{ form.qon_bosimi_past.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Қон босими (паст) <span class="text-red-500">*</span>
+                            Qon bosimi (past) <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <input type="number"
@@ -116,7 +116,7 @@
                     <!-- Pulse -->
                     <div>
                         <label for="{{ form.puls.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Пулс <span class="text-red-500">*</span>
+                            Puls <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <input type="number"
@@ -138,7 +138,7 @@
                     <!-- Temperature -->
                     <div>
                         <label for="{{ form.harorat.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Ҳарорат <span class="text-red-500">*</span>
+                            Harorat <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <input type="number"
@@ -160,7 +160,7 @@
                     <!-- Glucose -->
                     <div>
                         <label for="{{ form.glyukoza.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Глюкоза
+                            Glyukoza
                         </label>
                         <div class="relative">
                             <input type="number"
@@ -181,7 +181,7 @@
                     <!-- Cholesterol -->
                     <div>
                         <label for="{{ form.holesterin.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            Холестерин
+                            Xolesterin
                         </label>
                         <div class="relative">
                             <input type="number"
@@ -202,7 +202,7 @@
                     <!-- BMI -->
                     <div>
                         <label for="{{ form.bmi.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                            BMI (Тана масса индекси)
+                            BMI (Tana massa indeksi)
                         </label>
                         <div class="relative">
                             <input type="number"
@@ -228,10 +228,10 @@
                     <svg class="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                     </svg>
-                    AI Башорат (автоматик ҳисобланади)
+                    AI Bashorat (avtomatik hisoblanadi)
                 </h2>
                 <p class="text-gray-600 mb-4">
-                    Формани юборганингиздан кейин, AI модели беморнинг соғлиқ хавфини автоматик равишда баҳолайди.
+                    Formani yuborganingizdan keyin, AI modeli bemorning sog'liq xavfini avtomatik ravishda baholaydi.
                 </p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="bg-white rounded-lg p-4 shadow-sm">
@@ -239,18 +239,18 @@
                             <svg class="w-5 h-5 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                             </svg>
-                            <span class="font-semibold text-gray-700">Қанд касаллиги эҳтимоли</span>
+                            <span class="font-semibold text-gray-700">Qand kasalligi ehtimoli</span>
                         </div>
-                        <p class="text-sm text-gray-600">Глюкоза ва бошқа кўрсаткичлар асосида ҳисобланади</p>
+                        <p class="text-sm text-gray-600">Glyukoza va boshqa ko'rsatkichlar asosida hisoblanadi</p>
                     </div>
                     <div class="bg-white rounded-lg p-4 shadow-sm">
                         <div class="flex items-center mb-2">
                             <svg class="w-5 h-5 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                             </svg>
-                            <span class="font-semibold text-gray-700">Юрак касаллиги эҳтимоли</span>
+                            <span class="font-semibold text-gray-700">Yurak kasalligi ehtimoli</span>
                         </div>
-                        <p class="text-sm text-gray-600">Қон босими ва холестерин асосида ҳисобланади</p>
+                        <p class="text-sm text-gray-600">Qon bosimi va xolesterin asosida hisoblanadi</p>
                     </div>
                 </div>
             </div>
@@ -261,17 +261,17 @@
                     <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                     </svg>
-                    Қўшимча маълумотлар
+                    Qo'shimcha ma'lumotlar
                 </h2>
                 <div class="mt-4">
                     <label for="{{ form.izoh.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-                        Изоҳ
+                        Izoh
                     </label>
                     <textarea name="{{ form.izoh.name }}"
                               id="{{ form.izoh.id_for_label }}"
                               rows="4"
                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                              placeholder="Қўшимча изоҳлар ёки кузатишлар...">{{ form.izoh.value|default:'' }}</textarea>
+                              placeholder="Qo'shimcha izohlar yoki kuzatishlar...">{{ form.izoh.value|default:'' }}</textarea>
                     {% if form.izoh.errors %}
                     <p class="mt-1 text-sm text-red-600">{{ form.izoh.errors.0 }}</p>
                     {% endif %}
@@ -284,13 +284,13 @@
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
-                    Бекор қилиш
+                    Bekor qilish
                 </a>
                 <button type="submit" class="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg shadow-lg transition duration-200 font-medium flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
-                    Скрининг натижасини сақлаш
+                    Skrining natijasini saqlash
                 </button>
             </div>
         </form>
@@ -304,8 +304,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 <div>
-                    <h3 class="text-green-800 font-semibold text-sm">Меъёрий қийматлар</h3>
-                    <p class="text-green-700 text-xs mt-1">Қон босими: 120/80 mmHg<br>Пулс: 60-100 bpm<br>Ҳарорат: 36.1-37.2°C</p>
+                    <h3 class="text-green-800 font-semibold text-sm">Me'yoriy qiymatlar</h3>
+                    <p class="text-green-700 text-xs mt-1">Qon bosimi: 120/80 mmHg<br>Puls: 60-100 bpm<br>Harorat: 36.1-37.2°C</p>
                 </div>
             </div>
         </div>
@@ -316,8 +316,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 <div>
-                    <h3 class="text-blue-800 font-semibold text-sm">Глюкоза</h3>
-                    <p class="text-blue-700 text-xs mt-1">Меъёрий: 70-100 mg/dL (оч қорин)<br>Диабет: >126 mg/dL</p>
+                    <h3 class="text-blue-800 font-semibold text-sm">Glyukoza</h3>
+                    <p class="text-blue-700 text-xs mt-1">Me'yoriy: 70-100 mg/dL (och qorin)<br>Diabet: >126 mg/dL</p>
                 </div>
             </div>
         </div>
@@ -328,8 +328,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                 </svg>
                 <div>
-                    <h3 class="text-purple-800 font-semibold text-sm">AI Башорат</h3>
-                    <p class="text-purple-700 text-xs mt-1">Машина ўқитиш модели маълумотларингизни таҳлил қилиб, хавф даражасини аниқлайди</p>
+                    <h3 class="text-purple-800 font-semibold text-sm">AI Bashorat</h3>
+                    <p class="text-purple-700 text-xs mt-1">Mashina o'qitish modeli ma'lumotlaringizni tahlil qilib, xavf darajasini aniqlaydi</p>
                 </div>
             </div>
         </div>
