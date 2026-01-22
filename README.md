@@ -38,3 +38,13 @@ Brauzerda ochish: http://localhost:8000/home/
 ## Jamoa
 
 AI Hackathon 2026
+
+## Skrinshotlar
+
+![1](readme_images/1.png)
+
+![2](readme_images/2.png)
+
+![3](readme_images/3.png)
+
+![4](readme_images/4.png)
