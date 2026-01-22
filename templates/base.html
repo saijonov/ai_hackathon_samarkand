@@ -1,229 +1,128 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Healthcare CRM{% endblock %}</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}Healthcare CRM{% endblock %}</title>
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/static/css/style.css">
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Alpine.js (tiny interactivity) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-            transform: translateY(-2px);
-        }
-
-        .btn-primary {
-            background: #0066CC;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .btn-primary:hover {
-            background: #0052A3;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,102,204,0.3);
-        }
-
-        .badge-success {
-            background: #00C853;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        .badge-warning {
-            background: #FF9800;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        .badge-danger {
-            background: #FF6B6B;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        .badge-info {
-            background: #0066CC;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        .badge-secondary {
-            background: #6c757d;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        .sidebar {
-            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
-            position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 250px;
-            padding: 1.5rem;
-            overflow-y: auto;
-        }
-
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            color: rgba(255,255,255,0.7);
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .sidebar-link:hover {
-            background: rgba(255,255,255,0.1);
-            color: white;
-        }
-
-        .sidebar-link.active {
-            background: rgba(0,102,204,0.2);
-            color: white;
-            border-left: 3px solid #0066CC;
-        }
-
-        .main-content {
-            margin-left: 250px;
-            padding: 2rem;
-            min-height: 100vh;
-            background: #F8F9FA;
-        }
-
-        table {
-            width: 100%;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        thead {
-            background: #F8F9FA;
-        }
-
-        th {
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            color: #2C3E50;
-        }
-
-        td {
-            padding: 1rem;
-            border-top: 1px solid #E9ECEF;
-        }
-
-        tr:hover {
-            background: #F8F9FA;
-        }
-    </style>
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+  {% block head %}{% endblock %}
 </head>
-<body class="bg-gray-100">
+
+<body class="bg-slate-50 text-slate-900">
+  <div x-data="{sidebarOpen:false}" class="min-h-screen flex">
+
+    <!-- Sidebar (mobile overlay) -->
+    <div class="fixed inset-0 z-40 bg-black/40 lg:hidden"
+         x-show="sidebarOpen" x-transition.opacity
+         @click="sidebarOpen=false"></div>
+
     <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="mb-8">
-            <h1 class="text-2xl font-bold text-white">Healthcare CRM</h1>
-            <p class="text-sm text-gray-400 mt-1">AI bilan ishlaydigan tizim</p>
+    <aside class="fixed z-50 lg:static inset-y-0 left-0 w-72 bg-white border-r border-slate-200
+                  transform lg:transform-none transition-transform duration-200"
+           :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
+      <div class="h-16 px-5 flex items-center gap-3 border-b border-slate-200">
+        <div class="h-10 w-10 rounded-xl bg-blue-600 text-white grid place-items-center font-bold">H</div>
+        <div>
+          <div class="font-semibold leading-tight">Healthcare CRM</div>
+          <div class="text-xs text-slate-500">Hackathon / MVP UI</div>
+        </div>
+      </div>
+
+      <nav class="p-3 space-y-1">
+        <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+          <i class="fa-solid fa-gauge"></i><span>Дашборд</span>
+        </a>
+
+        <div class="pt-2 pb-1 px-3 text-xs font-semibold text-slate-400 uppercase">Модули</div>
+
+        <a href="{% url 'patient_list' %}" class="nav-link {% if 'patient' in request.resolver_match.url_name %}active{% endif %}">
+          <i class="fa-solid fa-user-injured"></i><span>Пациенты</span>
+        </a>
+        <a href="{% url 'appointment_list' %}" class="nav-link {% if 'appointment' in request.resolver_match.url_name %}active{% endif %}">
+          <i class="fa-regular fa-calendar-check"></i><span>Записи</span>
+        </a>
+        <a href="{% url 'staff_list' %}" class="nav-link {% if 'staff' in request.resolver_match.url_name %}active{% endif %}">
+          <i class="fa-solid fa-user-doctor"></i><span>Персонал</span>
+        </a>
+
+        <div class="pt-2 pb-1 px-3 text-xs font-semibold text-slate-400 uppercase">Система</div>
+
+        <a href="/admin/" class="nav-link" target="_blank" rel="noreferrer">
+          <i class="fa-solid fa-screwdriver-wrench"></i><span>Admin</span>
+        </a>
+      </nav>
+
+      <div class="p-4 mt-auto">
+        <div class="rounded-2xl bg-slate-50 border border-slate-200 p-4">
+          <div class="text-sm font-semibold">Подсказка</div>
+          <p class="text-xs text-slate-600 mt-1">
+            Это UI без сборки: Tailwind и Alpine подключены через CDN.
+          </p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="flex-1 lg:ml-0 ml-0 w-full">
+      <!-- Topbar -->
+      <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6">
+        <div class="flex items-center gap-3">
+          <button class="lg:hidden h-10 w-10 rounded-xl border border-slate-200 grid place-items-center hover:bg-slate-50"
+                  @click="sidebarOpen=true" aria-label="Open sidebar">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+
+          <div>
+            <div class="text-sm text-slate-500 leading-tight">{% block breadcrumb %}Главная{% endblock %}</div>
+            <div class="font-semibold">{% block header %}Healthcare CRM{% endblock %}</div>
+          </div>
         </div>
 
-        <nav>
-            <a href="{% url 'dashboard' %}" class="sidebar-link {% if request.path == '/' %}active{% endif %}">
-                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                </svg>
-                Bosh sahifa
-            </a>
-
-            <a href="{% url 'patient_list' %}" class="sidebar-link {% if 'patients' in request.path and 'create' not in request.path %}active{% endif %}">
-                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                </svg>
-                Bemorlar
-            </a>
-
-            <a href="{% url 'appointment_list' %}" class="sidebar-link {% if 'appointments' in request.path %}active{% endif %}">
-                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
-                Uchrashuvlar
-            </a>
-            <a href="{% url 'staff_list' %}"
-               class="sidebar-link {% if request.resolver_match.url_name == 'staff_list' %}active{% endif %}">
-                👨‍⚕️ Xodimlar
-            </a>
-        </nav>
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Messages -->
-        {% if messages %}
-        <div class="mb-4">
-            {% for message in messages %}
-            <div class="card p-4 mb-3 {% if message.tags == 'success' %}bg-green-50 border-l-4 border-green-500{% elif message.tags == 'error' %}bg-red-50 border-l-4 border-red-500{% elif message.tags == 'warning' %}bg-orange-50 border-l-4 border-orange-500{% else %}bg-blue-50 border-l-4 border-blue-500{% endif %}">
-                <p class="font-medium">{{ message }}</p>
+        <div class="flex items-center gap-2">
+          {% if messages %}
+            <div class="hidden sm:block text-sm text-slate-500">
+              {{ messages|length }} сообщение(й)
             </div>
-            {% endfor %}
+          {% endif %}
+          <div class="h-10 w-10 rounded-xl bg-slate-100 border border-slate-200 grid place-items-center">
+            <i class="fa-regular fa-user"></i>
+          </div>
         </div>
-        {% endif %}
+      </header>
 
-        <!-- Page Content -->
-        <div class="fade-in">
-            {% block content %}{% endblock %}
-        </div>
+      <!-- Flash messages -->
+      {% if messages %}
+      <div class="px-4 sm:px-6 pt-4 space-y-2">
+        {% for message in messages %}
+          <div class="rounded-xl px-4 py-3 text-sm border
+                      {% if message.tags == 'success' %}bg-emerald-50 border-emerald-200 text-emerald-900
+                      {% elif message.tags == 'error' %}bg-rose-50 border-rose-200 text-rose-900
+                      {% else %}bg-slate-50 border-slate-200 text-slate-800{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- Content -->
+      <main class="px-4 sm:px-6 py-6">
+        {% block content %}{% endblock %}
+      </main>
     </div>
+  </div>
+
+  <script src="{% static 'app.js' %}"></script>
+  {% block scripts %}{% endblock %}
 </body>
 </html>

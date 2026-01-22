@@ -1,89 +1,68 @@
-{% extends 'dashboard.html' %}
+{% extends 'base.html' %}
+{% block title %}Персонал · Healthcare CRM{% endblock %}
+{% block breadcrumb %}Модули / Персонал{% endblock %}
+{% block header %}Персонал{% endblock %}
 
 {% block content %}
-<div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold text-gray-800">👨‍⚕️ Xodimlar</h1>
-    <a href="{% url 'staff_create' %}" class="btn-primary">
-        ➕ Yangi xodim qo'shish
+<div class="card p-5">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div>
+      <h2 class="text-lg font-semibold">Список персонала</h2>
+      <p class="text-sm text-slate-600">Поиск по имени/телефону.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'staff_create' %}">
+      <i class="fa-solid fa-user-plus"></i> Добавить
     </a>
-</div>
+  </div>
 
-<!-- Search -->
-<div class="mb-6">
-    <form method="GET" class="flex gap-2">
-        <input 
-            type="text" 
-            name="q" 
-            value="{{ query }}"
-            placeholder="Ism, lavozim yoki bo'lim bo'yicha qidirish..."
-            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-        >
-        <button type="submit" class="btn-primary">🔍 Qidirish</button>
-    </form>
-</div>
+  <form class="mt-4" method="get">
+    <div class="flex gap-2">
+      <input
+        class="input flex-1"
+        type="text"
+        name="q"
+        value="{{ query }}"
+        placeholder="Поиск по имени или отделу..."
+      />
+      <button class="btn" type="submit">
+        <i class="fa-solid fa-magnifying-glass"></i> Найти
+      </button>
+    </div>
+  </form>
 
-<!-- Staff Table -->
-<div class="bg-white rounded-lg shadow overflow-hidden">
-    <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-            <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ism</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Lavozim</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bo'lim</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Telefon</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Holat</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ishga olingan</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Amallar</th>
-            </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-            {% for member in staff %}
-            <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="font-medium text-gray-900">{{ member.ism }}</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
-                        {{ member.get_lavozim_display }}
-                    </span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ member.get_bolim_display }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ member.telefon }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ member.email|default:"-" }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    {% if member.faol %}
-                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Faol</span>
-                    {% else %}
-                        <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">Faol emas</span>
-                    {% endif %}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ member.ishga_olingan_sana|date:"d.m.Y" }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <a href="{% url 'staff_edit' member.pk %}" class="text-blue-600 hover:text-blue-900 mr-3">✏️</a>
-                    <form method="POST" action="{% url 'staff_delete' member.pk %}" class="inline" 
-                          onsubmit="return confirm('Rostdan ham o\'chirmoqchimisiz?');">
-                        {% csrf_token %}
-                        <button type="submit" class="text-red-600 hover:text-red-900">🗑️</button>
-                    </form>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="8" class="px-6 py-8 text-center text-gray-500">
-                    Xodimlar topilmadi
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
+  <div class="mt-4 overflow-hidden rounded-2xl border border-slate-200">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Сотрудник</th>
+          <th>Роль</th>
+          <th>Отдел</th>
+          <th>Контакты</th>
+          <th class="text-right">Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in staff %}
+          <tr>
+            <td class="font-semibold">{{ s.ism }}</td>
+            <td class="text-slate-700">{{ s.get_lavozim_display }}</td>
+            <td class="text-slate-700">{{ s.get_bolim_display }}</td>
+            <td class="text-slate-700">{{ s.telefon }}</td>
+            <td class="text-right space-x-2">
+              <a class="btn" href="{% url 'staff_edit' s.id %}"><i class="fa-regular fa-pen-to-square"></i></a>
+              <form class="inline" method="post" action="{% url 'staff_delete' s.id %}" onsubmit="return confirm('Удалить сотрудника?');">
+                {% csrf_token %}
+                <button class="btn border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100" type="submit">
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-slate-600">Нет персонала.</td></tr>
+        {% endfor %}
+      </tbody>
     </table>
+  </div>
 </div>
 {% endblock %}

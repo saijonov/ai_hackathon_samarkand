@@ -24,9 +24,6 @@ def dashboard(request):
 
     # Statistics
     total_patients = Patient.objects.count()
-    total_staff = Staff.objects.count()
-    active_staff = Staff.objects.filter(faol=True).count()
-
     today_appointments = Appointment.objects.filter(
         uchrashuv_sanasi__date=today
     ).count()
@@ -59,8 +56,6 @@ def dashboard(request):
 
     context = {
         'total_patients': total_patients,
-        'total_staff': total_staff,
-        'active_staff': active_staff,
         'today_appointments': today_appointments,
         'high_risk_count': high_risk_count,
         'completed_today': completed_today,

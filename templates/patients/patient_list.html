@@ -1,256 +1,65 @@
 {% extends 'base.html' %}
-
-{% block title %}Беморлар рўйхати - Healthcare CRM{% endblock %}
+{% block title %}Пациенты · Healthcare CRM{% endblock %}
+{% block breadcrumb %}Модули / Пациенты{% endblock %}
+{% block header %}Пациенты{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <!-- Header -->
-    <div class="flex justify-between items-center mb-8">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800">Беморлар рўйхати</h1>
-            <p class="text-gray-600 mt-2">Барча беморларни бошқариш ва кўриш</p>
-        </div>
-        <a href="{% url 'patient_create' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md transition duration-200 flex items-center">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-            Янги бемор қўшиш
-        </a>
+<div class="card p-5">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div>
+      <h2 class="text-lg font-semibold">Список пациентов</h2>
+      <p class="text-sm text-slate-600">Поиск по имени или телефону.</p>
     </div>
+    <a class="btn btn-primary" href="{% url 'patient_create' %}">
+      <i class="fa-solid fa-plus"></i> Новый пациент
+    </a>
+  </div>
 
-    <!-- Search and Filter Section -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-        <form method="get" action="" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Search Input -->
-                <div class="md:col-span-2">
-                    <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Қидириш</label>
-                    <div class="relative">
-                        <input type="text"
-                               id="search"
-                               name="search"
-                               value="{{ request.GET.search }}"
-                               placeholder="Исм, телефон ёки манзил бўйича қидириш..."
-                               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-
-                <!-- Gender Filter -->
-                <div>
-                    <label for="jins" class="block text-sm font-medium text-gray-700 mb-2">Жинс</label>
-                    <select id="jins" name="jins" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <option value="">Барчаси</option>
-                        <option value="Эркак" {% if request.GET.jins == 'Эркак' %}selected{% endif %}>Эркак</option>
-                        <option value="Аёл" {% if request.GET.jins == 'Аёл' %}selected{% endif %}>Аёл</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Filter Buttons -->
-            <div class="flex flex-wrap gap-3">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition duration-200">
-                    Қидириш
-                </button>
-                <a href="{% url 'patient_list' %}" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition duration-200">
-                    Тозалаш
-                </a>
-                <label class="flex items-center ml-4">
-                    <input type="checkbox" name="yurak_kasalligi" value="1" {% if request.GET.yurak_kasalligi %}checked{% endif %} class="w-4 h-4 text-blue-600 rounded">
-                    <span class="ml-2 text-sm text-gray-700">Юрак касаллиги</span>
-                </label>
-                <label class="flex items-center">
-                    <input type="checkbox" name="qand_kasalligi" value="1" {% if request.GET.qand_kasalligi %}checked{% endif %} class="w-4 h-4 text-blue-600 rounded">
-                    <span class="ml-2 text-sm text-gray-700">Қанд касаллиги</span>
-                </label>
-                <label class="flex items-center">
-                    <input type="checkbox" name="gipertoniya" value="1" {% if request.GET.gipertoniya %}checked{% endif %} class="w-4 h-4 text-blue-600 rounded">
-                    <span class="ml-2 text-sm text-gray-700">Гипертония</span>
-                </label>
-            </div>
-        </form>
+  <form class="mt-4" method="get">
+    <div class="flex gap-2">
+      <input
+        class="input flex-1"
+        type="text"
+        name="q"
+        value="{{ query }}"
+        placeholder="Поиск по имени или телефону..."
+      />
+      <button class="btn" type="submit">
+        <i class="fa-solid fa-magnifying-glass"></i> Найти
+      </button>
     </div>
+  </form>
 
-    <!-- Statistics Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center">
-                <div class="bg-blue-100 rounded-full p-3">
-                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <p class="text-gray-600 text-sm">Жами беморлар</p>
-                    <p class="text-2xl font-bold text-gray-800">{{ total_patients|default:0 }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center">
-                <div class="bg-red-100 rounded-full p-3">
-                    <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <p class="text-gray-600 text-sm">Қанд касаллиги</p>
-                    <p class="text-2xl font-bold text-gray-800">{{ diabetes_count|default:0 }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center">
-                <div class="bg-orange-100 rounded-full p-3">
-                    <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <p class="text-gray-600 text-sm">Гипертония</p>
-                    <p class="text-2xl font-bold text-gray-800">{{ hypertension_count|default:0 }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center">
-                <div class="bg-green-100 rounded-full p-3">
-                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <p class="text-gray-600 text-sm">Юрак касаллиги</p>
-                    <p class="text-2xl font-bold text-gray-800">{{ heart_disease_count|default:0 }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Patients Table -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">№</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Исм</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ёш/Жинс</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Телефон</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Қон гурухи</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Касалликлар</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ҳаракатлар</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    {% for patient in patients %}
-                    <tr class="hover:bg-gray-50 transition duration-150">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ forloop.counter }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div class="h-10 w-10 flex-shrink-0">
-                                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                                        <span class="text-blue-600 font-semibold">{{ patient.ism|slice:":1"|upper }}</span>
-                                    </div>
-                                </div>
-                                <div class="ml-4">
-                                    <div class="text-sm font-medium text-gray-900">{{ patient.ism }}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ patient.yosh }} йош / {{ patient.jins }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ patient.telefon }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
-                                {{ patient.qon_guruhi|default:"Белгисиз" }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex flex-wrap gap-1">
-                                {% if patient.qand_kasalligi %}
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Қанд</span>
-                                {% endif %}
-                                {% if patient.gipertoniya %}
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">Гипертония</span>
-                                {% endif %}
-                                {% if patient.yurak_kasalligi %}
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Юрак</span>
-                                {% endif %}
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <div class="flex space-x-2">
-                                <a href="{% url 'patient_detail' patient.pk %}" class="text-blue-600 hover:text-blue-900 transition duration-150" title="Кўриш">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                    </svg>
-                                </a>
-                                <a href="{% url 'patient_edit' patient.pk %}" class="text-green-600 hover:text-green-900 transition duration-150" title="Таҳрирлаш">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                    </svg>
-                                </a>
-                                <a href="{% url 'patient_delete' patient.pk %}" class="text-red-600 hover:text-red-900 transition duration-150" title="Ўчириш" onclick="return confirm('Ҳақиқатан ҳам ўчирмоқчимисиз?')">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                    </svg>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="7" class="px-6 py-12 text-center">
-                            <div class="flex flex-col items-center justify-center text-gray-500">
-                                <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                                </svg>
-                                <p class="text-lg font-semibold">Беморлар топилмади</p>
-                                <p class="text-sm mt-2">Янги бемор қўшиш учун юқоридаги тугмани босинг</p>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Pagination -->
-    {% if is_paginated %}
-    <div class="mt-6 flex justify-center">
-        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-            {% if page_obj.has_previous %}
-            <a href="?page=1" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                <span>Биринчи</span>
-            </a>
-            <a href="?page={{ page_obj.previous_page_number }}" class="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                <span>Олдинги</span>
-            </a>
-            {% endif %}
-
-            <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
-                Саҳифа {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
-            </span>
-
-            {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" class="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                <span>Кейинги</span>
-            </a>
-            <a href="?page={{ page_obj.paginator.num_pages }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                <span>Охирги</span>
-            </a>
-            {% endif %}
-        </nav>
-    </div>
-    {% endif %}
+  <div class="mt-4 overflow-hidden rounded-2xl border border-slate-200">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Пациент</th>
+          <th>Телефон</th>
+          <th>Пол</th>
+          <th>Возраст</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in patients %}
+          <tr>
+            <td>
+              <div class="font-semibold">{{ p.ism }}</div>
+              <div class="text-xs text-slate-500">ID: {{ p.id }}</div>
+            </td>
+            <td class="text-slate-700">{{ p.telefon|default:"—" }}</td>
+            <td class="text-slate-700">{{ p.get_jins_display|default:p.jins }}</td>
+            <td class="text-slate-700">{{ p.yosh }}</td>
+            <td class="text-right">
+              <a class="btn" href="{% url 'patient_detail' p.id %}">Открыть <i class="fa-solid fa-arrow-right"></i></a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-slate-600">Нет пациентов.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

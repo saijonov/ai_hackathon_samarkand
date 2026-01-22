@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Удаление сотрудника{% endblock %}
+{% block breadcrumb %}Модули / <a class="text-blue-600 hover:underline" href="{% url 'staff_list' %}">Персонал</a> / Удаление{% endblock %}
+{% block header %}Удаление{% endblock %}
+{% block content %}
+<div class="card p-5 max-w-xl">
+  <h2 class="text-lg font-semibold">Удалить сотрудника?</h2>
+  <p class="text-sm text-slate-600 mt-1">{{ staff_member }}</p>
+  <form method="post" class="mt-4 flex gap-2">
+    {% csrf_token %}
+    <button class="btn border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100" type="submit">
+      <i class="fa-regular fa-trash-can"></i> Удалить
+    </button>
+    <a class="btn" href="{% url 'staff_list' %}">Отмена</a>
+  </form>
+</div>
+{% endblock %}

@@ -1,191 +1,95 @@
 {% extends 'base.html' %}
-
-{% block title %}Bosh sahifa - Healthcare CRM{% endblock %}
+{% block title %}Дашборд · Healthcare CRM{% endblock %}
+{% block breadcrumb %}Главная / Дашборд{% endblock %}
+{% block header %}Дашборд{% endblock %}
 
 {% block content %}
-<div class="mb-6 flex justify-between items-center">
-    <div>
-        <h1 class="text-4xl font-bold text-gray-800">Bosh sahifa</h1>
-        <p class="text-gray-600 mt-2">Tizim statistikasi va bugungi uchrashuvlar</p>
-    </div>
-    <a href="{% url 'appointment_create' %}" class="btn-primary">+ Yangi Uchrashuv</a>
-</div>
-
-<!-- Statistics Cards -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="stat-card">
-        <div class="text-3xl font-bold">{{ total_patients }}</div>
-        <div class="text-sm opacity-90 mt-1">Jami bemorlar</div>
-    </div>
-
-    <div class="stat-card-warning">
-        <div class="text-3xl font-bold">{{ today_appointments }}</div>
-        <div class="text-sm opacity-90 mt-1">Bugungi uchrashuvlar</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <section class="card p-5 lg:col-span-2">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-lg font-semibold">Сводка на сегодня</h2>
+        <p class="text-sm text-slate-600 mt-1">Статистика по пациентам и встречам (appointments).</p>
+      </div>
+      <div class="flex gap-2">
+        <a class="btn btn-primary" href="{% url 'patient_create' %}">
+          <i class="fa-solid fa-plus"></i> Пациент
+        </a>
+        <a class="btn" href="{% url 'appointment_create' %}">
+          <i class="fa-regular fa-calendar-plus"></i> Запись
+        </a>
+      </div>
     </div>
 
-    <div class="stat-card-danger">
-        <div class="text-3xl font-bold">{{ high_risk_count }}</div>
-        <div class="text-sm opacity-90 mt-1">Yuqori xavfli</div>
+    <div class="mt-6 grid grid-cols-1 sm:grid-cols-4 gap-4">
+      <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+        <div class="text-xs text-slate-500">Пациентов</div>
+        <div class="text-2xl font-bold mt-1">{{ total_patients|default:"—" }}</div>
+      </div>
+      <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+        <div class="text-xs text-slate-500">Записей сегодня</div>
+        <div class="text-2xl font-bold mt-1">{{ today_appointments|default:"—" }}</div>
+      </div>
+      <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+        <div class="text-xs text-slate-500">High risk</div>
+        <div class="text-2xl font-bold mt-1">{{ high_risk_count|default:"—" }}</div>
+      </div>
+      <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+        <div class="text-xs text-slate-500">Завершено</div>
+        <div class="text-2xl font-bold mt-1">{{ completed_today|default:"—" }}</div>
+      </div>
     </div>
 
-    <div class="stat-card-success">
-        <div class="text-3xl font-bold">{{ completed_today }}</div>
-        <div class="text-sm opacity-90 mt-1">Bugun yakunlangan</div>
-    </div>
-</div>
-
-<!-- Today's Appointments -->
-<div class="card p-6 mb-8">
-    <h2 class="text-2xl font-bold mb-4">Bugungi Uchrashuvlar</h2>
-
-    {% if todays_appointments %}
-    <div class="overflow-x-auto">
-        <table>
-            <thead>
-                <tr>
-                    <th>Bemor</th>
-                    <th>Vaqt</th>
-                    <th>Shifokor</th>
-                    <th>Bo'lim</th>
-                    <th>Xavf</th>
-                    <th>Holat</th>
-                    <th>Harakatlar</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for appointment in todays_appointments %}
-                <tr>
-                    <td>
-                        <a href="{% url 'patient_detail' appointment.bemor.pk %}" class="text-blue-600 hover:underline font-medium">
-                            {{ appointment.bemor.ism }}
-                        </a>
-                    </td>
-                    <td>{{ appointment.uchrashuv_sanasi|date:"H:i" }}</td>
-                    <td>{{ appointment.shifokor }}</td>
-                    <td>{{ appointment.get_bolim_display }}</td>
-                    <td>
-                        {% if appointment.kelmay_qolish_riski %}
-                            {% if appointment.kelmay_qolish_riski < 0.3 %}
-                                <span class="badge-success">Past xavf</span>
-                            {% elif appointment.kelmay_qolish_riski < 0.7 %}
-                                <span class="badge-warning">O'rta xavf</span>
-                            {% else %}
-                                <span class="badge-danger">Yuqori xavf</span>
-                            {% endif %}
-                        {% else %}
-                            <span class="badge-secondary">-</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if appointment.holat == 'rejalashtirilgan' %}
-                            <span class="badge-info">Rejalashtirilgan</span>
-                        {% elif appointment.holat == 'yakunlangan' %}
-                            <span class="badge-success">Yakunlangan</span>
-                        {% elif appointment.holat == 'bekor_qilingan' %}
-                            <span class="badge-secondary">Bekor qilingan</span>
-                        {% else %}
-                            <span class="badge-danger">Kelmagan</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if appointment.holat == 'rejalashtirilgan' %}
-                            <a href="{% url 'appointment_complete' appointment.pk %}" class="btn btn-success text-xs py-1 px-2">✓ Yakunlash</a>
-                            <a href="{% url 'appointment_cancel' appointment.pk %}" class="btn btn-danger text-xs py-1 px-2 ml-1">✕ Bekor qilish</a>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% else %}
-    <div class="empty-state">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-        </svg>
-        <p class="text-lg">Bugun hech qanday uchrashuv yo'q</p>
-    </div>
-    {% endif %}
-</div>
-
-<!-- High Risk Patients & Department Stats -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <!-- High Risk Patients -->
-    <div class="card p-6">
-        <h2 class="text-2xl font-bold mb-4">Yuqori Xavfli Bemorlar</h2>
-
-        {% if high_risk_appointments %}
-        <div class="space-y-3">
-            {% for appointment in high_risk_appointments %}
-            <div class="risk-card-high card p-4">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <a href="{% url 'patient_detail' appointment.bemor.pk %}" class="font-bold text-lg text-blue-600 hover:underline">
-                            {{ appointment.bemor.ism }}
-                        </a>
-                        <p class="text-sm text-gray-600 mt-1">
-                            {{ appointment.uchrashuv_sanasi|date:"d.m.Y H:i" }} - {{ appointment.get_bolim_display }}
-                        </p>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-2xl font-bold text-red-600">{{ appointment.kelmay_qolish_riski|floatformat:0|add:"0" }}%</div>
-                        <div class="text-xs text-gray-600">Kelmay qolish riski</div>
-                    </div>
-                </div>
-                <button class="btn btn-warning text-sm mt-3 w-full">SMS yuborish</button>
-            </div>
+    <div class="mt-6">
+      <h3 class="font-semibold">Сегодняшние записи</h3>
+      <div class="mt-3 overflow-hidden rounded-2xl border border-slate-200">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Пациент</th>
+              <th>Время</th>
+              <th>Отдел</th>
+              <th>Риск no-show</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in todays_appointments %}
+              <tr>
+                <td class="font-semibold">
+                  <a class="text-blue-600 hover:underline" href="{% url 'patient_detail' a.bemor.id %}">{{ a.bemor.ism }}</a>
+                </td>
+                <td class="text-slate-700">{{ a.uchrashuv_sanasi|date:"d.m.Y H:i" }}</td>
+                <td class="text-slate-700">{{ a.get_bolim_display|default:a.bolim }}</td>
+                <td class="text-slate-700">{{ a.kelmay_qolish_riski|floatformat:2 }}</td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="4" class="text-slate-600">На сегодня записей нет.</td></tr>
             {% endfor %}
-        </div>
-        {% else %}
-        <div class="empty-state py-8">
-            <p>Yuqori xavfli bemorlar yo'q</p>
-        </div>
-        {% endif %}
+          </tbody>
+        </table>
+      </div>
     </div>
+  </section>
 
-    <!-- Department Statistics -->
-    <div class="card p-6">
-        <h2 class="text-2xl font-bold mb-4">Bo'limlar bo'yicha statistika</h2>
+  <aside class="card p-5">
+    <h2 class="text-lg font-semibold">High-risk список</h2>
+    <p class="text-sm text-slate-600 mt-1">Те, у кого риск неявки высокий.</p>
 
-        {% if dept_stats %}
-        <canvas id="departmentChart" height="300"></canvas>
-
-        <script>
-            const ctx = document.getElementById('departmentChart').getContext('2d');
-            const departmentChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: [
-                        {% for stat in dept_stats %}
-                        '{{ stat.bolim|capfirst }}'{% if not forloop.last %},{% endif %}
-                        {% endfor %}
-                    ],
-                    datasets: [{
-                        data: [
-                            {% for stat in dept_stats %}
-                            {{ stat.count }}{% if not forloop.last %},{% endif %}
-                            {% endfor %}
-                        ],
-                        backgroundColor: [
-                            '#0066CC', '#00C853', '#FF9800', '#FF6B6B', '#9C27B0', '#00BCD4', '#FFC107'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                        }
-                    }
-                }
-            });
-        </script>
-        {% else %}
-        <div class="empty-state py-8">
-            <p>Bugun uchrashuvlar yo'q</p>
+    <div class="mt-4 space-y-2">
+      {% for a in high_risk_appointments %}
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+          <div class="flex items-center justify-between gap-3">
+            <div>
+              <div class="font-semibold">{{ a.bemor.ism }}</div>
+              <div class="text-xs text-slate-500">{{ a.uchrashuv_sanasi|date:"d.m.Y H:i" }} · {{ a.get_bolim_display }}</div>
+            </div>
+            <span class="badge badge-warn">{{ a.kelmay_qolish_riski|floatformat:2 }}</span>
+          </div>
         </div>
-        {% endif %}
+      {% empty %}
+        <div class="text-sm text-slate-600">Нет high-risk записей на сегодня.</div>
+      {% endfor %}
     </div>
+  </aside>
 </div>
 {% endblock %}
