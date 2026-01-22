@@ -682,3 +682,8 @@ def extract_patient_from_transcript(request):
         'success': False,
         'error': 'POST so\'rov kerak'
     }, status=405)
+
+
+def subscriptions(request):
+    """Subscriptions page with pricing plans"""
+    return render(request, 'subscriptions.html')

@@ -3,94 +3,208 @@
 {% block title %}Bosh sahifa - Healthcare CRM{% endblock %}
 
 {% block content %}
-<div class="mb-6 flex justify-between items-center">
+<div class="mb-8 flex justify-between items-center">
     <div>
-        <h1 class="text-4xl font-bold text-gray-800">Bosh sahifa</h1>
-        <p class="text-gray-600 mt-2">Tizim statistikasi va bugungi uchrashuvlar</p>
+        <h1 class="text-3xl font-bold text-gray-900">Xush kelibsiz!</h1>
+        <p class="text-gray-500 mt-1">Klinikangiz statistikasi va bugungi uchrashuvlar</p>
     </div>
-    <a href="{% url 'appointment_create' %}" class="btn-primary">+ Yangi Uchrashuv</a>
+    <a href="{% url 'appointment_create' %}" class="btn-primary">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Yangi Uchrashuv
+    </a>
 </div>
 
 <!-- Statistics Cards -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <div class="stat-card">
-        <div class="text-3xl font-bold">{{ total_patients }}</div>
-        <div class="text-sm opacity-90 mt-1">Jami bemorlar</div>
+        <div class="flex justify-between items-start relative z-10">
+            <div>
+                <p class="text-sm font-medium text-white/80 mb-1">Jami bemorlar</p>
+                <p class="text-4xl font-bold">{{ total_patients }}</p>
+            </div>
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="mt-4 flex items-center gap-2 text-sm text-white/80 relative z-10">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+            </svg>
+            Faol bemorlar
+        </div>
     </div>
 
     <div class="stat-card-warning">
-        <div class="text-3xl font-bold">{{ today_appointments }}</div>
-        <div class="text-sm opacity-90 mt-1">Bugungi uchrashuvlar</div>
+        <div class="flex justify-between items-start relative z-10">
+            <div>
+                <p class="text-sm font-medium text-white/80 mb-1">Bugungi uchrashuvlar</p>
+                <p class="text-4xl font-bold">{{ today_appointments }}</p>
+            </div>
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="mt-4 flex items-center gap-2 text-sm text-white/80 relative z-10">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Bugun rejalashtirilgan
+        </div>
     </div>
 
     <div class="stat-card-danger">
-        <div class="text-3xl font-bold">{{ high_risk_count }}</div>
-        <div class="text-sm opacity-90 mt-1">Yuqori xavfli</div>
+        <div class="flex justify-between items-start relative z-10">
+            <div>
+                <p class="text-sm font-medium text-white/80 mb-1">Yuqori xavfli</p>
+                <p class="text-4xl font-bold">{{ high_risk_count }}</p>
+            </div>
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="mt-4 flex items-center gap-2 text-sm text-white/80 relative z-10">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+            Kelmay qolish ehtimoli
+        </div>
     </div>
 
     <div class="stat-card-success">
-        <div class="text-3xl font-bold">{{ completed_today }}</div>
-        <div class="text-sm opacity-90 mt-1">Bugun yakunlangan</div>
+        <div class="flex justify-between items-start relative z-10">
+            <div>
+                <p class="text-sm font-medium text-white/80 mb-1">Bugun yakunlangan</p>
+                <p class="text-4xl font-bold">{{ completed_today }}</p>
+            </div>
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="mt-4 flex items-center gap-2 text-sm text-white/80 relative z-10">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Muvaffaqiyatli
+        </div>
     </div>
 </div>
 
 <!-- Today's Appointments -->
-<div class="card p-6 mb-8">
-    <h2 class="text-2xl font-bold mb-4">Bugungi Uchrashuvlar</h2>
+<div class="card mb-8">
+    <div class="p-6 border-b border-gray-100">
+        <div class="flex justify-between items-center">
+            <div>
+                <h2 class="text-xl font-bold text-gray-900">Bugungi Uchrashuvlar</h2>
+                <p class="text-sm text-gray-500 mt-1">Bugungi barcha uchrashuvlar ro'yxati</p>
+            </div>
+            <a href="{% url 'appointment_list' %}" class="text-indigo-600 hover:text-indigo-700 font-medium text-sm flex items-center gap-1">
+                Barchasini ko'rish
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+        </div>
+    </div>
 
     {% if todays_appointments %}
     <div class="overflow-x-auto">
-        <table>
+        <table class="modern-table">
             <thead>
                 <tr>
                     <th>Bemor</th>
                     <th>Vaqt</th>
                     <th>Shifokor</th>
                     <th>Bo'lim</th>
-                    <th>Xavf</th>
+                    <th>Xavf darajasi</th>
                     <th>Holat</th>
-                    <th>Harakatlar</th>
+                    <th class="text-right">Harakatlar</th>
                 </tr>
             </thead>
             <tbody>
                 {% for appointment in todays_appointments %}
                 <tr>
                     <td>
-                        <a href="{% url 'patient_detail' appointment.bemor.pk %}" class="text-blue-600 hover:underline font-medium">
-                            {{ appointment.bemor.ism }}
-                        </a>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center">
+                                <span class="text-indigo-600 font-semibold">{{ appointment.bemor.ism|slice:":1"|upper }}</span>
+                            </div>
+                            <div>
+                                <a href="{% url 'patient_detail' appointment.bemor.pk %}" class="text-gray-900 font-medium hover:text-indigo-600 transition-colors">
+                                    {{ appointment.bemor.ism }}
+                                </a>
+                                <p class="text-sm text-gray-500">{{ appointment.bemor.telefon }}</p>
+                            </div>
+                        </div>
                     </td>
-                    <td>{{ appointment.uchrashuv_sanasi|date:"H:i" }}</td>
+                    <td>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="font-medium">{{ appointment.uchrashuv_sanasi|date:"H:i" }}</span>
+                        </div>
+                    </td>
                     <td>{{ appointment.shifokor }}</td>
-                    <td>{{ appointment.get_bolim_display }}</td>
+                    <td>
+                        <span class="badge badge-info">{{ appointment.get_bolim_display }}</span>
+                    </td>
                     <td>
                         {% if appointment.kelmay_qolish_riski %}
                             {% if appointment.kelmay_qolish_riski < 0.3 %}
-                                <span class="badge-success">Past xavf</span>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    <span class="badge badge-success">{{ appointment.kelmay_qolish_riski|floatformat:0 }}% Past</span>
+                                </div>
                             {% elif appointment.kelmay_qolish_riski < 0.7 %}
-                                <span class="badge-warning">O'rta xavf</span>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-2 h-2 bg-amber-500 rounded-full animate-pulse-soft"></div>
+                                    <span class="badge badge-warning">{{ appointment.kelmay_qolish_riski|floatformat:0 }}% O'rta</span>
+                                </div>
                             {% else %}
-                                <span class="badge-danger">Yuqori xavf</span>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse-soft"></div>
+                                    <span class="badge badge-danger">{{ appointment.kelmay_qolish_riski|floatformat:0 }}% Yuqori</span>
+                                </div>
                             {% endif %}
                         {% else %}
-                            <span class="badge-secondary">-</span>
+                            <span class="badge badge-secondary">-</span>
                         {% endif %}
                     </td>
                     <td>
                         {% if appointment.holat == 'rejalashtirilgan' %}
-                            <span class="badge-info">Rejalashtirilgan</span>
+                            <span class="badge badge-info">Rejalashtirilgan</span>
                         {% elif appointment.holat == 'yakunlangan' %}
-                            <span class="badge-success">Yakunlangan</span>
+                            <span class="badge badge-success">Yakunlangan</span>
                         {% elif appointment.holat == 'bekor_qilingan' %}
-                            <span class="badge-secondary">Bekor qilingan</span>
+                            <span class="badge badge-secondary">Bekor qilingan</span>
                         {% else %}
-                            <span class="badge-danger">Kelmagan</span>
+                            <span class="badge badge-danger">Kelmagan</span>
                         {% endif %}
                     </td>
-                    <td>
+                    <td class="text-right">
                         {% if appointment.holat == 'rejalashtirilgan' %}
-                            <a href="{% url 'appointment_complete' appointment.pk %}" class="btn btn-success text-xs py-1 px-2">✓ Yakunlash</a>
-                            <a href="{% url 'appointment_cancel' appointment.pk %}" class="btn btn-danger text-xs py-1 px-2 ml-1">✕ Bekor qilish</a>
+                            <div class="flex justify-end gap-2">
+                                <a href="{% url 'appointment_complete' appointment.pk %}" class="p-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors" title="Yakunlash">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </a>
+                                <a href="{% url 'appointment_cancel' appointment.pk %}" class="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors" title="Bekor qilish">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </a>
+                            </div>
                         {% endif %}
                     </td>
                 </tr>
@@ -99,11 +213,20 @@
         </table>
     </div>
     {% else %}
-    <div class="empty-state">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-        </svg>
-        <p class="text-lg">Bugun hech qanday uchrashuv yo'q</p>
+    <div class="p-12 text-center">
+        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-1">Uchrashuvlar yo'q</h3>
+        <p class="text-gray-500 mb-4">Bugun hech qanday uchrashuv rejalashtirilmagan</p>
+        <a href="{% url 'appointment_create' %}" class="btn-primary inline-flex">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Yangi uchrashuv
+        </a>
     </div>
     {% endif %}
 </div>
@@ -111,49 +234,96 @@
 <!-- High Risk Patients & Department Stats -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- High Risk Patients -->
-    <div class="card p-6">
-        <h2 class="text-2xl font-bold mb-4">Yuqori Xavfli Bemorlar</h2>
+    <div class="card">
+        <div class="p-6 border-b border-gray-100">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900">Yuqori Xavfli Bemorlar</h2>
+                    <p class="text-sm text-gray-500">Kelmay qolish ehtimoli yuqori</p>
+                </div>
+            </div>
+        </div>
 
         {% if high_risk_appointments %}
-        <div class="space-y-3">
+        <div class="p-6 space-y-4">
             {% for appointment in high_risk_appointments %}
-            <div class="risk-card-high card p-4">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <a href="{% url 'patient_detail' appointment.bemor.pk %}" class="font-bold text-lg text-blue-600 hover:underline">
-                            {{ appointment.bemor.ism }}
-                        </a>
-                        <p class="text-sm text-gray-600 mt-1">
-                            {{ appointment.uchrashuv_sanasi|date:"d.m.Y H:i" }} - {{ appointment.get_bolim_display }}
-                        </p>
+            <div class="bg-gradient-to-r from-red-50 to-orange-50 border border-red-100 rounded-xl p-4 hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
+                            <span class="text-red-600 font-bold">{{ appointment.bemor.ism|slice:":1"|upper }}</span>
+                        </div>
+                        <div>
+                            <a href="{% url 'patient_detail' appointment.bemor.pk %}" class="font-semibold text-gray-900 hover:text-indigo-600 transition-colors">
+                                {{ appointment.bemor.ism }}
+                            </a>
+                            <p class="text-sm text-gray-500 flex items-center gap-1 mt-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                {{ appointment.uchrashuv_sanasi|date:"d.m.Y H:i" }}
+                            </p>
+                            <span class="badge badge-info mt-2">{{ appointment.get_bolim_display }}</span>
+                        </div>
                     </div>
                     <div class="text-right">
-                        <div class="text-2xl font-bold text-red-600">{{ appointment.kelmay_qolish_riski|floatformat:0|add:"0" }}%</div>
-                        <div class="text-xs text-gray-600">Kelmay qolish riski</div>
+                        <div class="text-2xl font-bold text-red-600">{{ appointment.kelmay_qolish_riski|floatformat:0 }}%</div>
+                        <div class="text-xs text-gray-500">Xavf darajasi</div>
                     </div>
                 </div>
-                <button class="btn btn-warning text-sm mt-3 w-full">SMS yuborish</button>
+                <button class="mt-4 w-full py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-lg hover:from-amber-600 hover:to-orange-600 transition-all shadow-md flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    </svg>
+                    SMS eslatma yuborish
+                </button>
             </div>
             {% endfor %}
         </div>
         {% else %}
-        <div class="empty-state py-8">
-            <p>Yuqori xavfli bemorlar yo'q</p>
+        <div class="p-12 text-center">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-1">Hammasi yaxshi!</h3>
+            <p class="text-gray-500">Yuqori xavfli bemorlar yo'q</p>
         </div>
         {% endif %}
     </div>
 
     <!-- Department Statistics -->
-    <div class="card p-6">
-        <h2 class="text-2xl font-bold mb-4">Bo'limlar bo'yicha statistika</h2>
+    <div class="card">
+        <div class="p-6 border-b border-gray-100">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900">Bo'limlar Statistikasi</h2>
+                    <p class="text-sm text-gray-500">Bugungi uchrashuvlar taqsimoti</p>
+                </div>
+            </div>
+        </div>
 
         {% if dept_stats %}
-        <canvas id="departmentChart" height="300"></canvas>
+        <div class="p-6">
+            <canvas id="departmentChart" height="250"></canvas>
+        </div>
 
         <script>
             const ctx = document.getElementById('departmentChart').getContext('2d');
             const departmentChart = new Chart(ctx, {
-                type: 'pie',
+                type: 'doughnut',
                 data: {
                     labels: [
                         {% for stat in dept_stats %}
@@ -167,25 +337,94 @@
                             {% endfor %}
                         ],
                         backgroundColor: [
-                            '#0066CC', '#00C853', '#FF9800', '#FF6B6B', '#9C27B0', '#00BCD4', '#FFC107'
-                        ]
+                            '#6366f1',
+                            '#8b5cf6',
+                            '#22c55e',
+                            '#f59e0b',
+                            '#ef4444',
+                            '#06b6d4',
+                            '#ec4899'
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 8
                     }]
                 },
                 options: {
                     responsive: true,
+                    cutout: '65%',
                     plugins: {
                         legend: {
                             position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                font: {
+                                    family: 'Inter',
+                                    size: 12
+                                }
+                            }
                         }
                     }
                 }
             });
         </script>
         {% else %}
-        <div class="empty-state py-8">
-            <p>Bugun uchrashuvlar yo'q</p>
+        <div class="p-12 text-center">
+            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-1">Ma'lumot yo'q</h3>
+            <p class="text-gray-500">Bugun uchrashuvlar yo'q</p>
         </div>
         {% endif %}
     </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+    <a href="{% url 'patient_create' %}" class="card p-6 hover:shadow-lg transition-all group">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                </svg>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-900">Yangi bemor</h3>
+                <p class="text-sm text-gray-500">Bemor qo'shish</p>
+            </div>
+        </div>
+    </a>
+
+    <a href="{% url 'appointment_create' %}" class="card p-6 hover:shadow-lg transition-all group">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-900">Yangi uchrashuv</h3>
+                <p class="text-sm text-gray-500">Uchrashuv belgilash</p>
+            </div>
+        </div>
+    </a>
+
+    <a href="{% url 'patient_list' %}" class="card p-6 hover:shadow-lg transition-all group">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-amber-100 to-orange-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-900">Bemorlarni qidirish</h3>
+                <p class="text-sm text-gray-500">Bazadan qidirish</p>
+            </div>
+        </div>
+    </a>
 </div>
 {% endblock %}

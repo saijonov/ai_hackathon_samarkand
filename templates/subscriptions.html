@@ -1,0 +1,440 @@
+{% extends 'base.html' %}
+
+{% block title %}Obuna - Healthcare CRM{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Obuna Rejalari</h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">O'z biznesingiz uchun eng mos rejani tanlang. Barcha rejalarga 14 kunlik bepul sinov davri beriladi.</p>
+    </div>
+
+    <!-- Pricing Toggle -->
+    <div class="flex justify-center items-center gap-4 mb-12">
+        <span class="text-gray-600 font-medium">Oylik</span>
+        <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="billingToggle" class="sr-only peer">
+            <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-indigo-600"></div>
+        </label>
+        <span class="text-gray-600 font-medium">Yillik <span class="text-green-600 text-sm font-semibold">(20% chegirma)</span></span>
+    </div>
+
+    <!-- Pricing Cards -->
+    <div class="grid md:grid-cols-3 gap-8 mb-16">
+        <!-- Starter Plan -->
+        <div class="card p-8 relative">
+            <div class="mb-6">
+                <div class="w-14 h-14 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mb-4">
+                    <svg class="w-7 h-7 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Boshlang'ich</h3>
+                <p class="text-gray-600">Kichik klinikalar uchun ideal</p>
+            </div>
+
+            <div class="mb-6">
+                <span class="text-4xl font-bold text-gray-900 monthly-price">$29</span>
+                <span class="text-4xl font-bold text-gray-900 yearly-price hidden">$23</span>
+                <span class="text-gray-500">/oy</span>
+            </div>
+
+            <ul class="space-y-4 mb-8">
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">100 ta bemorga qadar</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">Uchrashuv boshqaruvi</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">SMS eslatmalar (100/oy)</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">Asosiy hisobotlar</span>
+                </li>
+                <li class="flex items-center gap-3 opacity-50">
+                    <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <span class="text-gray-500">AI bashorat tizimi</span>
+                </li>
+                <li class="flex items-center gap-3 opacity-50">
+                    <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <span class="text-gray-500">Ovozli yozib olish</span>
+                </li>
+            </ul>
+
+            <button class="btn-secondary w-full justify-center">
+                Boshlash
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Professional Plan - Featured -->
+        <div class="card p-8 relative border-2 border-indigo-500 shadow-xl scale-105">
+            <!-- Popular Badge -->
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+                <span class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-sm font-bold px-4 py-1.5 rounded-full shadow-lg">
+                    ENG MASHHUR
+                </span>
+            </div>
+
+            <div class="mb-6 mt-2">
+                <div class="w-14 h-14 bg-gradient-to-br from-indigo-100 to-purple-200 rounded-2xl flex items-center justify-center mb-4">
+                    <svg class="w-7 h-7 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Professional</h3>
+                <p class="text-gray-600">O'rta hajmli klinikalar uchun</p>
+            </div>
+
+            <div class="mb-6">
+                <span class="text-4xl font-bold text-gray-900 monthly-price">$79</span>
+                <span class="text-4xl font-bold text-gray-900 yearly-price hidden">$63</span>
+                <span class="text-gray-500">/oy</span>
+            </div>
+
+            <ul class="space-y-4 mb-8">
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">500 ta bemorga qadar</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">Uchrashuv boshqaruvi</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">SMS eslatmalar (500/oy)</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700 font-semibold">AI bashorat tizimi</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700 font-semibold">Ovozli yozib olish</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">Kengaytirilgan hisobotlar</span>
+                </li>
+            </ul>
+
+            <button class="btn-primary w-full justify-center">
+                Boshlash
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Enterprise Plan -->
+        <div class="card p-8 relative">
+            <div class="mb-6">
+                <div class="w-14 h-14 bg-gradient-to-br from-amber-100 to-orange-200 rounded-2xl flex items-center justify-center mb-4">
+                    <svg class="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Korxona</h3>
+                <p class="text-gray-600">Katta shifoxonalar uchun</p>
+            </div>
+
+            <div class="mb-6">
+                <span class="text-4xl font-bold text-gray-900 monthly-price">$199</span>
+                <span class="text-4xl font-bold text-gray-900 yearly-price hidden">$159</span>
+                <span class="text-gray-500">/oy</span>
+            </div>
+
+            <ul class="space-y-4 mb-8">
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700 font-semibold">Cheksiz bemorlar</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">Barcha Professional xususiyatlar</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700 font-semibold">Cheksiz SMS</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">API integratsiya</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">Maxsus o'qitish</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700 font-semibold">24/7 qo'llab-quvvatlash</span>
+                </li>
+            </ul>
+
+            <button class="btn-secondary w-full justify-center">
+                Bog'lanish
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Features Comparison -->
+    <div class="card overflow-hidden mb-16">
+        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-6">
+            <h2 class="text-2xl font-bold text-white">Xususiyatlarni solishtirish</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th class="w-1/3">Xususiyat</th>
+                        <th class="text-center">Boshlang'ich</th>
+                        <th class="text-center">Professional</th>
+                        <th class="text-center">Korxona</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-medium">Bemorlar soni</td>
+                        <td class="text-center">100</td>
+                        <td class="text-center">500</td>
+                        <td class="text-center font-semibold text-indigo-600">Cheksiz</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Foydalanuvchilar</td>
+                        <td class="text-center">1</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center font-semibold text-indigo-600">Cheksiz</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">SMS eslatmalar</td>
+                        <td class="text-center">100/oy</td>
+                        <td class="text-center">500/oy</td>
+                        <td class="text-center font-semibold text-indigo-600">Cheksiz</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">AI bashorat tizimi</td>
+                        <td class="text-center">
+                            <svg class="w-5 h-5 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </td>
+                        <td class="text-center">
+                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </td>
+                        <td class="text-center">
+                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Ovozli yozib olish</td>
+                        <td class="text-center">
+                            <svg class="w-5 h-5 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </td>
+                        <td class="text-center">
+                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </td>
+                        <td class="text-center">
+                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Protokollar</td>
+                        <td class="text-center">
+                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </td>
+                        <td class="text-center">
+                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </td>
+                        <td class="text-center">
+                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">API integratsiya</td>
+                        <td class="text-center">
+                            <svg class="w-5 h-5 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </td>
+                        <td class="text-center">
+                            <svg class="w-5 h-5 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </td>
+                        <td class="text-center">
+                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Qo'llab-quvvatlash</td>
+                        <td class="text-center">Email</td>
+                        <td class="text-center">Ustuvor email</td>
+                        <td class="text-center font-semibold text-indigo-600">24/7 telefon</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 text-center mb-8">Ko'p so'raladigan savollar</h2>
+
+        <div class="space-y-4">
+            <div class="card p-6">
+                <button class="faq-toggle flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
+                    <span class="font-semibold text-gray-900">Bepul sinov davri qancha?</span>
+                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="faq-content hidden mt-4 text-gray-600">
+                    Barcha rejalarda 14 kunlik bepul sinov davri mavjud. Kredit karta talab qilinmaydi.
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <button class="faq-toggle flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
+                    <span class="font-semibold text-gray-900">Rejani o'zgartirish mumkinmi?</span>
+                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="faq-content hidden mt-4 text-gray-600">
+                    Ha, istalgan vaqtda rejangizni yangilashingiz yoki pasaytirishingiz mumkin. O'zgarishlar keyingi hisob-kitob davridan boshlab kuchga kiradi.
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <button class="faq-toggle flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
+                    <span class="font-semibold text-gray-900">Ma'lumotlarim xavfsizmi?</span>
+                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="faq-content hidden mt-4 text-gray-600">
+                    Albatta! Biz bank darajasidagi shifrlash va xavfsizlik standartlaridan foydalanamiz. Barcha ma'lumotlar O'zbekistonning mahalliy serverlarida saqlanadi.
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <button class="faq-toggle flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
+                    <span class="font-semibold text-gray-900">AI bashorat tizimi qanday ishlaydi?</span>
+                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="faq-content hidden mt-4 text-gray-600">
+                    Bizning AI tizimi bemorlarning kelmay qolish ehtimolini, qand kasalligi va yurak kasalligi xavfini bashorat qiladi. Bu shifokorlarga profilaktik choralar ko'rishga yordam beradi.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="card p-12 text-center bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
+        <h2 class="text-3xl font-bold mb-4">Hoziroq boshlang!</h2>
+        <p class="text-xl text-indigo-100 mb-8 max-w-2xl mx-auto">14 kunlik bepul sinov davri bilan klinikangizni zamonaviylashtirishni boshlang. Kredit karta talab qilinmaydi.</p>
+        <div class="flex justify-center gap-4 flex-wrap">
+            <button class="bg-white text-indigo-600 font-bold py-3 px-8 rounded-xl hover:bg-indigo-50 transition-colors shadow-lg">
+                Bepul boshlash
+            </button>
+            <button class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-xl hover:bg-white/10 transition-colors">
+                Demo ko'rish
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Billing toggle
+    const billingToggle = document.getElementById('billingToggle');
+    const monthlyPrices = document.querySelectorAll('.monthly-price');
+    const yearlyPrices = document.querySelectorAll('.yearly-price');
+
+    billingToggle.addEventListener('change', function() {
+        if (this.checked) {
+            monthlyPrices.forEach(el => el.classList.add('hidden'));
+            yearlyPrices.forEach(el => el.classList.remove('hidden'));
+        } else {
+            monthlyPrices.forEach(el => el.classList.remove('hidden'));
+            yearlyPrices.forEach(el => el.classList.add('hidden'));
+        }
+    });
+
+    // FAQ toggle
+    function toggleFaq(button) {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('svg');
+
+        content.classList.toggle('hidden');
+        icon.classList.toggle('rotate-180');
+    }
+</script>
+{% endblock %}
