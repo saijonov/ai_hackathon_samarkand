@@ -169,6 +169,58 @@
         tr:hover {
             background: #F8F9FA;
         }
+
+        /* Stat Cards - Dashboard Statistics */
+        .stat-card,
+        .stat-card-warning,
+        .stat-card-danger,
+        .stat-card-success {
+            background: linear-gradient(135deg, #0066CC 0%, #0052A3 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stat-card-warning {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+        }
+
+        .stat-card-danger {
+            background: linear-gradient(135deg, #FF6B6B 0%, #EE5A5A 100%);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+
+        .stat-card-success {
+            background: linear-gradient(135deg, #00C853 0%, #00A844 100%);
+            box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
+        }
+
+        .stat-card:hover,
+        .stat-card-warning:hover,
+        .stat-card-danger:hover,
+        .stat-card-success:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1rem;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body class="bg-gray-100">

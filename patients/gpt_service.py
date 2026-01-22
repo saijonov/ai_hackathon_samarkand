@@ -12,6 +12,21 @@ except ImportError:
     OPENAI_AVAILABLE = False
 
 
+# JSON Schema for Patient Registration
+PATIENT_SCHEMA = {
+    "ism": {"type": "string", "description": "Bemorning to'liq ismi (familiya, ism, otasining ismi)"},
+    "yosh": {"type": "integer", "range": "0-150", "description": "Bemorning yoshi"},
+    "jins": {"type": "string", "options": ["Erkak", "Ayol"], "description": "Jinsi"},
+    "telefon": {"type": "string", "description": "Telefon raqami (+998 formatida)"},
+    "manzil": {"type": "string", "description": "Yashash manzili"},
+    "qon_guruhi": {"type": "string", "options": ["O(I)", "A(II)", "B(III)", "AB(IV)"], "description": "Qon guruhi"},
+    "allergiyalar": {"type": "string", "description": "Allergiyalar (mavjud bo'lsa)"},
+    "qand_kasalligi": {"type": "boolean", "description": "Qand kasalligi mavjudmi"},
+    "gipertoniya": {"type": "boolean", "description": "Gipertoniya (yuqori qon bosimi) mavjudmi"},
+    "yurak_kasalligi": {"type": "boolean", "description": "Yurak kasalligi mavjudmi"},
+}
+
+
 # JSON Schema for Diabetes Protocol
 DIABETES_SCHEMA = {
     "pregnancies": {"type": "integer", "range": "0-17", "description": "Homiladorlik soni"},
@@ -181,3 +196,94 @@ def get_empty_schema_json(protocol_type):
     """Return an empty JSON structure for the protocol type (for manual filling)"""
     schema = get_schema_for_protocol(protocol_type)
     return {key: None for key in schema.keys()}
+
+
+def extract_patient_data_from_transcript(transcript):
+    """
+    Use GPT to extract patient registration data from a voice transcript.
+    Returns a dictionary with extracted fields.
+    """
+    if not OPENAI_AVAILABLE:
+        return {"error": "OpenAI library not installed. Run: pip install openai"}
+
+    api_key = getattr(settings, 'OPENAI_API_KEY', '')
+    if not api_key:
+        return {"error": "OpenAI API key not configured in settings"}
+
+    try:
+        client = OpenAI(api_key=api_key)
+
+        schema_description = json.dumps(PATIENT_SCHEMA, indent=2, ensure_ascii=False)
+
+        prompt = f"""Sen tibbiy ma'lumotlarni ajratib oluvchi AI assistantisin.
+Quyidagi shifokor-bemor suhbati transkriptidan bemor ro'yxatga olish ma'lumotlarini JSON formatida ajratib ol.
+
+JSON SCHEMA (maydonlar va ularning turlari):
+{schema_description}
+
+MUHIM QOIDALAR:
+1. Faqat transkriptda aytilgan ma'lumotlarni qo'sh
+2. Agar ma'lumot topilmasa, o'sha maydonni null qilib qoldir
+3. Raqamlarni to'g'ri formatda qo'sh (integer yoki float)
+4. Boolean qiymatlarni true/false qilib yoz
+5. Faqat JSON formatida javob ber, boshqa hech narsa yozma
+6. O'zbek tilida aytilgan raqamlarni ham tushuning (masalan: "yigirma besh yoshda" = 25)
+7. Telefon raqamini +998 formatida yoz
+8. Ismni to'liq yoz (familiya, ism, otasining ismi)
+9. "Ha", "bor", "mavjud" kabi so'zlar true, "yo'q", "mavjud emas" kabi so'zlar false
+10. Jinsi uchun "erkak"/"ayol" yoki "er/xotin" degan so'zlarni Erkak/Ayol ga o'gir
+
+TRANSKRIPT:
+{transcript}
+
+JAVOB (faqat JSON):"""
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "Sen tibbiy ma'lumotlarni JSON formatida ajratib oluvchi AI assistantisin. Faqat JSON formatida javob ber."
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.1,
+            max_tokens=1000
+        )
+
+        response_text = response.choices[0].message.content.strip()
+        extracted_data = extract_json_from_response(response_text)
+
+        # Validate and clean the extracted data
+        cleaned_data = {}
+
+        for key, value in extracted_data.items():
+            if key in PATIENT_SCHEMA and value is not None:
+                field_info = PATIENT_SCHEMA[key]
+
+                # Type conversion and validation
+                if field_info['type'] == 'integer' and value is not None:
+                    try:
+                        cleaned_data[key] = int(value)
+                    except (ValueError, TypeError):
+                        pass
+                elif field_info['type'] == 'float' and value is not None:
+                    try:
+                        cleaned_data[key] = float(value)
+                    except (ValueError, TypeError):
+                        pass
+                elif field_info['type'] == 'boolean':
+                    if isinstance(value, bool):
+                        cleaned_data[key] = value
+                    elif isinstance(value, str):
+                        cleaned_data[key] = value.lower() in ('true', 'ha', 'bor', '1', 'yes', 'mavjud')
+                elif field_info['type'] == 'string':
+                    cleaned_data[key] = str(value) if value else None
+
+        return cleaned_data
+
+    except Exception as e:
+        return {"error": str(e)}

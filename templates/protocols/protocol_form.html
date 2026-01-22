@@ -114,13 +114,14 @@
         <input type="hidden" name="protocol_type" id="protocolTypeInput" value="">
         <input type="hidden" name="transcript" id="transcriptInput" value="">
 
-        <!-- Common Medical Info -->
+        <!-- Common Medical Info (Auto-filled from patient data) -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
             <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center border-b pb-2">
                 <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
                 Umumiy ma'lumotlar
+                <span class="ml-2 text-sm font-normal text-green-600">(Bemor ma'lumotlaridan avtomatik to'ldirildi)</span>
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -131,29 +132,29 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Qon guruhi</label>
                     <select name="qon_guruhi" id="field_qon_guruhi" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                         <option value="">Tanlanmagan</option>
-                        <option value="O(I)">O(I)</option>
-                        <option value="A(II)">A(II)</option>
-                        <option value="B(III)">B(III)</option>
-                        <option value="AB(IV)">AB(IV)</option>
+                        <option value="O(I)" {% if patient.qon_guruhi == "O(I)" %}selected{% endif %}>O(I)</option>
+                        <option value="A(II)" {% if patient.qon_guruhi == "A(II)" %}selected{% endif %}>A(II)</option>
+                        <option value="B(III)" {% if patient.qon_guruhi == "B(III)" %}selected{% endif %}>B(III)</option>
+                        <option value="AB(IV)" {% if patient.qon_guruhi == "AB(IV)" %}selected{% endif %}>AB(IV)</option>
                     </select>
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Allergiyalar</label>
-                    <input type="text" name="allergiyalar" id="field_allergiyalar" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Allergiyalar mavjud bo'lsa kiriting">
+                    <input type="text" name="allergiyalar" id="field_allergiyalar" value="{{ patient.allergiyalar|default:'' }}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Allergiyalar mavjud bo'lsa kiriting">
                 </div>
             </div>
             <!-- Medical Conditions -->
             <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="flex items-center p-3 border border-gray-200 rounded-lg">
-                    <input type="checkbox" name="qand_kasalligi" id="field_qand_kasalligi" class="w-5 h-5 text-red-600 rounded">
+                <div class="flex items-center p-3 border border-gray-200 rounded-lg {% if patient.qand_kasalligi %}bg-red-50 border-red-300{% endif %}">
+                    <input type="checkbox" name="qand_kasalligi" id="field_qand_kasalligi" {% if patient.qand_kasalligi %}checked{% endif %} class="w-5 h-5 text-red-600 rounded">
                     <label for="field_qand_kasalligi" class="ml-2 text-gray-700">Qand kasalligi mavjud</label>
                 </div>
-                <div class="flex items-center p-3 border border-gray-200 rounded-lg">
-                    <input type="checkbox" name="gipertoniya" id="field_gipertoniya" class="w-5 h-5 text-orange-600 rounded">
+                <div class="flex items-center p-3 border border-gray-200 rounded-lg {% if patient.gipertoniya %}bg-orange-50 border-orange-300{% endif %}">
+                    <input type="checkbox" name="gipertoniya" id="field_gipertoniya" {% if patient.gipertoniya %}checked{% endif %} class="w-5 h-5 text-orange-600 rounded">
                     <label for="field_gipertoniya" class="ml-2 text-gray-700">Gipertoniya mavjud</label>
                 </div>
-                <div class="flex items-center p-3 border border-gray-200 rounded-lg">
-                    <input type="checkbox" name="yurak_kasalligi" id="field_yurak_kasalligi" class="w-5 h-5 text-pink-600 rounded">
+                <div class="flex items-center p-3 border border-gray-200 rounded-lg {% if patient.yurak_kasalligi %}bg-pink-50 border-pink-300{% endif %}">
+                    <input type="checkbox" name="yurak_kasalligi" id="field_yurak_kasalligi" {% if patient.yurak_kasalligi %}checked{% endif %} class="w-5 h-5 text-pink-600 rounded">
                     <label for="field_yurak_kasalligi" class="ml-2 text-gray-700">Yurak kasalligi mavjud</label>
                 </div>
             </div>
@@ -212,8 +213,8 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Jins</label>
                     <select name="sex" id="field_sex" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500">
                         <option value="">Tanlanmagan</option>
-                        <option value="1">Erkak</option>
-                        <option value="0">Ayol</option>
+                        <option value="1" {% if patient.jins == "Erkak" or patient.jins == "E" %}selected{% endif %}>Erkak</option>
+                        <option value="0" {% if patient.jins == "Ayol" or patient.jins == "A" %}selected{% endif %}>Ayol</option>
                     </select>
                 </div>
                 <div>

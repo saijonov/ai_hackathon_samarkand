@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}{% if is_edit %}Беморни таҳрирлаш{% else %}Янги бемор қўшиш{% endif %} - Healthcare CRM{% endblock %}
+{% block title %}{% if is_edit %}Bemorni tahrirlash{% else %}Yangi bemor qo'shish{% endif %} - Healthcare CRM{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
@@ -10,7 +10,7 @@
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
-            Беморлар рўйхатига қайтиш
+            Bemorlar ro'yxatiga qaytish
         </a>
     </div>
 
@@ -22,67 +22,93 @@
                 <svg class="w-8 h-8 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                 </svg>
-                Беморни таҳрирлаш
+                Bemorni tahrirlash
             </span>
             {% else %}
             <span class="flex items-center">
                 <svg class="w-8 h-8 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                 </svg>
-                Янги бемор қўшиш
+                Yangi bemor qo'shish
             </span>
             {% endif %}
         </h1>
-        <p class="text-gray-600">Бемор маълумотларини тўлдиринг</p>
+        <p class="text-gray-600">Bemor ma'lumotlarini to'ldiring</p>
     </div>
 
-    <!-- Voice Recording Section -->
-    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-md p-6 max-w-4xl mx-auto mb-8">
+    {% if not is_edit %}
+    <!-- AI Voice Recording Section -->
+    <div class="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg shadow-md p-6 max-w-4xl mx-auto mb-8 border border-purple-200">
         <div class="flex items-center justify-between mb-4">
             <div>
                 <h2 class="text-2xl font-bold text-gray-800 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
                     </svg>
-                    Овозли ёзув
+                    AI Ovozli yozuv
                 </h2>
-                <p class="text-gray-600 text-sm mt-1">Бемор билан суҳбатни ёзиб олинг</p>
+                <p class="text-gray-600 text-sm mt-1">Bemor ma'lumotlarini ovoz orqali kiriting - AI avtomatik to'ldiradi</p>
             </div>
-            <button type="button" id="recordButton" class="btn-primary flex items-center">
+        </div>
+
+        <!-- Recording Controls -->
+        <div class="flex flex-wrap gap-3 mb-4">
+            <button type="button" id="recordButton" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center transition duration-200">
                 <svg id="micIcon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
                 </svg>
-                <span id="recordButtonText">Ёзишни бошлаш</span>
+                <span id="recordButtonText">Yozishni boshlash</span>
+            </button>
+            <button type="button" id="extractButton" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center transition duration-200 hidden">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                </svg>
+                AI bilan to'ldirish
             </button>
         </div>
+
+        <!-- Recording Status -->
         <div id="recordingStatus" class="hidden">
             <div class="flex items-center space-x-2 text-red-600 font-medium mb-2">
-                <span class="animate-pulse">🔴</span>
-                <span>Ёзиш давом этмоқда...</span>
-                <span id="recordingTimer" class="text-gray-600">0:00</span>
+                <span class="animate-pulse text-2xl">&#128308;</span>
+                <span>Yozish davom etmoqda...</span>
+                <span id="recordingTimer" class="text-gray-600 font-mono">0:00</span>
             </div>
             <div class="w-full bg-gray-200 rounded-full h-2">
                 <div id="recordingProgress" class="bg-red-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
             </div>
         </div>
+
+        <!-- Transcription Result -->
         <div id="transcriptionResult" class="hidden mt-4">
             <h3 class="font-semibold text-gray-700 mb-2 flex items-center">
                 <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
-                Транскрипция:
+                Transkriptsiya:
             </h3>
-            <div id="transcriptionText" class="bg-white p-4 rounded-lg border border-gray-200 whitespace-pre-wrap text-gray-800 max-h-60 overflow-y-auto"></div>
+            <textarea id="transcriptionText" class="w-full bg-white p-4 rounded-lg border border-gray-200 text-gray-800 min-h-[100px] resize-y" placeholder="Transkriptsiya natijasi shu yerda ko'rinadi..."></textarea>
         </div>
+
+        <!-- Loading Indicator -->
         <div id="loadingIndicator" class="hidden flex items-center justify-center p-4">
-            <div class="spinner mr-3"></div>
-            <span class="text-gray-600">Транскрипция қилинмоқда...</span>
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mr-3"></div>
+            <span class="text-gray-600">AI ma'lumotlarni ajratib olmoqda...</span>
+        </div>
+
+        <!-- Example -->
+        <div class="mt-4 p-3 bg-white rounded-lg border border-gray-200">
+            <p class="text-sm text-gray-600">
+                <strong>Misol:</strong> "Bemor ismi Aliyev Sardor Karimovich, yigirma besh yoshda, erkak, telefon raqami 998901234567,
+                Toshkent shahrida yashaydi. Qon guruhi birinchi, allergiyasi yo'q. Qand kasalligi bor, gipertoniya yo'q."
+            </p>
         </div>
     </div>
+    {% endif %}
 
     <!-- Form Card -->
     <div class="bg-white rounded-lg shadow-lg p-8 max-w-4xl mx-auto">
-        <form method="post" class="space-y-8">
+        <form method="post" class="space-y-8" id="patientForm">
             {% csrf_token %}
 
             <!-- Personal Information Section -->
@@ -91,13 +117,13 @@
                     <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
-                    Шахсий маълумотлар
+                    Shaxsiy ma'lumotlar
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                     <!-- Name -->
                     <div class="md:col-span-2">
                         <label for="id_ism" class="block text-sm font-medium text-gray-700 mb-2">
-                            Исм <span class="text-red-500">*</span>
+                            Ism <span class="text-red-500">*</span>
                         </label>
                         <input type="text"
                                name="ism"
@@ -105,13 +131,13 @@
                                value="{% if patient %}{{ patient.ism }}{% endif %}"
                                required
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                               placeholder="Беморнинг тўлиқ исми">
+                               placeholder="Bemorning to'liq ismi">
                     </div>
 
                     <!-- Age -->
                     <div>
                         <label for="id_yosh" class="block text-sm font-medium text-gray-700 mb-2">
-                            Ёш <span class="text-red-500">*</span>
+                            Yosh <span class="text-red-500">*</span>
                         </label>
                         <input type="number"
                                name="yosh"
@@ -121,28 +147,28 @@
                                min="0"
                                max="150"
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                               placeholder="Ёшини киритинг">
+                               placeholder="Yoshini kiriting">
                     </div>
 
                     <!-- Gender -->
                     <div>
                         <label for="id_jins" class="block text-sm font-medium text-gray-700 mb-2">
-                            Жинс <span class="text-red-500">*</span>
+                            Jins <span class="text-red-500">*</span>
                         </label>
                         <select name="jins"
                                 id="id_jins"
                                 required
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
-                            <option value="">Танланг</option>
-                            <option value="Эркак" {% if patient and patient.jins == "Эркак" %}selected{% endif %}>Эркак</option>
-                            <option value="Аёл" {% if patient and patient.jins == "Аёл" %}selected{% endif %}>Аёл</option>
+                            <option value="">Tanlang</option>
+                            <option value="Erkak" {% if patient and patient.jins == "Erkak" %}selected{% endif %}>Erkak</option>
+                            <option value="Ayol" {% if patient and patient.jins == "Ayol" %}selected{% endif %}>Ayol</option>
                         </select>
                     </div>
 
                     <!-- Phone -->
                     <div>
                         <label for="id_telefon" class="block text-sm font-medium text-gray-700 mb-2">
-                            Телефон <span class="text-red-500">*</span>
+                            Telefon <span class="text-red-500">*</span>
                         </label>
                         <input type="tel"
                                name="telefon"
@@ -156,14 +182,14 @@
                     <!-- Address -->
                     <div>
                         <label for="id_manzil" class="block text-sm font-medium text-gray-700 mb-2">
-                            Манзил
+                            Manzil
                         </label>
                         <input type="text"
                                name="manzil"
                                id="id_manzil"
                                value="{% if patient %}{{ patient.manzil }}{% endif %}"
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                               placeholder="Яшаш манзили">
+                               placeholder="Yashash manzili">
                     </div>
                 </div>
             </div>
@@ -174,18 +200,18 @@
                     <svg class="w-6 h-6 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
-                    Тиббий маълумотлар
+                    Tibbiy ma'lumotlar
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                     <!-- Blood Group -->
                     <div>
                         <label for="id_qon_guruhi" class="block text-sm font-medium text-gray-700 mb-2">
-                            Қон гурухи
+                            Qon guruhi
                         </label>
                         <select name="qon_guruhi"
                                 id="id_qon_guruhi"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
-                            <option value="">Танланг</option>
+                            <option value="">Tanlang</option>
                             <option value="O(I)" {% if patient and patient.qon_guruhi == "O(I)" %}selected{% endif %}>O(I)</option>
                             <option value="A(II)" {% if patient and patient.qon_guruhi == "A(II)" %}selected{% endif %}>A(II)</option>
                             <option value="B(III)" {% if patient and patient.qon_guruhi == "B(III)" %}selected{% endif %}>B(III)</option>
@@ -196,14 +222,14 @@
                     <!-- Allergies -->
                     <div>
                         <label for="id_allergiyalar" class="block text-sm font-medium text-gray-700 mb-2">
-                            Аллергиялар
+                            Allergiyalar
                         </label>
                         <input type="text"
                                name="allergiyalar"
                                id="id_allergiyalar"
                                value="{% if patient %}{{ patient.allergiyalar }}{% endif %}"
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                               placeholder="Аллергиялар мавжуд бўлса киритинг">
+                               placeholder="Allergiyalar mavjud bo'lsa kiriting">
                     </div>
                 </div>
             </div>
@@ -214,7 +240,7 @@
                     <svg class="w-6 h-6 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                     </svg>
-                    Мавжуд касалликлар
+                    Mavjud kasalliklar
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
                     <!-- Diabetes -->
@@ -228,7 +254,7 @@
                             <svg class="w-6 h-6 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
                             </svg>
-                            <span class="text-gray-700 font-medium">Қанд касаллиги</span>
+                            <span class="text-gray-700 font-medium">Qand kasalligi</span>
                         </label>
                     </div>
 
@@ -243,7 +269,7 @@
                             <svg class="w-6 h-6 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                             </svg>
-                            <span class="text-gray-700 font-medium">Гипертония</span>
+                            <span class="text-gray-700 font-medium">Gipertoniya</span>
                         </label>
                     </div>
 
@@ -258,7 +284,7 @@
                             <svg class="w-6 h-6 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                             </svg>
-                            <span class="text-gray-700 font-medium">Юрак касаллиги</span>
+                            <span class="text-gray-700 font-medium">Yurak kasalligi</span>
                         </label>
                     </div>
                 </div>
@@ -267,13 +293,13 @@
             <!-- Form Actions -->
             <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                 <a href="{% url 'patient_list' %}" class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200 font-medium">
-                    Бекор қилиш
+                    Bekor qilish
                 </a>
                 <button type="submit" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md transition duration-200 font-medium flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
-                    {% if is_edit %}Ўзгартиришларни сақлаш{% else %}Беморни қўшиш{% endif %}
+                    {% if is_edit %}O'zgartirishlarni saqlash{% else %}Bemorni qo'shish{% endif %}
                 </button>
             </div>
         </form>
@@ -286,15 +312,217 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             <div>
-                <h3 class="text-blue-800 font-semibold mb-1">Маълумот</h3>
+                <h3 class="text-blue-800 font-semibold mb-1">Ma'lumot</h3>
                 <p class="text-blue-700 text-sm">
-                    <span class="text-red-500">*</span> белгиланган майдонлар мажбурий тўлдирилади.
-                    Беморни қўшгандан кейин унга скрининг тести ўтказиш ва учрашув белгилаш мумкин.
+                    <span class="text-red-500">*</span> belgilangan maydonlar majburiy to'ldiriladi.
+                    Bemorni qo'shgandan keyin unga skrining testi o'tkazish va uchrashuv belgilash mumkin.
                 </p>
             </div>
         </div>
     </div>
 </div>
-<!-- Voice Recording Script -->
-<script src="/static/js/voice_recorder.js"></script>
+
+{% if not is_edit %}
+<script>
+// Voice Recording for Patient Registration
+let mediaRecorder;
+let audioChunks = [];
+let isRecording = false;
+let recordingStartTime;
+let timerInterval;
+
+const recordButton = document.getElementById('recordButton');
+const recordButtonText = document.getElementById('recordButtonText');
+const recordingStatus = document.getElementById('recordingStatus');
+const recordingTimer = document.getElementById('recordingTimer');
+const recordingProgress = document.getElementById('recordingProgress');
+const transcriptionResult = document.getElementById('transcriptionResult');
+const transcriptionText = document.getElementById('transcriptionText');
+const extractButton = document.getElementById('extractButton');
+const loadingIndicator = document.getElementById('loadingIndicator');
+
+// Recording functionality
+recordButton.addEventListener('click', async () => {
+    if (!isRecording) {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = (event) => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = async () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                await transcribeAudio(audioBlob);
+            };
+
+            mediaRecorder.start();
+            isRecording = true;
+            recordingStartTime = Date.now();
+
+            recordButton.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+            recordButton.classList.add('bg-red-600', 'hover:bg-red-700');
+            recordButtonText.textContent = 'To\'xtatish';
+            recordingStatus.classList.remove('hidden');
+
+            timerInterval = setInterval(updateTimer, 1000);
+        } catch (error) {
+            alert('Mikrofonga ruxsat berilmadi: ' + error.message);
+        }
+    } else {
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        isRecording = false;
+
+        recordButton.classList.remove('bg-red-600', 'hover:bg-red-700');
+        recordButton.classList.add('bg-purple-600', 'hover:bg-purple-700');
+        recordButtonText.textContent = 'Yozishni boshlash';
+        recordingStatus.classList.add('hidden');
+
+        clearInterval(timerInterval);
+    }
+});
+
+function updateTimer() {
+    const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+    const minutes = Math.floor(elapsed / 60);
+    const seconds = elapsed % 60;
+    recordingTimer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+    // Update progress bar (max 5 minutes)
+    const progress = Math.min((elapsed / 300) * 100, 100);
+    recordingProgress.style.width = `${progress}%`;
+}
+
+async function transcribeAudio(audioBlob) {
+    loadingIndicator.classList.remove('hidden');
+    loadingIndicator.querySelector('span').textContent = 'Transkriptsiya qilinmoqda...';
+
+    try {
+        const formData = new FormData();
+        formData.append('audio', audioBlob, 'recording.webm');
+
+        const response = await fetch('/transcribe-audio/', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            transcriptionText.value = result.transcription;
+            transcriptionResult.classList.remove('hidden');
+            extractButton.classList.remove('hidden');
+        } else {
+            alert('Xato: ' + result.message);
+        }
+    } catch (error) {
+        alert('Transkriptsiya xatosi: ' + error.message);
+    } finally {
+        loadingIndicator.classList.add('hidden');
+    }
+}
+
+// Extract patient data with GPT
+extractButton.addEventListener('click', async () => {
+    const transcript = transcriptionText.value.trim();
+    if (!transcript) {
+        alert('Transkriptsiya matni bo\'sh!');
+        return;
+    }
+
+    loadingIndicator.classList.remove('hidden');
+    loadingIndicator.querySelector('span').textContent = 'AI ma\'lumotlarni ajratib olmoqda...';
+    extractButton.disabled = true;
+
+    try {
+        const response = await fetch('/api/extract-patient-from-transcript/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ transcript: transcript })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            fillFormWithData(result.data);
+
+            // Show success message
+            const successDiv = document.createElement('div');
+            successDiv.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mt-4';
+            successDiv.innerHTML = '<strong>Muvaffaqiyat!</strong> Ma\'lumotlar avtomatik to\'ldirildi. Iltimos, tekshirib ko\'ring.';
+            transcriptionResult.appendChild(successDiv);
+            setTimeout(() => successDiv.remove(), 5000);
+        } else {
+            alert('Xato: ' + result.error);
+        }
+    } catch (error) {
+        alert('AI xatosi: ' + error.message);
+    } finally {
+        loadingIndicator.classList.add('hidden');
+        extractButton.disabled = false;
+    }
+});
+
+function fillFormWithData(data) {
+    // Fill text fields
+    if (data.ism) document.getElementById('id_ism').value = data.ism;
+    if (data.yosh) document.getElementById('id_yosh').value = data.yosh;
+    if (data.telefon) document.getElementById('id_telefon').value = data.telefon;
+    if (data.manzil) document.getElementById('id_manzil').value = data.manzil;
+    if (data.allergiyalar) document.getElementById('id_allergiyalar').value = data.allergiyalar;
+
+    // Fill select fields
+    if (data.jins) {
+        const jinsSelect = document.getElementById('id_jins');
+        for (let option of jinsSelect.options) {
+            if (option.value === data.jins) {
+                option.selected = true;
+                break;
+            }
+        }
+    }
+
+    if (data.qon_guruhi) {
+        const qonSelect = document.getElementById('id_qon_guruhi');
+        for (let option of qonSelect.options) {
+            if (option.value === data.qon_guruhi) {
+                option.selected = true;
+                break;
+            }
+        }
+    }
+
+    // Fill checkboxes
+    if (data.qand_kasalligi !== undefined) {
+        document.getElementById('id_qand_kasalligi').checked = data.qand_kasalligi;
+    }
+    if (data.gipertoniya !== undefined) {
+        document.getElementById('id_gipertoniya').checked = data.gipertoniya;
+    }
+    if (data.yurak_kasalligi !== undefined) {
+        document.getElementById('id_yurak_kasalligi').checked = data.yurak_kasalligi;
+    }
+
+    // Highlight filled fields
+    highlightFilledFields();
+}
+
+function highlightFilledFields() {
+    const inputs = document.querySelectorAll('#patientForm input, #patientForm select');
+    inputs.forEach(input => {
+        if (input.value && input.value !== '' && input.value !== 'on') {
+            input.classList.add('ring-2', 'ring-green-500', 'border-green-500');
+            setTimeout(() => {
+                input.classList.remove('ring-2', 'ring-green-500', 'border-green-500');
+            }, 3000);
+        }
+    });
+}
+</script>
+{% endif %}
 {% endblock %}

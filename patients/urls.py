@@ -32,5 +32,6 @@ urlpatterns = [
 
     # API endpoints for GPT extraction
     path('api/extract-from-transcript/', views.extract_from_transcript, name='extract_from_transcript'),
+    path('api/extract-patient-from-transcript/', views.extract_patient_from_transcript, name='extract_patient_from_transcript'),
     path('api/protocol-schema/', views.get_protocol_schema, name='get_protocol_schema'),
 ]

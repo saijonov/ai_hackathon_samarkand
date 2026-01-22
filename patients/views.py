@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from datetime import timedelta
 from .models import Patient, Appointment, HealthScreening, Protocol
-from .gpt_service import extract_medical_data_from_transcript, get_schema_for_protocol
+from .gpt_service import extract_medical_data_from_transcript, get_schema_for_protocol, extract_patient_data_from_transcript
 import json
 import sys
 import os
@@ -636,3 +636,49 @@ def get_protocol_schema(request):
 
     schema = get_schema_for_protocol(protocol_type)
     return JsonResponse({'schema': schema})
+
+
+@csrf_exempt
+def extract_patient_from_transcript(request):
+    """API endpoint to extract patient data from transcript using GPT"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            transcript = data.get('transcript')
+
+            if not transcript:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'transcript kerak'
+                }, status=400)
+
+            # Extract data using GPT
+            extracted_data = extract_patient_data_from_transcript(transcript)
+
+            if 'error' in extracted_data:
+                return JsonResponse({
+                    'success': False,
+                    'error': extracted_data['error']
+                }, status=400)
+
+            return JsonResponse({
+                'success': True,
+                'data': extracted_data,
+                'message': "Ma'lumotlar muvaffaqiyatli ajratib olindi!"
+            })
+
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'success': False,
+                'error': 'Noto\'g\'ri JSON format'
+            }, status=400)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=500)
+
+    return JsonResponse({
+        'success': False,
+        'error': 'POST so\'rov kerak'
+    }, status=405)
