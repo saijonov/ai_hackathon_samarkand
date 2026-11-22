@@ -5,6 +5,7 @@ from django.db.models import Q, Count
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from django.utils.http import url_has_allowed_host_and_scheme
 from datetime import timedelta
 from .models import Patient, Appointment, HealthScreening, Protocol
 from .gpt_service import extract_medical_data_from_transcript, get_schema_for_protocol, extract_patient_data_from_transcript
@@ -24,6 +25,19 @@ from ml_models.predictor import (
     predict_heart_disease_from_protocol,
     get_risk_level_uzbek
 )
+
+WEEKDAYS_SHORT = ['Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sh', 'Ya']
+WEEKDAYS = ['Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba', 'Yakshanba']
+
+
+def redirect_back(request, fallback):
+    """Go back to the page the action came from (only local URLs)"""
+    next_url = request.GET.get('next') or request.POST.get('next')
+    if next_url and url_has_allowed_host_and_scheme(
+        next_url, allowed_hosts={request.get_host()}, require_https=request.is_secure()
+    ):
+        return redirect(next_url)
+    return redirect(fallback)
 
 
 def dashboard(request):
@@ -58,18 +72,54 @@ def dashboard(request):
     ).select_related('bemor').order_by('-kelmay_qolish_riski')[:5]
 
     # Department statistics
-    dept_stats = Appointment.objects.filter(
-        uchrashuv_sanasi__date=today
-    ).values('bolim').annotate(count=Count('id'))
+    bolim_names = dict(Appointment.BOLIM_CHOICES)
+    dept_counts = {}
+    for row in Appointment.objects.filter(uchrashuv_sanasi__date=today).values('bolim').annotate(count=Count('id')):
+        key = str(row['bolim']).lower()
+        dept_counts[key] = dept_counts.get(key, 0) + row['count']
+    dept_max = max(dept_counts.values(), default=0)
+    dept_stats = [
+        {
+            'name': bolim_names.get(key, key.capitalize()),
+            'count': count,
+            'share': round(count * 100 / dept_max) if dept_max else 0,
+        }
+        for key, count in sorted(dept_counts.items(), key=lambda item: -item[1])
+    ]
+
+    # Today's progress and the next patient in line
+    scheduled_today = Appointment.objects.filter(
+        uchrashuv_sanasi__date=today,
+        holat='rejalashtirilgan'
+    )
+    next_appointment = (
+        scheduled_today.filter(uchrashuv_sanasi__gte=timezone.now()).select_related('bemor').order_by('uchrashuv_sanasi').first()
+        or scheduled_today.select_related('bemor').order_by('uchrashuv_sanasi').first()
+    )
+
+    # Appointment load for the week around today
+    week = []
+    for offset in range(-3, 4):
+        day = today + timedelta(days=offset)
+        week.append({
+            'label': WEEKDAYS_SHORT[day.weekday()],
+            'title': f"{WEEKDAYS[day.weekday()]}, {day.strftime('%d.%m')}",
+            'count': Appointment.objects.filter(uchrashuv_sanasi__date=day).count(),
+            'today': offset == 0,
+        })
 
     context = {
         'total_patients': total_patients,
         'today_appointments': today_appointments,
         'high_risk_count': high_risk_count,
         'completed_today': completed_today,
+        'scheduled_today_count': scheduled_today.count(),
+        'next_appointment': next_appointment,
         'todays_appointments': todays_appointments,
         'high_risk_appointments': high_risk_appointments,
         'dept_stats': dept_stats,
+        'week': week,
+        'week_total': sum(d['count'] for d in week),
     }
 
     return render(request, 'dashboard.html', context)
@@ -217,11 +267,24 @@ def patient_delete(request, pk):
 def appointment_list(request):
     """List all appointments with filters"""
     appointments = Appointment.objects.select_related('bemor').all()
+    counts = {
+        'all': appointments.count(),
+        'rejalashtirilgan': appointments.filter(holat='rejalashtirilgan').count(),
+        'yakunlangan': appointments.filter(holat='yakunlangan').count(),
+        'kelmagan': appointments.filter(holat='kelmagan').count(),
+        'bekor_qilingan': appointments.filter(holat='bekor_qilingan').count(),
+    }
 
     # Apply filters
+    query = request.GET.get('q', '').strip()
     holat = request.GET.get('holat', '')
     risk = request.GET.get('risk', '')
     date_filter = request.GET.get('date', '')
+
+    if query:
+        appointments = appointments.filter(
+            Q(bemor__ism__icontains=query) | Q(shifokor__icontains=query) | Q(bemor__telefon__icontains=query)
+        )
 
     if holat:
         appointments = appointments.filter(holat=holat)
@@ -245,6 +308,8 @@ def appointment_list(request):
 
     context = {
         'appointments': appointments[:50],
+        'counts': counts,
+        'query': query,
         'holat': holat,
         'risk': risk,
         'date_filter': date_filter,
@@ -301,7 +366,7 @@ def appointment_create(request):
     # Get all patients for dropdown
     patients = Patient.objects.all().order_by('ism')
 
-    context = {'patients': patients}
+    context = {'patients': patients, 'bolimlar': Appointment.BOLIM_CHOICES}
     return render(request, 'appointments/appointment_form.html', context)
 
 
@@ -324,7 +389,7 @@ def appointment_edit(request, pk):
             messages.error(request, f"Xato: {str(e)}")
 
     patients = Patient.objects.all().order_by('ism')
-    context = {'appointment': appointment, 'patients': patients, 'is_edit': True}
+    context = {'appointment': appointment, 'patients': patients, 'is_edit': True, 'bolimlar': Appointment.BOLIM_CHOICES}
     return render(request, 'appointments/appointment_form.html', context)
 
 
@@ -335,7 +400,7 @@ def appointment_delete(request, pk):
     if request.method == 'POST':
         appointment.delete()
         messages.success(request, "Uchrashuv o'chirildi!")
-        return redirect('appointment_list')
+        return redirect_back(request, 'appointment_list')
 
     return redirect('appointment_list')
 
@@ -346,7 +411,7 @@ def appointment_complete(request, pk):
     appointment.holat = 'yakunlangan'
     appointment.save()
     messages.success(request, "Uchrashuv yakunlandi!")
-    return redirect('appointment_list')
+    return redirect_back(request, 'appointment_list')
 
 
 def appointment_cancel(request, pk):
@@ -355,7 +420,7 @@ def appointment_cancel(request, pk):
     appointment.holat = 'bekor_qilingan'
     appointment.save()
     messages.warning(request, "Uchrashuv bekor qilindi!")
-    return redirect('appointment_list')
+    return redirect_back(request, 'appointment_list')
 
 
 def appointment_noshow(request, pk):
@@ -370,7 +435,7 @@ def appointment_noshow(request, pk):
     patient.save()
 
     messages.info(request, "Uchrashuv 'kelmagan' deb belgilandi!")
-    return redirect('appointment_list')
+    return redirect_back(request, 'appointment_list')
 
 
 def health_screening_create(request, pk):
