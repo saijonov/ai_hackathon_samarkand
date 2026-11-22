@@ -1,50 +1,26 @@
-# AID.uz - AI Doctor
+![AID.uz](readme_images/banner.png)
 
-O'zbekiston kasalxonalari uchun AI bilan ishlaydigan bemor boshqaruv tizimi.
+Klinikalar uchun AI yordamchi CRM. Shifokor gapiradi, AI bemor kartasini to'ldiradi va qand, yurak kasalligi hamda kelmay qolish xavfini oldindan aytadi.
 
-## Nima qiladi?
+![Bosh sahifa](readme_images/1.png)
 
-- Bemorlarni ro'yxatga olish va boshqarish
-- Uchrashuvlarni rejalashtirish
-- AI orqali qand va yurak kasalligi xavfini aniqlash
-- Ovozli ma'lumot kiritish (ElevenLabs)
+| | |
+|---|---|
+| ![Bemorlar](readme_images/2.png) | ![Bemor kartasi](readme_images/3.png) |
+| ![Ovoz bilan yangi bemor](readme_images/4.png) | ![Protokol va AI bashorat](readme_images/5.png) |
+| ![Uchrashuvlar](readme_images/6.png) | ![Obuna](readme_images/7.png) |
+
+![Mobil versiya](readme_images/mobile.png)
 
 ## Ishga tushirish
 
 ```bash
-# Virtual muhit
-python3 -m venv venv
-source venv/bin/activate
-
-# Paketlar
+python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-
-# Bazani yaratish
 python3 manage.py migrate
-
-# Serverni ishga tushirish
 python3 manage.py runserver
 ```
 
-Brauzerda ochish: http://localhost:8000/home/
+Brauzerda: http://localhost:8000
 
-## Texnologiyalar
-
-- Django 5.0
-- scikit-learn (ML modellari)
-- Tailwind CSS
-- OpenAI, ElevenLabs
-
-## Jamoa
-
-AI Hackathon 2026
-
-## Skrinshotlar
-
-![1](readme_images/1.png)
-
-![2](readme_images/2.png)
-
-![3](readme_images/3.png)
-
-![4](readme_images/4.png)
+Django, scikit-learn, OpenAI, ElevenLabs. AI Hackathon 2026.
