@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#111111">
     <title>{% block title %}AID.uz{% endblock %} — AID.uz</title>
-    <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +34,7 @@
             },
         };
     </script>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=6">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=8">
     {% block head %}{% endblock %}
 </head>
 <body>
@@ -42,7 +43,7 @@
 
 <aside class="sidebar" aria-label="Asosiy menyu">
     <a href="{% url 'dashboard' %}" class="brand">
-        <span class="brand-mark">{% icon 'heart-pulse' 24 '' 2.3 %}</span>
+        <img src="{% static 'img/logo-3d.png' %}" alt="" class="brand-logo">
         <span>
             <span class="brand-name" style="display:block">AID.uz</span>
             <span class="brand-sub" style="display:block">AI Doctor</span>
@@ -52,13 +53,13 @@
     <p class="nav-label">Asosiy</p>
     <nav class="nav">
         <a href="{% url 'dashboard' %}" class="nav-link {% if p == '/home/' or p == '/' %}is-active{% endif %}">
-            {% icon 'home' 22 %}Bosh sahifa
+            <img src="{% static 'img/nav/nav-home.png' %}" alt="" class="nav-ic">Bosh sahifa
         </a>
         <a href="{% url 'patient_list' %}" class="nav-link {% if '/patients' in p or '/protocols' in p %}is-active{% endif %}">
-            {% icon 'users' 22 %}Bemorlar
+            <img src="{% static 'img/nav/nav-users.png' %}" alt="" class="nav-ic">Bemorlar
         </a>
         <a href="{% url 'appointment_list' %}" class="nav-link {% if '/appointments' in p %}is-active{% endif %}">
-            {% icon 'calendar' 22 %}Uchrashuvlar
+            <img src="{% static 'img/3d/calendar.png' %}" alt="" class="nav-ic">Uchrashuvlar
             {% if nav.today %}<span class="nav-count" title="Bugun kutilmoqda">{{ nav.today }}</span>{% endif %}
         </a>
     </nav>
@@ -66,15 +67,15 @@
     <p class="nav-label">Boshqaruv</p>
     <nav class="nav">
         <a href="{% url 'subscriptions' %}" class="nav-link {% if '/subscriptions' in p %}is-active{% endif %}">
-            {% icon 'card' 22 %}Obuna
+            <img src="{% static 'img/nav/nav-card.png' %}" alt="" class="nav-ic">Obuna
         </a>
         <span class="nav-link is-muted" aria-disabled="true">
-            {% icon 'settings' 22 %}Sozlamalar<span class="nav-soon">Tez orada</span>
+            <img src="{% static 'img/nav/nav-settings.png' %}" alt="" class="nav-ic">Sozlamalar<span class="nav-soon">Tez orada</span>
         </span>
     </nav>
 
     <a href="{% url 'patient_create' %}" class="side-promo">
-        <span class="mic-dot">{% icon 'mic' 22 %}</span>
+        <span class="mic-dot"><img src="{% static 'img/nav/nav-mic.png' %}" alt=""></span>
         <b>Ovoz bilan qabul</b>
         <span>Gapiring, AI bemor kartasini o'zi to'ldiradi</span>
     </a>
@@ -89,7 +90,7 @@
     <div class="main-inner">
         <header class="mobile-bar">
             <a href="{% url 'dashboard' %}" class="brand">
-                <span class="brand-mark">{% icon 'heart-pulse' 22 '' 2.3 %}</span>
+                <img src="{% static 'img/logo-3d.png' %}" alt="" class="brand-logo">
                 <span class="brand-name">AID.uz</span>
             </a>
             <a href="{% url 'patient_list' %}" class="icon-btn" aria-label="Qidirish">{% icon 'search' 22 %}</a>
@@ -134,10 +135,10 @@
 </main>
 
 <nav class="tabbar" aria-label="Menyu">
-    <a href="{% url 'dashboard' %}" class="{% if p == '/home/' or p == '/' %}is-active{% endif %}">{% icon 'home' 21 %}<span>Asosiy</span></a>
-    <a href="{% url 'patient_list' %}" class="{% if '/patients' in p or '/protocols' in p %}is-active{% endif %}">{% icon 'users' 22 %}<span>Bemorlar</span></a>
-    <a href="{% url 'appointment_list' %}" class="{% if '/appointments' in p %}is-active{% endif %}">{% icon 'calendar' 22 %}<span>Uchrashuvlar</span>{% if nav.today %}<i class="badge-dot"></i>{% endif %}</a>
-    <a href="{% url 'subscriptions' %}" class="{% if '/subscriptions' in p %}is-active{% endif %}">{% icon 'card' 22 %}<span>Obuna</span></a>
+    <a href="{% url 'dashboard' %}" class="{% if p == '/home/' or p == '/' %}is-active{% endif %}"><img src="{% static 'img/nav/nav-home.png' %}" alt="" class="nav-ic"><span>Asosiy</span></a>
+    <a href="{% url 'patient_list' %}" class="{% if '/patients' in p or '/protocols' in p %}is-active{% endif %}"><img src="{% static 'img/nav/nav-users.png' %}" alt="" class="nav-ic"><span>Bemorlar</span></a>
+    <a href="{% url 'appointment_list' %}" class="{% if '/appointments' in p %}is-active{% endif %}"><img src="{% static 'img/3d/calendar.png' %}" alt="" class="nav-ic"><span>Uchrashuvlar</span>{% if nav.today %}<i class="badge-dot"></i>{% endif %}</a>
+    <a href="{% url 'subscriptions' %}" class="{% if '/subscriptions' in p %}is-active{% endif %}"><img src="{% static 'img/nav/nav-card.png' %}" alt="" class="nav-ic"><span>Obuna</span></a>
 </nav>
 {% endwith %}
 
