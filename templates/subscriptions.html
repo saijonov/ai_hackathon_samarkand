@@ -1,440 +1,147 @@
 {% extends 'base.html' %}
+{% load static ui %}
 
-{% block title %}Obuna - Healthcare CRM{% endblock %}
+{% block title %}Obuna{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto">
-    <!-- Header -->
-    <div class="text-center mb-12">
-        <h1 class="text-4xl font-bold text-gray-900 mb-4">Obuna Rejalari</h1>
-        <p class="text-xl text-gray-600 max-w-2xl mx-auto">O'z biznesingiz uchun eng mos rejani tanlang. Barcha rejalarga 14 kunlik bepul sinov davri beriladi.</p>
+<div class="page-head rise">
+    <div>
+        <h1 class="h1">Klinikangizga mos reja</h1>
+        <p class="lead">Barcha rejalarda 14 kunlik bepul sinov. Karta talab qilinmaydi.</p>
     </div>
-
-    <!-- Pricing Toggle -->
-    <div class="flex justify-center items-center gap-4 mb-12">
-        <span class="text-gray-600 font-medium">Oylik</span>
-        <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" id="billingToggle" class="sr-only peer">
-            <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-indigo-600"></div>
-        </label>
-        <span class="text-gray-600 font-medium">Yillik <span class="text-green-600 text-sm font-semibold">(20% chegirma)</span></span>
-    </div>
-
-    <!-- Pricing Cards -->
-    <div class="grid md:grid-cols-3 gap-8 mb-16">
-        <!-- Starter Plan -->
-        <div class="card p-8 relative">
-            <div class="mb-6">
-                <div class="w-14 h-14 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mb-4">
-                    <svg class="w-7 h-7 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">Boshlang'ich</h3>
-                <p class="text-gray-600">Kichik klinikalar uchun ideal</p>
-            </div>
-
-            <div class="mb-6">
-                <span class="text-4xl font-bold text-gray-900 monthly-price">$15</span>
-                <span class="text-4xl font-bold text-gray-900 yearly-price hidden">$150</span>
-                <span class="text-gray-500">/oy</span>
-            </div>
-
-            <ul class="space-y-4 mb-8">
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700">100 ta bemorga qadar</span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700">Uchrashuv boshqaruvi</span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700">SMS eslatmalar (100/oy)</span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700">Asosiy hisobotlar</span>
-                </li>
-                <li class="flex items-center gap-3 opacity-50">
-                    <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                    <span class="text-gray-500">AI bashorat tizimi</span>
-                </li>
-                <li class="flex items-center gap-3 opacity-50">
-                    <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                    <span class="text-gray-500">Ovozli yozib olish</span>
-                </li>
-            </ul>
-
-            <button class="btn-secondary w-full justify-center">
-                Boshlash
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                </svg>
-            </button>
-        </div>
-
-        <!-- Professional Plan - Featured -->
-        <div class="card p-8 relative border-2 border-indigo-500 shadow-xl scale-105">
-            <!-- Popular Badge -->
-            <div class="absolute -top-4 left-1/2 -translate-x-1/2">
-                <span class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-sm font-bold px-4 py-1.5 rounded-full shadow-lg">
-                    ENG MASHHUR
-                </span>
-            </div>
-
-            <div class="mb-6 mt-2">
-                <div class="w-14 h-14 bg-gradient-to-br from-indigo-100 to-purple-200 rounded-2xl flex items-center justify-center mb-4">
-                    <svg class="w-7 h-7 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                    </svg>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">Professional</h3>
-                <p class="text-gray-600">O'rta hajmli klinikalar uchun</p>
-            </div>
-
-            <div class="mb-6">
-                <span class="text-4xl font-bold text-gray-900 monthly-price">$30</span>
-                <span class="text-4xl font-bold text-gray-900 yearly-price hidden">$300</span>
-                <span class="text-gray-500">/oy</span>
-            </div>
-
-            <ul class="space-y-4 mb-8">
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700">500 ta bemorga qadar</span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700">Uchrashuv boshqaruvi</span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700">SMS eslatmalar (500/oy)</span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700 font-semibold">AI bashorat tizimi</span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700 font-semibold">Ovozli yozib olish</span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700">Kengaytirilgan hisobotlar</span>
-                </li>
-            </ul>
-
-            <button class="btn-primary w-full justify-center">
-                Boshlash
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                </svg>
-            </button>
-        </div>
-
-        <!-- Enterprise Plan -->
-        <div class="card p-8 relative">
-            <div class="mb-6">
-                <div class="w-14 h-14 bg-gradient-to-br from-amber-100 to-orange-200 rounded-2xl flex items-center justify-center mb-4">
-                    <svg class="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
-                    </svg>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">Korxona</h3>
-                <p class="text-gray-600">Katta shifoxonalar uchun</p>
-            </div>
-
-            <div class="mb-6">
-                <span class="text-4xl font-bold text-gray-900 monthly-price">$50</span>
-                <span class="text-4xl font-bold text-gray-900 yearly-price hidden">$500</span>
-                <span class="text-gray-500">/oy</span>
-            </div>
-
-            <ul class="space-y-4 mb-8">
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700 font-semibold">Cheksiz bemorlar</span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700">Barcha Professional xususiyatlar</span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700 font-semibold">Cheksiz SMS</span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700">API integratsiya</span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700">Maxsus o'qitish</span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-gray-700 font-semibold">24/7 qo'llab-quvvatlash</span>
-                </li>
-            </ul>
-
-            <button class="btn-secondary w-full justify-center">
-                Bog'lanish
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                </svg>
-            </button>
-        </div>
-    </div>
-
-    <!-- Features Comparison -->
-    <div class="card overflow-hidden mb-16">
-        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-6">
-            <h2 class="text-2xl font-bold text-white">Xususiyatlarni solishtirish</h2>
-        </div>
-        <div class="overflow-x-auto">
-            <table class="modern-table">
-                <thead>
-                    <tr>
-                        <th class="w-1/3">Xususiyat</th>
-                        <th class="text-center">Boshlang'ich</th>
-                        <th class="text-center">Professional</th>
-                        <th class="text-center">Korxona</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="font-medium">Bemorlar soni</td>
-                        <td class="text-center">100</td>
-                        <td class="text-center">500</td>
-                        <td class="text-center font-semibold text-indigo-600">Cheksiz</td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">Foydalanuvchilar</td>
-                        <td class="text-center">1</td>
-                        <td class="text-center">5</td>
-                        <td class="text-center font-semibold text-indigo-600">Cheksiz</td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">SMS eslatmalar</td>
-                        <td class="text-center">100/oy</td>
-                        <td class="text-center">500/oy</td>
-                        <td class="text-center font-semibold text-indigo-600">Cheksiz</td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">AI bashorat tizimi</td>
-                        <td class="text-center">
-                            <svg class="w-5 h-5 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </td>
-                        <td class="text-center">
-                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </td>
-                        <td class="text-center">
-                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">Ovozli yozib olish</td>
-                        <td class="text-center">
-                            <svg class="w-5 h-5 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </td>
-                        <td class="text-center">
-                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </td>
-                        <td class="text-center">
-                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">Protokollar</td>
-                        <td class="text-center">
-                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </td>
-                        <td class="text-center">
-                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </td>
-                        <td class="text-center">
-                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">API integratsiya</td>
-                        <td class="text-center">
-                            <svg class="w-5 h-5 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </td>
-                        <td class="text-center">
-                            <svg class="w-5 h-5 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </td>
-                        <td class="text-center">
-                            <svg class="w-5 h-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">Qo'llab-quvvatlash</td>
-                        <td class="text-center">Email</td>
-                        <td class="text-center">Ustuvor email</td>
-                        <td class="text-center font-semibold text-indigo-600">24/7 telefon</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- FAQ Section -->
-    <div class="max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl font-bold text-gray-900 text-center mb-8">Ko'p so'raladigan savollar</h2>
-
-        <div class="space-y-4">
-            <div class="card p-6">
-                <button class="faq-toggle flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
-                    <span class="font-semibold text-gray-900">Bepul sinov davri qancha?</span>
-                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div class="faq-content hidden mt-4 text-gray-600">
-                    Barcha rejalarda 14 kunlik bepul sinov davri mavjud. Kredit karta talab qilinmaydi.
-                </div>
-            </div>
-
-            <div class="card p-6">
-                <button class="faq-toggle flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
-                    <span class="font-semibold text-gray-900">Rejani o'zgartirish mumkinmi?</span>
-                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div class="faq-content hidden mt-4 text-gray-600">
-                    Ha, istalgan vaqtda rejangizni yangilashingiz yoki pasaytirishingiz mumkin. O'zgarishlar keyingi hisob-kitob davridan boshlab kuchga kiradi.
-                </div>
-            </div>
-
-            <div class="card p-6">
-                <button class="faq-toggle flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
-                    <span class="font-semibold text-gray-900">Ma'lumotlarim xavfsizmi?</span>
-                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div class="faq-content hidden mt-4 text-gray-600">
-                    Albatta! Biz bank darajasidagi shifrlash va xavfsizlik standartlaridan foydalanamiz. Barcha ma'lumotlar O'zbekistonning mahalliy serverlarida saqlanadi.
-                </div>
-            </div>
-
-            <div class="card p-6">
-                <button class="faq-toggle flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
-                    <span class="font-semibold text-gray-900">AI bashorat tizimi qanday ishlaydi?</span>
-                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div class="faq-content hidden mt-4 text-gray-600">
-                    Bizning AI tizimi bemorlarning kelmay qolish ehtimolini, qand kasalligi va yurak kasalligi xavfini bashorat qiladi. Bu shifokorlarga profilaktik choralar ko'rishga yordam beradi.
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CTA Section -->
-    <div class="card p-12 text-center bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
-        <h2 class="text-3xl font-bold mb-4">Hoziroq boshlang!</h2>
-        <p class="text-xl text-indigo-100 mb-8 max-w-2xl mx-auto">14 kunlik bepul sinov davri bilan klinikangizni zamonaviylashtirishni boshlang. Kredit karta talab qilinmaydi.</p>
-        <div class="flex justify-center gap-4 flex-wrap">
-            <button class="bg-white text-indigo-600 font-bold py-3 px-8 rounded-xl hover:bg-indigo-50 transition-colors shadow-lg">
-                Bepul boshlash
-            </button>
-            <button class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-xl hover:bg-white/10 transition-colors">
-                Demo ko'rish
-            </button>
-        </div>
+    <div class="toggle-pills" role="group" aria-label="To'lov davri">
+        <button type="button" class="chip is-on" data-billing="month">Oylik</button>
+        <button type="button" class="chip" data-billing="year">Yillik <span class="count">−20%</span></button>
     </div>
 </div>
 
+<!-- Plans -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-12 items-stretch">
+    <article class="card flex flex-col rise" style="--d:1; padding:32px">
+        <span class="tile tile-lg tile-white"><img src="{% static 'img/3d/pill.png' %}" alt=""></span>
+        <h2 class="h2 mt-6" style="font-size:26px">Boshlang'ich</h2>
+        <p class="muted mt-1">Kichik klinika va xususiy shifokorlar uchun</p>
+        <p class="big num mt-6"><span data-price data-month="$15" data-year="$150">$15</span><small data-unit>/oy</small></p>
+        <ul class="flex flex-col gap-3 mt-7 mb-8">
+            <li class="flex items-center gap-3 font-medium"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>100 tagacha bemor</li>
+            <li class="flex items-center gap-3 font-medium"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>Uchrashuvlar jadvali</li>
+            <li class="flex items-center gap-3 font-medium"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>Oyiga 100 ta SMS eslatma</li>
+            <li class="flex items-center gap-3 font-medium"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>Asosiy hisobotlar</li>
+            <li class="flex items-center gap-3 font-medium muted"><span class="sms-dot" style="background:#fff">{% icon 'minus' 14 '' 3 %}</span>AI bashorat tizimi</li>
+            <li class="flex items-center gap-3 font-medium muted"><span class="sms-dot" style="background:#fff">{% icon 'minus' 14 '' 3 %}</span>Ovozli yozib olish</li>
+        </ul>
+        <button type="button" class="btn btn-white btn-lg btn-block mt-auto">Sinab ko'rish {% icon 'arrow-right' 18 '' 2.4 %}</button>
+    </article>
+
+    <article class="hero flex flex-col rise" style="--d:2; padding:32px">
+        <img src="{% static 'img/3d/heart.png' %}" alt="" class="obj floaty absolute" style="right:28px; top:28px; width:120px; height:108px">
+        <span class="pill pill-ink-y self-start">Eng mashhur</span>
+        <h2 class="h2 mt-6" style="font-size:26px">Professional</h2>
+        <p class="mt-1 font-medium" style="color:var(--ink-2); max-width:230px">O'rta klinikalar uchun to'liq AI yordamchi</p>
+        <p class="big num mt-6"><span data-price data-month="$30" data-year="$300">$30</span><small data-unit>/oy</small></p>
+        <ul class="flex flex-col gap-3 mt-7 mb-8">
+            <li class="flex items-center gap-3 font-medium"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>500 tagacha bemor</li>
+            <li class="flex items-center gap-3 font-medium"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>Uchrashuvlar jadvali</li>
+            <li class="flex items-center gap-3 font-medium"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>Oyiga 500 ta SMS eslatma</li>
+            <li class="flex items-center gap-3 font-bold"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>AI bashorat tizimi</li>
+            <li class="flex items-center gap-3 font-bold"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>Ovozli yozib olish</li>
+            <li class="flex items-center gap-3 font-medium"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>Kengaytirilgan hisobotlar</li>
+        </ul>
+        <button type="button" class="btn btn-ink btn-lg btn-block mt-auto">Boshlash {% icon 'arrow-right' 18 '' 2.4 %}</button>
+    </article>
+
+    <article class="card flex flex-col rise" style="--d:3; padding:32px">
+        <span class="tile tile-lg tile-white"><img src="{% static 'img/3d/clipboard.png' %}" alt=""></span>
+        <h2 class="h2 mt-6" style="font-size:26px">Korxona</h2>
+        <p class="muted mt-1">Katta shifoxona va klinikalar tarmog'i uchun</p>
+        <p class="big num mt-6"><span data-price data-month="$50" data-year="$500">$50</span><small data-unit>/oy</small></p>
+        <ul class="flex flex-col gap-3 mt-7 mb-8">
+            <li class="flex items-center gap-3 font-bold"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>Cheksiz bemorlar</li>
+            <li class="flex items-center gap-3 font-medium"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>Professional rejaning hammasi</li>
+            <li class="flex items-center gap-3 font-bold"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>Cheksiz SMS</li>
+            <li class="flex items-center gap-3 font-medium"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>API integratsiya</li>
+            <li class="flex items-center gap-3 font-medium"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>Xodimlarni o'qitish</li>
+            <li class="flex items-center gap-3 font-bold"><span class="sms-dot is-on">{% icon 'check' 14 '' 3 %}</span>24/7 qo'llab-quvvatlash</li>
+        </ul>
+        <button type="button" class="btn btn-white btn-lg btn-block mt-auto">Bog'lanish {% icon 'arrow-right' 18 '' 2.4 %}</button>
+    </article>
+</section>
+
+<!-- Comparison -->
+<section class="mb-12 rise" style="--d:4">
+    <h2 class="h2" style="font-size:28px">Professional reja AI bilan ishlaydi</h2>
+    <p class="lead">Boshqa rejalar bilan solishtiring</p>
+    <div class="table-wrap mt-6">
+        <div class="cmp">
+            <span class="cmp-hl" aria-hidden="true"></span>
+            <div class="cmp-row cmp-head">
+                <span></span>
+                <span class="label">Boshlang'ich</span>
+                <span><span class="pill pill-ink">Professional</span></span>
+                <span class="label">Korxona</span>
+            </div>
+            <div class="cmp-row"><span>Bemorlar soni</span><span class="num">100</span><span class="num strong">500</span><span class="strong">Cheksiz</span></div>
+            <div class="cmp-row"><span>Foydalanuvchilar</span><span class="num">1</span><span class="num strong">5</span><span class="strong">Cheksiz</span></div>
+            <div class="cmp-row"><span>SMS eslatmalar</span><span class="num">Oyiga 100</span><span class="num strong">Oyiga 500</span><span class="strong">Cheksiz</span></div>
+            <div class="cmp-row"><span>AI bashorat tizimi</span><span class="muted">{% icon 'minus' 20 '' 2.6 %}</span><span>{% icon 'check' 22 '' 2.8 %}</span><span>{% icon 'check' 22 '' 2.8 %}</span></div>
+            <div class="cmp-row"><span>Ovozli yozib olish</span><span class="muted">{% icon 'minus' 20 '' 2.6 %}</span><span>{% icon 'check' 22 '' 2.8 %}</span><span>{% icon 'check' 22 '' 2.8 %}</span></div>
+            <div class="cmp-row"><span>Protokollar</span><span>{% icon 'check' 22 '' 2.8 %}</span><span>{% icon 'check' 22 '' 2.8 %}</span><span>{% icon 'check' 22 '' 2.8 %}</span></div>
+            <div class="cmp-row"><span>API integratsiya</span><span class="muted">{% icon 'minus' 20 '' 2.6 %}</span><span class="muted">{% icon 'minus' 20 '' 2.6 %}</span><span>{% icon 'check' 22 '' 2.8 %}</span></div>
+            <div class="cmp-row"><span>Qo'llab-quvvatlash</span><span>Email</span><span class="strong">Ustuvor email</span><span class="strong">24/7 telefon</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-12 rise" style="--d:5">
+    <div class="lg:col-span-4">
+        <h2 class="h2" style="font-size:28px">Ko'p so'raladigan savollar</h2>
+        <p class="lead">Javob topa olmasangiz, bizga yozing</p>
+    </div>
+    <div class="lg:col-span-8 flex flex-col gap-3">
+        <details class="faq" open>
+            <summary>Bepul sinov davri qancha?<span class="plus">{% icon 'plus' 18 '' 2.6 %}</span></summary>
+            <p>Barcha rejalarda 14 kunlik bepul sinov davri bor. Kredit karta talab qilinmaydi.</p>
+        </details>
+        <details class="faq">
+            <summary>Rejani o'zgartirish mumkinmi?<span class="plus">{% icon 'plus' 18 '' 2.6 %}</span></summary>
+            <p>Ha, istalgan vaqtda rejani oshirish yoki pasaytirish mumkin. O'zgarish keyingi hisob davridan kuchga kiradi.</p>
+        </details>
+        <details class="faq">
+            <summary>Ma'lumotlarim xavfsizmi?<span class="plus">{% icon 'plus' 18 '' 2.6 %}</span></summary>
+            <p>Albatta. Bank darajasidagi shifrlashdan foydalanamiz, barcha ma'lumotlar O'zbekistondagi serverlarda saqlanadi.</p>
+        </details>
+        <details class="faq">
+            <summary>AI bashorat tizimi qanday ishlaydi?<span class="plus">{% icon 'plus' 18 '' 2.6 %}</span></summary>
+            <p>AI bemorning kelmay qolish ehtimolini, qand kasalligi va yurak kasalligi xavfini baholaydi. Shifokor bu bahoni profilaktika uchun ishlatadi.</p>
+        </details>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="card-ink relative overflow-hidden rise" style="--d:6; border-radius:var(--r-xl); padding:48px">
+    <img src="{% static 'img/3d/calendar.png' %}" alt="" class="obj floaty absolute hidden md:block" style="right:56px; top:50%; margin-top:-110px; width:200px; height:220px">
+    <h2 class="display" style="font-size:64px; max-width:620px">Hoziroq boshlang</h2>
+    <p class="mt-4 text-[18px] font-medium" style="color:#CFCFC8; max-width:520px">14 kunlik bepul sinov bilan klinikangizni zamonaviylashtiring. Karta talab qilinmaydi.</p>
+    <div class="flex flex-wrap gap-3 mt-8">
+        <button type="button" class="btn btn-yellow btn-lg">Bepul boshlash {% icon 'arrow-right' 18 '' 2.4 %}</button>
+        <a href="{% url 'dashboard' %}" class="btn btn-lg" style="background:#262624; color:#fff">Demo ko'rish</a>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
 <script>
-    // Billing toggle
-    const billingToggle = document.getElementById('billingToggle');
-    const monthlyPrices = document.querySelectorAll('.monthly-price');
-    const yearlyPrices = document.querySelectorAll('.yearly-price');
-
-    billingToggle.addEventListener('change', function() {
-        if (this.checked) {
-            monthlyPrices.forEach(el => el.classList.add('hidden'));
-            yearlyPrices.forEach(el => el.classList.remove('hidden'));
-        } else {
-            monthlyPrices.forEach(el => el.classList.remove('hidden'));
-            yearlyPrices.forEach(el => el.classList.add('hidden'));
-        }
+(function () {
+    var chips = document.querySelectorAll('[data-billing]');
+    chips.forEach(function (chip) {
+        chip.addEventListener('click', function () {
+            var period = chip.getAttribute('data-billing');
+            chips.forEach(function (c) { c.classList.toggle('is-on', c === chip); });
+            document.querySelectorAll('[data-price]').forEach(function (el) { el.textContent = el.getAttribute('data-' + period); });
+            document.querySelectorAll('[data-unit]').forEach(function (el) { el.textContent = period === 'year' ? '/yil' : '/oy'; });
+        });
     });
-
-    // FAQ toggle
-    function toggleFaq(button) {
-        const content = button.nextElementSibling;
-        const icon = button.querySelector('svg');
-
-        content.classList.toggle('hidden');
-        icon.classList.toggle('rotate-180');
-    }
+})();
 </script>
 {% endblock %}

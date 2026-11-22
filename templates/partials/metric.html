@@ -1,0 +1,5 @@
+<div class="metric {% if flag == 'high' %}is-high{% endif %}">
+    <span class="label">{{ label }}</span>
+    {% if text %}<span class="metric-t">{{ text }}</span>{% else %}<b class="metric-v num">{{ value|floatformat:"-1" }}{% if unit %}<small>{{ unit }}</small>{% endif %}</b>{% endif %}
+    {% if flag == 'high' %}<span class="pill pill-ink-y">Me'yordan yuqori</span>{% elif flag == 'low' %}<span class="pill pill-note">Me'yordan past</span>{% elif flag == 'ok' %}<span class="pill pill-white">Me'yorda</span>{% endif %}
+</div>
